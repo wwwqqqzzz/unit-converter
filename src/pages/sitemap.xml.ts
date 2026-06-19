@@ -5,7 +5,7 @@ import { getUnitPairs, pairSlug, valueSlug, getCommonValues } from '../lib/units
 export const prerender = true;
 
 export async function GET() {
-  const site = 'https://unitconvert.example.com';
+  const site = import.meta.env.SITE || 'https://unit-converter.pages.dev';
   const urls: string[] = [];
 
   // Root
