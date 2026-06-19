@@ -1,6 +1,6 @@
 # Unit Converter pSEO — 完整实施路线图
 
-> 创建日期: 2026-06-19 | 更新: 2026-06-19 | 目标: 万页级 pSEO 转换工具矩阵，睡后收入
+> 创建日期: 2026-06-19 | 更新: 2026-06-20 | 目标: 万页级 pSEO 转换工具矩阵，睡后收入
 
 ## ✅ 完成状态
 
@@ -14,9 +14,9 @@
 | **4.5** | ✅ 已完成 — Neo-Brutalist 视觉重设计 |
 | **4.6** | ✅ 已完成 — 对比度修复（暗色/亮色模式可读性） |
 | **4.7** | ✅ 已完成 — 7个新类别（Power, Fuel, Frequency, Angle, Force, Torque, Shoe） |
-| **5** | ⬜ 待开始 — AdSense优化 |
+| **5** | ✅ 已完成 — AdSense集成（条件渲染、3广告位、auto-ads） |
+| **7** | ✅ 已完成 — 部署+域名+SEO提交 |
 | **6** | ⬜ 待开始 — 多站群架构 |
-| **7** | ⬜ 待开始 — 部署+监控 |
 | **8** | ⬜ 待开始 — 语言扩展 (es, ja, fr, ko) |
 
 ## 总览
@@ -31,9 +31,9 @@
 | **4.5** | Neo-Brutalist 重设计 | 4h | ~6,419 | ✅ Done |
 | **4.6** | 对比度修复 | 1h | ~6,419 | ✅ Done |
 | **4.7** | 7新类别 | 3h | ~8,041 | ✅ Done |
-| **5** | AdSense优化 | 4.5h | ~8,041 | ⬜ |
+| **5** | AdSense集成 | 2h | ~8,041 | ✅ Done |
+| **7** | 部署+域名+SEO | 3h | 8,041 | ✅ Done |
 | **6** | 多站群架构 | 20h | 多站点 | ⬜ |
-| **7** | 部署+监控 | 4h | — | ⬜ |
 | **8** | 语言扩展 | 8h/语言 | ~4,000/语言 | ⬜ |
 
 **当前页面数**: 8,041 | **目标**: 万页(加语言即可) | **17分类, 123单位, 2语言**
@@ -41,6 +41,17 @@
 ---
 
 ## 当前项目数据
+
+### 线上信息
+
+| 项 | 值 |
+|---|---|
+| 网站域名 | https://convunit.net |
+| GitHub | https://github.com/wwwqqqzzz/unit-converter |
+| 部署方式 | Cloudflare Pages (wrangler pages deploy) |
+| 页面数 | 8,041 |
+| AdSense | ca-pub-4967918867986181 (3 positions: top/middle/bottom) |
+| Google Search Console | 已验证, sitemap 已提交 (8,041 URLs discovered) |
 
 ### 分类统计
 
@@ -73,7 +84,7 @@
 |------|------|
 | 值页面标题含答案 (e.g. "5 cm = 1.97 inches") | ✅ |
 | 对页面标题含分类名 | ✅ |
-| 81单位 × 2语言 SEO描述 (descriptions.ts) | ✅ |
+| 123单位 × 2语言 SEO描述 (descriptions.ts) | ✅ |
 | UnitDescription 折叠组件 (native `<details>`) | ✅ |
 | FAQ JSON-LD (2-4题/页, 含 "What is X?") | ✅ |
 | HowTo JSON-LD (3步转换指南) | ✅ |
@@ -83,8 +94,22 @@
 | Hreflang (en, zh, x-default) | ✅ |
 | Canonical URL | ✅ |
 | 语言切换 | ✅ |
-| Sitemap.xml | ✅ |
+| Sitemap.xml (8,041 URLs) | ✅ |
 | 每页约22个内链 | ✅ |
+| Google Search Console 验证 | ✅ |
+| Sitemap 提交 (8,041 URLs discovered) | ✅ |
+
+### 性能 & 安全
+
+| 项 | 值 |
+|---|---|
+| HTML 缓存 | max-age=3600, stale-while-revalidate=86400 |
+| 静态资源缓存 | immutable, max-age=31536000 (Astro 哈希文件名) |
+| 安全头 | X-Frame-Options: DENY, X-Content-Type-Options: nosniff, X-XSS-Protection, Permissions-Policy, Referrer-Policy |
+| 根路径重定向 | / → /en/ (302) |
+| 字体预加载 | preconnect + preload Google Fonts |
+| favicon.svg | Neo-brutalist 黄色 U 字 |
+| CDN | Cloudflare (自动 HTTP/2, Brotli, H3/QUIC) |
 
 ### 已修复问题
 
@@ -92,6 +117,8 @@
 |------|------|------|
 | PSI 中文名含 `/` | `磅力/平方英寸` → `磅力每平方英寸` | 2026-06-19 |
 | Hreflang 重复 | 移除 BaseLayout 重复 alternate links | 2026-06-19 |
+| 灰色配黑色看不清 | 暗色模式对比度全面修复 | 2026-06-19 |
+| 域名占位符 | unitconvert.example.com → convunit.net | 2026-06-20 |
 
 ---
 
@@ -146,9 +173,6 @@
 | Area/面积 | 10 | 45 | 990 |
 | Volume/体积 | 13 | 78 | 1,404 |
 
-Area 单位: sqmm, sqcm, sqm, sqkm, ha, acre, sqft, sqin, sqmi, mu
-Volume 单位: ml, cl, dl, l, m3, gal, gal_uk, qt, pt, cup, floz, tbsp, tsp
-
 ---
 
 ## Phase 3: P2 分类 ✅ (已完成)
@@ -184,12 +208,12 @@ Volume 单位: ml, cl, dl, l, m3, gal, gal_uk, qt, pt, cup, floz, tbsp, tsp
 - 黄色强调色 `#ffe033`
 - 零圆角 (`--r: 0px`)
 - 暗色模式完整支持（白色边框/阴影）
-- 8个文件全部更新: BaseLayout, Converter, Homepage, Category, Detail, ConversionTable, CrossLinks, UnitDescription, AdSense
+- 8个文件全部更新
 - 交互效果: hover时阴影上移, active时阴影消失（按下感）
 
 ## Phase 4.6: 对比度修复 ✅ (已完成)
 
-用户反馈: 灰色配黑色看不清
+用户反馈: "灰色配黑色看不清"
 
 **亮色模式修复**:
 - `--c-text-secondary`: `#333` → `#222`
@@ -200,15 +224,6 @@ Volume 单位: ml, cl, dl, l, m3, gal, gal_uk, qt, pt, cup, floz, tbsp, tsp
 - `--c-text-secondary`: `#bbb` → `#d4d4d4` (7.5:1 on #0d0d0d)
 - `--c-text-tertiary`: `#777` → `#999` (4.7:1 on #0d0d0d)
 - `--c-border-light`: `#555` → `#666`
-- `--c-surface-hover`: `#222` → `#252525`
-- `--c-surface-active`: `#2a2a2a` → `#303030`
-- `--c-hero-border`: `#444` → `#666`
-- `--c-hero-surface`: `#222` → `#252525`
-- `--c-hero-input-bg`: `#222` → `#252525`
-
-**Converter 修复**:
-- 标签 `opacity: 0.6` → `color: var(--c-text-secondary)`（不再淡化文字）
-- 暗色模式下拉箭头 SVG `#999` → `#ccc`
 
 ## Phase 4.7: 7新类别 ✅ (已完成)
 
@@ -226,28 +241,72 @@ Volume 单位: ml, cl, dl, l, m3, gal, gal_uk, qt, pt, cup, floz, tbsp, tsp
 单位数: 81 → 123 (+52%)
 分类数: 10 → 17 (+70%)
 
-### 广告位规划
+---
 
-| 位置 | 类型 | 尺寸 | 优先级 | 说明 |
-|------|------|------|--------|------|
-| 转换器上方 | Display | 响应式 | P0 | 最高可视率，紧邻核心功能 |
-| 公式下方 | In-feed | 300×250 | P1 | 自然断点，公式阅读完后 |
-| 表格下方 | In-article | 响应式 | P1 | 值表后，内容尾声 |
-| 侧栏(desktop) | Display | 300×600 | P2 | 宽屏粘性，仅桌面端 |
+## Phase 5: AdSense 集成 ✅ (已完成)
 
-**原则**: 
-- 永远不在标题和转换结果之间放广告
-- 移动端不显示侧栏广告
-- Core Web Vitals: 预留 `min-height` 防止布局偏移
-- 下方广告懒加载 (IntersectionObserver)
-- `<link rel="preconnect">` 预连接广告域名
+### 广告位布局
 
-### 实现步骤
+| 位置 | 页面类型 | 格式 | 广告单元 |
+|------|----------|------|----------|
+| top | 首页、分类页 | auto + auto-ads脚本 | AD_SLOT_TOP |
+| middle | 详情页、分类页 | auto 响应式 | AD_SLOT_MIDDLE |
+| bottom | 详情页、分类页 | horizontal 横幅 | AD_SLOT_BOTTOM |
 
-1. **上线前**: AdSense 组件已改为条件渲染 — 无 Publisher ID → 不输出任何内容
-2. **上线后**: 申请 Google AdSense 账号，获取 Publisher ID
-3. **审批通过后**: 设置环境变量 `PUBLIC_ADSENSE_ID` + `PUBLIC_ADSENSE_SLOT`，重新部署，广告自动出现
-4. **优化阶段**: 添加侧栏广告位、IntersectionObserver 懒加载
+### 条件渲染
+
+- 无 `PUBLIC_ADSENSE_ID` → 零输出（不留占位符、不产生布局偏移）
+- 有 `PUBLIC_ADSENSE_ID` → 渲染 `<ins class="adsbygoogle">` + `adsbygoogle.js` 脚本
+- auto-ads 脚本仅在 top 位置加载一次（避免重复）
+
+### 实现
+
+- `src/components/AdSense.astro` — 3 个位置（top/middle/bottom），条件渲染
+- 构建时通过 `PUBLIC_ADSENSE_ID=ca-pub-4967918867986181 npm run build` 注入
+- 7,620 个内容页面包含广告代码
+- Cloudflare Pages secret 已设置 `PUBLIC_ADSENSE_ID`
+
+---
+
+## Phase 7: 部署与上线 ✅ (已完成)
+
+### 域名
+
+- 首选域名: `convunit.net` (.net 信任度高，SEO 友好)
+- Cloudflare Registrar 购买，自动配置 DNS
+- 旧域名 `convertunit.it.com` 为子域名陷阱，建议退款
+
+### Cloudflare Pages 部署
+
+| 项 | 值 |
+|---|---|
+| 项目名 | unit-convert |
+| 部署方式 | `wrangler pages deploy dist` (直接上传) |
+| 临时 URL | unit-convert-dd0.pages.dev |
+| 自定义域名 | convunit.net ✅ |
+| 构建命令 | `PUBLIC_ADSENSE_ID=ca-pub-4967918867986181 npm run build` |
+
+### 性能优化
+
+| 优化 | 值 |
+|---|---|
+| HTML 缓存 | `public, max-age=3600, stale-while-revalidate=86400` |
+| 静态资源缓存 | `public, max-age=31536000, immutable` |
+| sitemap/robots 缓存 | `public, max-age=86400` |
+| 安全头 | X-Frame-Options: DENY, X-Content-Type-Options: nosniff, X-XSS-Protection, Permissions-Policy, Referrer-Policy |
+| 根路径重定向 | `/ → /en/` (302) |
+| 字体预加载 | preconnect + preload Google Fonts CSS |
+| favicon | Neo-brutalist 黄色 U 字 SVG |
+| CDN | Cloudflare (HTTP/2, Brotli, H3/QUIC 自动) |
+| TTFB (首次) | ~0.45s |
+| TTFB (缓存) | ~0.38s |
+
+### Google Search Console
+
+- 网址前缀资源: `https://convunit.net` ✅ 已验证
+- 域名资源: `convunit.net` ✅ 已验证 (DNS TXT)
+- Sitemap: `sitemap.xml` ✅ 已提交, 8,041 URLs discovered
+- 状态: 成功
 
 ---
 
@@ -275,56 +334,12 @@ converters/
 │       └── tsconfig.json
 ├── sites/
 │   ├── unit-converter/           ← 当前站点
-│   │   ├── src/data/units.ts
-│   │   ├── src/i18n/
-│   │   └── ...
 │   ├── currency-converter/       ← 汇率转换
 │   ├── bmi-calculator/          ← BMI 计算器
 │   └── percentage-calc/         ← 百分比计算器
 ├── pnpm-workspace.yaml
 └── package.json
 ```
-
-### 新站估算
-
-| 站点 | 页面估算 | 特点 |
-|------|----------|------|
-| 汇率转换器 | ~990页 | 每日更新汇率 |
-| BMI 计算器 | ~200+页 | 公式型，复用 convertFn |
-| 百分比计算器 | ~100+页 | 简单公式 |
-| 时区转换器 | ~200+页 | 需要实时数据 |
-
----
-
-## Phase 7: 部署与监控 ⬜ (待开始)
-
-### Cloudflare Pages
-
-```bash
-# Build command
-npm run build
-
-# Output directory
-dist
-
-# 环境变量
-PUBLIC_ADSENSE_ID=ca-pub-XXXXXXXXX
-PUBLIC_SITE_URL=https://unitconvert.example.com  ← 需替换为实际域名
-```
-
-### 分析工具
-
-- Google Analytics 4 — 页面浏览 + 转换器交互追踪
-- Cloudflare Web Analytics — 隐私友好备选
-- Google Search Console — 提交 sitemap, 监控索引状态
-- UptimeRobot — 免费监控
-
-### 监控指标
-
-- Core Web Vitals (通过 CrUX)
-- 每周 AdSense RPM / CTR
-- Search Console 索引覆盖率
-- 页面加载时间 < 2s
 
 ---
 
@@ -338,14 +353,6 @@ PUBLIC_SITE_URL=https://unitconvert.example.com  ← 需替换为实际域名
 | 日语 (ja) | ×2 → ~16,000 | ~170单位名 + ~120描述 | 高 | 高 |
 | 法语 (fr) | ×2.5 → ~20,000 | ~170单位名 + ~120描述 | 中高 | 高 |
 | 韩语 (ko) | ×3 → ~24,000 | ~170单位名 + ~120描述 | 中 | 中 |
-
-### 加语言步骤 (每门语言)
-
-1. 创建 `src/i18n/{code}.json` — 翻译 ~50 个 UI 字符串
-2. `src/data/units.ts` — 每个单位 `name` 对象加新语言名
-3. `src/data/descriptions.ts` — 每个描述加新语言段落
-4. `src/utils/i18n.ts` — `LANGUAGES` 数组加语言代码
-5. `npm run build` — 验证所有新页面
 
 ### 优先级: es > ja > fr > ko
 
@@ -364,9 +371,8 @@ Phase 4  SEO+内容 ✅
 Phase 4.5 Neo-Brutalist 重设计 ✅
 Phase 4.6 对比度修复 ✅
 Phase 4.7 7新类别 ✅ (6,419→8,041页)
-    ↓
-Phase 5  AdSense优化  → 开始赚钱
-Phase 7  部署+监控    → 上线 Cloudflare Pages
+Phase 5  AdSense集成 ✅ (ca-pub-4967918867986181)
+Phase 7  部署+域名+SEO ✅ (convunit.net, 8,041 URLs submitted)
     ↓
 Phase 8  语言扩展 (es→万页目标)  → es 即可破万
     ↓

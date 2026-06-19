@@ -1,5 +1,85 @@
 # 实施日志
 
+## 2026-06-20 — Phase 5 + Phase 7 完成：AdSense 集成 + 部署上线 + 域名配置
+
+### Phase 5: AdSense 集成 ✅
+
+**广告位布局**:
+- `top`: 首页 + 分类页，加载 auto-ads 脚本 + 信息流广告
+- `middle`: 详情页 + 分类页，自动响应式
+- `bottom`: 详情页 + 分类页，水平横幅
+
+**条件渲染**:
+- 无 `PUBLIC_ADSENSE_ID` → 零输出（无占位符、无布局偏移）
+- 有 ID → 渲染 `<ins class="adsbygoogle">` + `adsbygoogle.js` 脚本
+- auto-ads 脚本仅 top 位置加载一次（避免重复请求）
+
+**Publisher ID**: `ca-pub-4967918867986181`
+
+**修改文件**: `src/components/AdSense.astro`
+
+### Phase 7: 部署 + 域名 + SEO ✅
+
+**域名**:
+- 用户误购 `convertunit.it.com`（子域名陷阱），建议退款
+- 最终域名: `convunit.net`（Cloudflare Registrar, ~$10/yr）
+- 域名选择标准: 高 SEO (.net 信任度)、短、好记、可用
+
+**Cloudflare Pages 部署**:
+- 项目名: `unit-convert`
+- 部署方式: `wrangler pages deploy dist`（直接上传）
+- 临时 URL: `unit-convert-dd0.pages.dev`
+- 自定义域名: `convunit.net` ✅ 绑定成功
+- wrangler v4.103.0, OAuth 认证
+- Account ID: `a82e169d7b3eb1c5f273e30bbf96ceb4`
+
+**性能优化 (public/_headers)**:
+| 路径 | 缓存策略 | 安全头 |
+|------|----------|--------|
+| `/*.html`, `/*/` | max-age=3600, stale-while-revalidate=86400 | X-Frame-Options: DENY, X-Content-Type-Options: nosniff, X-XSS-Protection, Permissions-Policy, Referrer-Policy |
+| `/_astro/*` | max-age=31536000, immutable | — |
+| `/sitemap.xml`, `/robots.txt` | max-age=86400 | — |
+
+**性能优化 (public/_redirects)**:
+- `/ → /en/` (302)
+
+**性能优化 (BaseLayout.astro)**:
+- `<link rel="preconnect">` + `<link rel="preload">` for Google Fonts
+- `<meta name="theme-color" content="#ffe033">`
+- `<link rel="icon" type="image/svg+xml" href="/favicon.svg">`
+- `public/favicon.svg`: Neo-brutalist 黄色 U 字 SVG
+
+**TTFB 性能**:
+| 测量 | 首次 | 缓存后 |
+|------|------|--------|
+| TTFB | ~0.45s | ~0.38s |
+| Total | ~0.48s | ~0.40s |
+
+**Google Search Console**:
+- 网址前缀资源: `https://convunit.net` ✅ 已验证
+- 域名资源: `convunit.net` ✅ 已验证 (DNS TXT)
+- Sitemap `sitemap.xml` ✅ 已提交
+- 状态: 成功, 8,041 URLs discovered
+
+**GitHub**:
+- 仓库: https://github.com/wwwqqqzzz/unit-converter
+- 所有代码已推送到 main 分支
+
+**构建命令更新**:
+- `PUBLIC_ADSENSE_ID=ca-pub-4967918867986181 npm run build`
+
+### 当前项目状态
+
+- **网站**: https://convunit.net (8,041 页面, 17 分类, 123 单位, 2 语言)
+- **GitHub**: https://github.com/wwwqqqzzz/unit-converter
+- **部署**: Cloudflare Pages, convunit.net 自定义域名
+- **AdSense**: ca-pub-4967918867986181, 3 广告位, 条件渲染
+- **SEO**: Google Search Console 已验证, sitemap 已提交 (8,041 URLs)
+- **性能**: TTFB ~0.38s (缓存), HTTP/2 + Brotli + H3/QUIC 自动
+- **安全**: X-Frame-Options: DENY, X-Content-Type-Options, Permissions-Policy
+
+---
+
 ## 2026-06-19 (深夜) — Phase 4.5 ~ 4.7 完成：视觉重设计 + 对比度修复 + 7新类别
 
 ### Phase 4.5: Neo-Brutalist 视觉重设计 ✅

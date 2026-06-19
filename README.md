@@ -1,14 +1,24 @@
 # Unit Converter — Multilingual pSEO Tool Site
 
-A programmatic SEO (pSEO) unit conversion website built with **Astro + TypeScript**, statically generating **8,041 pages** across **17 categories**, **123 units**, and **2 languages** (English + Chinese). Designed for passive income through AdSense.
+A programmatic SEO (pSEO) unit conversion website built with **Astro + TypeScript**, statically generating **8,041 pages** across **17 categories**, **123 units**, and **2 languages** (English + Chinese). Live at **[convunit.net](https://convunit.net)**.
+
+## Live Site
+
+| 项 | 值 |
+|---|---|
+| URL | https://convunit.net |
+| Pages | 8,041 |
+| AdSense | ca-pub-4967918867986181 |
+| Search Console | Verified, sitemap submitted (8,041 URLs) |
 
 ## Tech Stack
 
 - **Astro 5** — static site generation (SSG)
 - **TypeScript** — type-safe unit configuration
 - **Vitest** — 74 unit tests
+- **Cloudflare Pages** — deployment + CDN
+- **AdSense** — conditional rendering, 3 positions
 - **No backend** — all conversion logic runs in the browser via vanilla JS
-- **Deploy target** — Cloudflare Pages or Netlify (free tier)
 
 ## Stats
 
@@ -33,6 +43,18 @@ npm run preview  # preview the build locally
 npm test         # run 74 vitest tests
 ```
 
+### Build with AdSense
+
+```bash
+PUBLIC_ADSENSE_ID=ca-pub-4967918867986181 npm run build
+```
+
+### Deploy to Cloudflare Pages
+
+```bash
+npx wrangler pages deploy dist --project-name unit-convert
+```
+
 ## Project Structure
 
 ```
@@ -54,16 +76,20 @@ src/
 │   ├── ConversionTable.astro  ← Common values table
 │   ├── CrossLinks.astro  ← Cross-linking navigation (12 same-cat + 9 cross-cat)
 │   ├── UnitDescription.astro ← Collapsible unit descriptions (native <details>)
-│   └── AdSense.astro     ← AdSense placeholder
+│   └── AdSense.astro     ← Conditional AdSense (top/middle/bottom)
 ├── layouts/
-│   └── BaseLayout.astro  ← HTML shell with SEO meta + JSON-LD
+│   └── BaseLayout.astro  ← HTML shell with SEO meta + JSON-LD + theme-color + favicon
 ├── pages/
 │   ├── index.astro              ← Root redirect → /en/
 │   ├── [lang]/index.astro       ← Language homepage
 │   ├── [lang]/[category]/index.astro ← Category overview
 │   ├── [lang]/[category]/[...slug].astro ← Dynamic converter/value pages
-│   ├── sitemap.xml.ts           ← Auto-generated sitemap
+│   ├── sitemap.xml.ts           ← Auto-generated sitemap (8,041 URLs)
 │   └── robots.txt.ts            ← Robots config
+└── public/
+    ├── _headers            ← Cloudflare Pages caching + security headers
+    ├── _redirects          ← Root / → /en/ (302)
+    └── favicon.svg          ← Neo-brutalist yellow U on black
 ```
 
 ## Categories
@@ -89,10 +115,6 @@ src/
 | Shoe Size | 6 | 15 | 0 | 32 |
 
 **Total**: 123 units, 433 pairs, ~8,037 content pages + category/home/sitemap = **8,041 pages**
-| Pressure | 8 | 28 | 7 | 392 |
-| Energy | 7 | 21 | 7 | 294 |
-
-**Total**: 81 units, 297 pairs, ~6,056 content pages + category/home/sitemap = **6,419 pages**
 
 ## How to Add a New Category
 
@@ -136,14 +158,14 @@ For non-linear conversions (e.g. temperature), add a `convertFn`:
 4. Add descriptions in `src/data/descriptions.ts`
 5. `npm run build` — all pages generate for the new language
 
-Each new language multiplies page count by ~1.5x. Adding Spanish (es) brings total to ~9,600 pages.
+Each new language multiplies page count by ~1.5x. Adding Spanish (es) brings total to ~12,000 pages.
 
 ## SEO Features
 
 - **Value-in-title** — pages include the answer in the title (e.g. "5 cm = 1.97 inches")
 - **Unique meta descriptions** per page
 - **Hreflang tags** — en, zh, x-default (3 per page, no duplicates)
-- **Canonical URLs** — every page points to itself
+- **Canonical URLs** — every page points to itself (convunit.net)
 - **Semantic HTML** — H1, breadcrumbs, proper heading hierarchy
 - **JSON-LD structured data**:
   - BreadcrumbList on all pages
@@ -155,37 +177,52 @@ Each new language multiplies page count by ~1.5x. Adding Spanish (es) brings tot
 - **Auto-generated sitemap.xml** — category-specific common values
 - **Mobile-first responsive** design
 - **Core Web Vitals friendly** — minimal JS, no frameworks in client bundle
+- **Google Search Console** — verified, sitemap submitted (8,041 URLs)
+
+## Performance & Security
+
+| Feature | Value |
+|---------|-------|
+| HTML cache | max-age=3600, stale-while-revalidate=86400 |
+| Static asset cache | immutable, max-age=31536000 |
+| Security headers | X-Frame-Options: DENY, X-Content-Type-Options: nosniff, X-XSS-Protection, Permissions-Policy, Referrer-Policy |
+| Root redirect | / → /en/ (302) |
+| Font preload | preconnect + preload Google Fonts |
+| Favicon | Neo-brutalist yellow U SVG |
+| CDN | Cloudflare (HTTP/2, Brotli, H3/QUIC) |
+| TTFB (cached) | ~0.38s |
 
 ## Deployment
 
-### Cloudflare Pages
+### Cloudflare Pages (current)
 
-1. Push to GitHub.
-2. In Cloudflare Dashboard → Pages → Connect Git repo.
-3. Build command: `npm run build`
-4. Build output directory: `dist`
-5. Set environment variables:
-   - `PUBLIC_ADSENSE_ID=ca-pub-XXXXXXXXX`
-   - `PUBLIC_SITE_URL=https://your-domain.com`
+```bash
+# Build with AdSense
+PUBLIC_ADSENSE_ID=ca-pub-4967918867986181 npm run build
 
-### Netlify
+# Deploy
+npx wrangler pages deploy dist --project-name unit-convert
+```
 
-1. Push to GitHub.
-2. In Netlify → Import Git repo.
-3. Build command: `npm run build`
-4. Publish directory: `dist`
-5. Set the same environment variables.
+Domain: `convunit.net` (Cloudflare Registrar)
+
+### Environment Variables
+
+| Variable | Description |
+|----------|-------------|
+| `PUBLIC_ADSENSE_ID` | AdSense publisher ID (e.g. `ca-pub-4967918867986181`) |
+| `PUBLIC_ADSENSE_SLOT_TOP` | Ad slot for top position |
+| `PUBLIC_ADSENSE_SLOT_MIDDLE` | Ad slot for middle position |
+| `PUBLIC_ADSENSE_SLOT_BOTTOM` | Ad slot for bottom position |
 
 ## Documentation
 
 - `docs/roadmap.md` — Full implementation roadmap (8 phases)
 - `docs/changelog.md` — Implementation log
-- `docs/phase0-1-report.md` — Phase 0 & 1 detailed report
-- `docs/phase2-4-report.md` — Phase 2, 3, 4 detailed report
+- `docs/phase5-7-report.md` — Deployment + AdSense detailed report
 
 ## What's Next
 
-- **Phase 5**: AdSense optimization (sidebar, sticky bottom, responsive ads)
-- **Phase 7**: Deploy to Cloudflare Pages + Search Console + Analytics
-- **Phase 8**: Add Spanish (es) → ~9,600 pages, then Japanese (ja) → ~12,800 pages
+- **Phase 8**: Add Spanish (es) → ~12,000 pages, then Japanese (ja) → ~16,000 pages
 - **Phase 6**: Multi-site architecture (currency, BMI, percentage calculators)
+- **Analytics**: Google Analytics 4 integration
