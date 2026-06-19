@@ -1,21 +1,48 @@
 ---
-// AdSense — invisible until publisher ID is configured
-// When PUBLIC_ADSENSE_ID is set, real ads render; otherwise, nothing shows
+// AdSense — conditional rendering, invisible without publisher ID
+// Positions: 'top' (below hero), 'middle' (between content), 'bottom' (end of page)
+// Also loads auto-ads script once per page (in top position)
 export interface Props { position?: 'top' | 'middle' | 'bottom'; class?: string; }
 const { position = 'middle' } = Astro.props;
 const PUBLISHER_ID = import.meta.env.PUBLIC_ADSENSE_ID;
-const AD_SLOT = import.meta.env.PUBLIC_ADSENSE_SLOT || '1234567890';
+const AD_SLOT_TOP = import.meta.env.PUBLIC_ADSENSE_SLOT_TOP || '1234567890';
+const AD_SLOT_MIDDLE = import.meta.env.PUBLIC_ADSENSE_SLOT_MIDDLE || '1234567890';
+const AD_SLOT_BOTTOM = import.meta.env.PUBLIC_ADSENSE_SLOT_BOTTOM || '1234567890';
+const slot = position === 'top' ? AD_SLOT_TOP : position === 'bottom' ? AD_SLOT_BOTTOM : AD_SLOT_MIDDLE;
 ---
 
-{PUBLISHER_ID ? (
+{PUBLISHER_ID && (
   <div class={`ad-container ad-${position}`}>
-    <ins class="adsbygoogle" style="display:block" data-ad-client={PUBLISHER_ID} data-ad-slot={AD_SLOT} data-ad-format="auto" data-full-width-responsive="true"></ins>
-    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    {position === 'top' && (
+      <script is:inline src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${PUBLISHER_ID}`} crossorigin="anonymous" async></script>
+    )}
+    <ins
+      class="adsbygoogle"
+      style="display:block"
+      data-ad-client={PUBLISHER_ID}
+      data-ad-slot={slot}
+      data-ad-format={position === 'bottom' ? 'horizontal' : 'auto'}
+      data-full-width-responsive="true"
+    ></ins>
+    <script is:inline>(adsbygoogle = window.adsbygoogle || []).push({});</script>
   </div>
-) : null}
+)}
 
 <style>
-  .ad-container { margin: var(--sp-6) 0; text-align: center; min-height: 90px; }
-  .ad-top { margin-top: 0; }
-  .ad-bottom { margin-bottom: 0; }
+  .ad-container {
+    margin: var(--sp-6) 0;
+    text-align: center;
+    min-height: 100px;
+  }
+  .ad-top {
+    margin-top: var(--sp-4);
+    margin-bottom: var(--sp-6);
+  }
+  .ad-middle {
+    margin: var(--sp-8) 0;
+  }
+  .ad-bottom {
+    margin-top: var(--sp-8);
+    margin-bottom: var(--sp-4);
+  }
 </style>
