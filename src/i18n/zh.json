@@ -9,7 +9,9 @@
     "length": "长度",
     "weight": "重量",
     "temperature": "温度",
-    "data": "数据存储"
+    "data": "数据存储",
+    "area": "面积",
+    "volume": "体积"
   },
   "home": {
     "title": "单位换算",

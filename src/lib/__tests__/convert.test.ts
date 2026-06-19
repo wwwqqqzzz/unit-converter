@@ -209,3 +209,63 @@ describe('getUnitPairs (new categories)', () => {
     expect(getUnitPairs(cat).length).toBe(45);
   });
 });
+
+describe('convert (area)', () => {
+  const areaCat = categories.find(c => c.id === 'area')!;
+
+  it('converts sqm to sqcm', () => {
+    expect(convert(areaCat, 1, 'sqm', 'sqcm')).toBe(10000);
+  });
+
+  it('converts acre to sqm', () => {
+    expect(convert(areaCat, 1, 'acre', 'sqm')).toBeCloseTo(4046.8564, 3);
+  });
+
+  it('converts sqkm to sqm', () => {
+    expect(convert(areaCat, 1, 'sqkm', 'sqm')).toBe(1000000);
+  });
+
+  it('converts ha to sqm', () => {
+    expect(convert(areaCat, 1, 'ha', 'sqm')).toBe(10000);
+  });
+
+  it('converts sqin to sqcm', () => {
+    expect(convert(areaCat, 1, 'sqin', 'sqcm')).toBeCloseTo(6.4516, 3);
+  });
+});
+
+describe('convert (volume)', () => {
+  const volCat = categories.find(c => c.id === 'volume')!;
+
+  it('converts l to ml', () => {
+    expect(convert(volCat, 1, 'l', 'ml')).toBe(1000);
+  });
+
+  it('converts gal to l', () => {
+    expect(convert(volCat, 1, 'gal', 'l')).toBeCloseTo(3.7854, 3);
+  });
+
+  it('converts m3 to l', () => {
+    expect(convert(volCat, 1, 'm3', 'l')).toBe(1000);
+  });
+
+  it('converts cup to ml', () => {
+    expect(convert(volCat, 1, 'cup', 'ml')).toBeCloseTo(236.588, 2);
+  });
+
+  it('converts tbsp to ml', () => {
+    expect(convert(volCat, 1, 'tbsp', 'ml')).toBeCloseTo(14.787, 2);
+  });
+});
+
+describe('getUnitPairs (area & volume)', () => {
+  it('area has 36 pairs (9 units)', () => {
+    const cat = categories.find(c => c.id === 'area')!;
+    expect(getUnitPairs(cat).length).toBe(36);
+  });
+
+  it('volume has 55 pairs (11 units)', () => {
+    const cat = categories.find(c => c.id === 'volume')!;
+    expect(getUnitPairs(cat).length).toBe(55);
+  });
+});

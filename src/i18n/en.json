@@ -9,7 +9,9 @@
     "length": "Length",
     "weight": "Weight",
     "temperature": "Temperature",
-    "data": "Data Storage"
+    "data": "Data Storage",
+    "area": "Area",
+    "volume": "Volume"
   },
   "home": {
     "title": "Unit Converter",
