@@ -36,4 +36,4 @@ export const LANG_LABELS: Record<string, string> = {
 };
 
 /** All supported languages */
-export const LANGUAGES: Lang[] = ['en', 'zh', 'es', 'fr', 'de', 'ja'];
+export const LANGUAGES: Lang[] = ['en', 'zh', 'es', 'fr', 'de', 'ja', 'pt', 'it', 'ko', 'ru', 'hi', 'tr'];
