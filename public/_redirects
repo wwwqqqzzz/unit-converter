@@ -1,0 +1,2 @@
+# Root redirect to English homepage
+/ /en/ 302

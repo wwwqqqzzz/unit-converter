@@ -36,10 +36,13 @@ const canonicalHref = canonical ?? canonicalUrl(lang, pagePath, siteUrl.replace(
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
+    <meta name="theme-color" content="#ffe033" />
     <link rel="canonical" href={canonicalHref} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <Fragment set:html={hreflangTags(pagePath)} />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" as="style" />
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
     {jsonld && <script type="application/ld+json" set:html={jsonld}></script>}
     <style>
