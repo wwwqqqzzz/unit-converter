@@ -1,39 +1,24 @@
 ---
-// ============================================================
-// Language homepage: /en/ and /zh/
-// ============================================================
-
+// Language homepage: /en/ and /zh/ — Neo-Brutalist
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import AdSense from '../../components/AdSense.astro';
 import { t, type Lang } from '../../utils/i18n';
 import { getCategories } from '../../lib/units';
 import { CATEGORY_ICONS } from '../../data/units';
 
-export interface Props {
-  lang: Lang;
-}
+export interface Props { lang: Lang; }
 export function getStaticPaths() {
-  return [
-    { params: { lang: 'en' } },
-    { params: { lang: 'zh' } },
-  ];
+  return [{ params: { lang: 'en' } }, { params: { lang: 'zh' } }];
 }
-
 const { lang } = Astro.params as Props;
 const categories = getCategories();
 ---
 
-<BaseLayout
-  lang={lang}
-  title={t(lang, 'home.title')}
-  description={t(lang, 'home.description')}
-  pagePath=""
-  isHome={true}
->
+<BaseLayout lang={lang} title={t(lang, 'home.title')} description={t(lang, 'home.description')} pagePath="" isHome={true}>
   <div class="home-hero">
     <h1>{t(lang, 'home.title')}</h1>
     <p class="home-subtitle">{t(lang, 'home.subtitle')}</p>
-    <p class="home-trust">{lang === 'zh' ? '免费 · 即时 · 无需注册' : 'Free · Instant · No signup required'}</p>
+    <p class="home-trust">{lang === 'zh' ? '免费 · 即时 · 无需注册' : 'Free · Instant · No signup'}</p>
   </div>
 
   <AdSense position="top" />
@@ -41,31 +26,24 @@ const categories = getCategories();
   <section class="category-list">
     <h2>{t(lang, 'home.chooseCategory')}</h2>
     <div class="category-grid">
-      {
-        categories.map(cat => (
-          <a href={"/" + lang + "/" + cat.id + "/"} class="category-card">
-            <span class="category-icon">
-              {CATEGORY_ICONS[cat.id] ?? '📐'}
-            </span>
-            <span class="category-name">{cat.name[lang]}</span>
-            <span class="category-count">{cat.units.length} {lang === 'zh' ? '个单位' : 'units'}</span>
-          </a>
-        ))
-      }
+      {categories.map(cat => (
+        <a href={"/" + lang + "/" + cat.id + "/"} class="category-card">
+          <span class="category-icon">{CATEGORY_ICONS[cat.id] ?? '📐'}</span>
+          <span class="category-name">{cat.name[lang]}</span>
+          <span class="category-count">{cat.units.length} {lang === 'zh' ? '单位' : 'units'}</span>
+        </a>
+      ))}
     </div>
   </section>
 </BaseLayout>
 
 <style>
-  .home-hero {
-    text-align: center;
-    padding: var(--sp-12) 0 var(--sp-8);
-  }
+  .home-hero { text-align: center; padding: var(--sp-12) 0 var(--sp-8); }
   .home-hero h1 {
     font-size: var(--text-4xl);
-    font-weight: 800;
+    font-weight: 700;
     letter-spacing: -0.03em;
-    line-height: 1.1;
+    line-height: 1.05;
     color: var(--c-text);
   }
   .home-subtitle {
@@ -75,28 +53,29 @@ const categories = getCategories();
     line-height: 1.5;
   }
   .home-trust {
-    color: var(--c-text-tertiary);
-    font-size: var(--text-sm);
-    margin-top: var(--sp-2);
-    font-weight: 500;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-  }
-  .category-list {
-    margin: var(--sp-10) 0;
-  }
-  .category-list h2 {
-    font-size: var(--text-sm);
-    font-weight: 600;
+    display: inline-block;
+    margin-top: var(--sp-3);
+    padding: var(--sp-1) var(--sp-4);
+    background: var(--c-accent);
+    color: #000;
+    font-size: var(--text-xs);
+    font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.08em;
+  }
+  .category-list { margin: var(--sp-10) 0; }
+  .category-list h2 {
+    font-size: var(--text-xs);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
     color: var(--c-text-tertiary);
     margin-bottom: var(--sp-4);
   }
   .category-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-    gap: var(--sp-2);
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: var(--sp-3);
   }
   .category-card {
     display: flex;
@@ -105,36 +84,28 @@ const categories = getCategories();
     text-align: center;
     padding: var(--sp-4) var(--sp-3);
     background: var(--c-surface);
-    border: 1px solid var(--c-border);
-    border-radius: var(--r-lg);
+    border: var(--b);
+    box-shadow: var(--shadow-hard-sm);
     text-decoration: none;
     color: var(--c-text);
-    transition: all var(--t-base);
+    transition: all var(--t);
   }
   .category-card:hover {
-    background: var(--c-surface-hover);
-    border-color: var(--c-border-strong);
-    box-shadow: var(--shadow-card-hover);
+    transform: translate(-2px, -2px);
+    box-shadow: var(--shadow-hard);
     text-decoration: none;
-    transform: translateY(-1px);
+    background: var(--c-accent);
   }
-  .category-icon {
-    font-size: 1.5rem;
-    margin-bottom: var(--sp-1);
+  .category-card:active {
+    transform: translate(2px, 2px);
+    box-shadow: none;
   }
-  .category-name {
-    font-weight: 600;
-    font-size: var(--text-base);
-  }
-  .category-count {
-    font-size: var(--text-xs);
-    color: var(--c-text-tertiary);
-    margin-top: 2px;
-  }
-
+  .category-icon { font-size: 1.5rem; margin-bottom: var(--sp-1); }
+  .category-name { font-weight: 600; font-size: var(--text-base); }
+  .category-count { font-size: var(--text-xs); color: var(--c-text-tertiary); margin-top: 2px; }
   @media (max-width: 480px) {
     .home-hero { padding: var(--sp-8) 0 var(--sp-6); }
     .home-hero h1 { font-size: var(--text-3xl); }
-    .category-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); }
+    .category-grid { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); }
   }
 </style>

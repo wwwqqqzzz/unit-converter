@@ -1,6 +1,7 @@
 ---
 // ============================================================
-// Base HTML layout — SEO meta, hreflang, canonical, analytics, fonts
+// Base HTML layout — Neo-Brutalist Design System
+// Thick borders, hard offset shadows, accent yellow, zero subtlety
 // ============================================================
 
 import type { Lang } from '../utils/i18n';
@@ -9,17 +10,11 @@ import { hreflangTags, canonicalUrl } from '../lib/seo';
 
 export interface Props {
   lang: Lang;
-  /** Title (without site name suffix) */
   title: string;
-  /** Meta description */
   description: string;
-  /** Page path relative to /{lang}/ (e.g. "length/cm-to-inch") */
   pagePath: string;
-  /** Whether this is the root /{lang}/ page */
   isHome?: boolean;
-  /** Optional canonical override */
   canonical?: string;
-  /** Optional JSON-LD structured data */
   jsonld?: string;
 }
 
@@ -27,14 +22,9 @@ const { lang, title, description, pagePath, isHome, canonical, jsonld } = Astro.
 const siteUrl = Astro.site?.href ?? 'https://unitconvert.example.com/';
 const fullTitle = isHome ? title : `${title} — Unit Converter`;
 
-// Build language switcher links
 const langLinks = LANGUAGES
   .filter(l => l !== lang)
-  .map(l => ({
-    code: l,
-    url: `/${l}/${pagePath}`,
-    label: l === 'en' ? 'English' : '中文',
-  }));
+  .map(l => ({ code: l, url: `/${l}/${pagePath}`, label: l === 'en' ? 'EN' : '中' }));
 
 const canonicalHref = canonical ?? canonicalUrl(lang, pagePath, siteUrl.replace(/\/$/, ''));
 ---
@@ -46,140 +36,101 @@ const canonicalHref = canonical ?? canonicalUrl(lang, pagePath, siteUrl.replace(
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
-
-    <!-- Canonical -->
     <link rel="canonical" href={canonicalHref} />
-
-    <!-- Hreflang (includes en, zh, x-default) -->
     <Fragment set:html={hreflangTags(pagePath)} />
-
-    <!-- Preconnect for performance -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
-
-    <!-- JSON-LD structured data -->
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
     {jsonld && <script type="application/ld+json" set:html={jsonld}></script>}
-
     <style>
       /* ============================================================
-         Design System — Minimalist Monochrome
+         Neo-Brutalist Design System
          ============================================================
-         Font: DM Sans (geometric, modern, not overused)
-         Palette: Pure black/white/gray — zero color
-         Spacing: 4px base unit (4, 8, 12, 16, 24, 32, 48, 64)
-         Radius: 8px cards, 6px buttons, 4px inputs
-         Shadows: Minimal — only for the converter hero card
-         Breakpoints: 480px (mobile), 768px (tablet), 1024px+ (desktop)
+         Font: Space Grotesk (geometric, bold, distinctive)
+         Palette: Black + White + Yellow accent
+         Borders: 3px solid black (light) / 3px solid white (dark)
+         Shadows: 4px 4px 0 black (light) / 4px 4px 0 white (dark)
+         Radius: 0px (brutalist = no curves)
          ============================================================ */
 
       :root {
-        /* Colors */
-        --c-bg: #fafafa;
+        --c-bg: #f5f5f0;
         --c-surface: #fff;
-        --c-surface-hover: #f5f5f5;
-        --c-surface-active: #eee;
-        --c-border: #e5e5e5;
-        --c-border-strong: #ccc;
-        --c-text: #111;
-        --c-text-secondary: #555;
-        --c-text-tertiary: #888;
+        --c-surface-hover: #f0f0e8;
+        --c-surface-active: #e8e8dc;
+        --c-border: #000;
+        --c-border-light: #ccc;
+        --c-text: #000;
+        --c-text-secondary: #333;
+        --c-text-tertiary: #666;
         --c-text-inverse: #fff;
-        --c-accent: #111;
-        --c-accent-hover: #333;
-        --c-success-bg: #f0faf0;
-        --c-success-border: #c8e6c8;
-        --c-success-text: #2d6a2d;
-        --c-hero-bg: #111;
-        --c-hero-surface: rgba(255,255,255,0.12);
-        --c-hero-border: rgba(255,255,255,0.2);
-        --c-hero-input-bg: rgba(255,255,255,0.92);
-        --c-hero-input-focus: #fff;
-        --c-link: #111;
-
-        /* Spacing (4px base) */
-        --sp-1: 4px;
-        --sp-2: 8px;
-        --sp-3: 12px;
-        --sp-4: 16px;
-        --sp-5: 20px;
-        --sp-6: 24px;
-        --sp-8: 32px;
-        --sp-10: 40px;
-        --sp-12: 48px;
-        --sp-16: 64px;
-
-        /* Typography */
-        --font-sans: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-        --font-mono: 'DM Mono', 'SF Mono', 'Fira Code', monospace;
-        --text-xs: 0.75rem;
-        --text-sm: 0.8125rem;
-        --text-base: 0.9375rem;
-        --text-lg: 1.0625rem;
-        --text-xl: 1.25rem;
-        --text-2xl: 1.5rem;
-        --text-3xl: 2rem;
-        --text-4xl: 2.5rem;
-
-        /* Border Radius */
-        --r-sm: 4px;
-        --r-md: 6px;
-        --r-lg: 8px;
-        --r-xl: 12px;
-        --r-full: 9999px;
-
-        /* Shadows */
-        --shadow-card: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
-        --shadow-card-hover: 0 4px 12px rgba(0,0,0,0.08);
-        --shadow-hero: 0 8px 30px rgba(0,0,0,0.12);
-
-        /* Transitions */
-        --t-fast: 120ms ease;
-        --t-base: 180ms ease;
-        --t-slow: 280ms ease;
-
-        /* Layout */
+        --c-accent: #ffe033;
+        --c-accent-hover: #ffd600;
+        --c-accent-dark: #c8a800;
+        --c-success: #d4edda;
+        --c-success-border: #000;
+        --c-success-text: #155724;
+        --c-hero-bg: #000;
+        --c-hero-text: #fff;
+        --c-hero-surface: #1a1a1a;
+        --c-hero-border: #444;
+        --c-hero-input-bg: #fff;
+        --c-link: #000;
+        --c-link-hover: #000;
+        --shadow-hard: 4px 4px 0 #000;
+        --shadow-hard-sm: 3px 3px 0 #000;
+        --shadow-hard-xs: 2px 2px 0 #000;
+        --b: 3px solid #000;
+        --sp-1: 4px; --sp-2: 8px; --sp-3: 12px; --sp-4: 16px;
+        --sp-5: 20px; --sp-6: 24px; --sp-8: 32px; --sp-10: 40px;
+        --sp-12: 48px; --sp-16: 64px;
+        --font: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+        --font-mono: 'Space Mono', 'SF Mono', monospace;
+        --text-xs: 0.75rem; --text-sm: 0.8125rem; --text-base: 0.9375rem;
+        --text-lg: 1.0625rem; --text-xl: 1.25rem; --text-2xl: 1.5rem;
+        --text-3xl: 2rem; --text-4xl: 2.75rem;
+        --t: 100ms ease;
         --max-width: 720px;
         --max-width-wide: 960px;
-
-        /* Container */
         --container-pad: var(--sp-4);
       }
 
-      /* Dark mode */
       @media (prefers-color-scheme: dark) {
         :root {
-          --c-bg: #0a0a0a;
-          --c-surface: #161616;
-          --c-surface-hover: #1e1e1e;
-          --c-surface-active: #282828;
-          --c-border: #2a2a2a;
-          --c-border-strong: #3a3a3a;
-          --c-text: #e8e8e8;
-          --c-text-secondary: #a0a0a0;
-          --c-text-tertiary: #666;
-          --c-accent: #e8e8e8;
-          --c-accent-hover: #fff;
-          --c-success-bg: #0d1f0d;
-          --c-success-border: #1a3a1a;
+          --c-bg: #0d0d0d;
+          --c-surface: #1a1a1a;
+          --c-surface-hover: #222;
+          --c-surface-active: #2a2a2a;
+          --c-border: #e8e8e8;
+          --c-border-light: #555;
+          --c-text: #f0f0f0;
+          --c-text-secondary: #bbb;
+          --c-text-tertiary: #777;
+          --c-text-inverse: #000;
+          --c-accent: #ffe033;
+          --c-accent-hover: #ffd600;
+          --c-accent-dark: #ffe033;
+          --c-success: #1a3a1a;
+          --c-success-border: #4a4;
           --c-success-text: #7ec77e;
-          --c-hero-bg: #161616;
-          --c-hero-surface: rgba(255,255,255,0.08);
-          --c-hero-border: rgba(255,255,255,0.12);
-          --c-hero-input-bg: #1e1e1e;
-          --c-hero-input-focus: #282828;
-          --c-link: #e8e8e8;
-          --shadow-card: 0 1px 3px rgba(0,0,0,0.3);
-          --shadow-card-hover: 0 4px 12px rgba(0,0,0,0.4);
-          --shadow-hero: 0 8px 30px rgba(0,0,0,0.4);
+          --c-hero-bg: #111;
+          --c-hero-text: #f0f0f0;
+          --c-hero-surface: #222;
+          --c-hero-border: #444;
+          --c-hero-input-bg: #222;
+          --c-link: #f0f0f0;
+          --c-link-hover: #ffe033;
+          --shadow-hard: 4px 4px 0 #e8e8e8;
+          --shadow-hard-sm: 3px 3px 0 #e8e8e8;
+          --shadow-hard-xs: 2px 2px 0 #e8e8e8;
+          --b: 3px solid #e8e8e8;
         }
       }
 
-      /* Reset */
       *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-      html { font-size: 16px; scroll-behavior: smooth; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+      html { font-size: 16px; scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
       body {
-        font-family: var(--font-sans);
+        font-family: var(--font);
         color: var(--c-text);
         background: var(--c-bg);
         line-height: 1.6;
@@ -187,10 +138,10 @@ const canonicalHref = canonical ?? canonicalUrl(lang, pagePath, siteUrl.replace(
         display: flex;
         flex-direction: column;
       }
-      a { color: var(--c-link); text-decoration: none; }
-      a:hover { text-decoration: underline; }
+      a { color: var(--c-link); text-decoration: underline; text-underline-offset: 2px; }
+      a:hover { color: var(--c-link-hover); }
       img { max-width: 100%; height: auto; }
-      h1, h2, h3 { line-height: 1.25; }
+      h1, h2, h3, h4 { line-height: 1.2; letter-spacing: -0.02em; }
     </style>
   </head>
   <body>
@@ -198,13 +149,11 @@ const canonicalHref = canonical ?? canonicalUrl(lang, pagePath, siteUrl.replace(
       <div class="container header-inner">
         <a href={"/" + lang + "/"} class="logo">{t(lang, 'home.title')}</a>
         <nav class="lang-switcher">
-          {
-            LANGUAGES.filter(l => l !== lang).map(l => (
-              <a href={"/" + l + "/" + pagePath} class="lang-link">
-                {l === 'en' ? 'EN' : '中'}
-              </a>
-            ))
-          }
+          {LANGUAGES.filter(l => l !== lang).map(l => (
+            <a href={"/" + l + "/" + pagePath} class="lang-btn">
+              {l === 'en' ? 'EN' : '中'}
+            </a>
+          ))}
         </nav>
       </div>
     </header>
@@ -227,7 +176,7 @@ const canonicalHref = canonical ?? canonicalUrl(lang, pagePath, siteUrl.replace(
 <style>
   .site-header {
     background: var(--c-surface);
-    border-bottom: 1px solid var(--c-border);
+    border-bottom: var(--b);
     position: sticky;
     top: 0;
     z-index: 100;
@@ -248,25 +197,29 @@ const canonicalHref = canonical ?? canonicalUrl(lang, pagePath, siteUrl.replace(
     text-decoration: none;
     letter-spacing: -0.02em;
   }
-  .logo:hover { opacity: 0.7; text-decoration: none; }
-  .lang-switcher {
-    display: flex;
-    gap: var(--sp-1);
-  }
-  .lang-link {
-    padding: var(--sp-1) var(--sp-2);
-    border-radius: var(--r-full);
+  .logo:hover { text-decoration: none; opacity: 0.8; }
+  .lang-switcher { display: flex; gap: var(--sp-1); }
+  .lang-btn {
+    padding: var(--sp-1) var(--sp-3);
+    border: var(--b);
     font-size: var(--text-sm);
     font-weight: 600;
-    color: var(--c-text-secondary);
+    color: var(--c-text);
     text-decoration: none;
-    border: 1px solid var(--c-border);
-    transition: all var(--t-fast);
+    background: var(--c-surface);
+    box-shadow: var(--shadow-hard-xs);
+    transition: all var(--t);
+    letter-spacing: 0.02em;
   }
-  .lang-link:hover {
-    background: var(--c-surface-hover);
-    border-color: var(--c-border-strong);
+  .lang-btn:hover {
+    background: var(--c-accent);
     text-decoration: none;
+    transform: translate(-1px, -1px);
+    box-shadow: var(--shadow-hard-sm);
+  }
+  .lang-btn:active {
+    transform: translate(2px, 2px);
+    box-shadow: none;
   }
   .container {
     max-width: var(--max-width);
@@ -276,13 +229,13 @@ const canonicalHref = canonical ?? canonicalUrl(lang, pagePath, siteUrl.replace(
   }
   .main-content {
     flex: 1;
-    padding-top: var(--sp-8);
+    padding-top: var(--sp-10);
     padding-bottom: var(--sp-16);
   }
   .site-footer {
-    border-top: 1px solid var(--c-border);
+    border-top: var(--b);
     padding: var(--sp-6) 0;
-    color: var(--c-text-tertiary);
+    background: var(--c-surface);
     font-size: var(--text-sm);
   }
   .footer-inner {
@@ -299,8 +252,7 @@ const canonicalHref = canonical ?? canonicalUrl(lang, pagePath, siteUrl.replace(
     text-decoration: none;
     margin-left: var(--sp-4);
   }
-  .footer-inner nav a:hover { color: var(--c-text); }
-
+  .footer-inner nav a:hover { color: var(--c-text); text-decoration: underline; }
   @media (max-width: 480px) {
     :root { --container-pad: var(--sp-3); }
     .header-inner { padding: var(--sp-2) var(--sp-3); }
