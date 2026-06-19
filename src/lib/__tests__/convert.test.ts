@@ -232,6 +232,10 @@ describe('convert (area)', () => {
   it('converts sqin to sqcm', () => {
     expect(convert(areaCat, 1, 'sqin', 'sqcm')).toBeCloseTo(6.4516, 3);
   });
+
+  it('converts mu to sqm', () => {
+    expect(convert(areaCat, 1, 'mu', 'sqm')).toBeCloseTo(666.667, 2);
+  });
 });
 
 describe('convert (volume)', () => {
@@ -256,16 +260,126 @@ describe('convert (volume)', () => {
   it('converts tbsp to ml', () => {
     expect(convert(volCat, 1, 'tbsp', 'ml')).toBeCloseTo(14.787, 2);
   });
+
+  it('converts gal_uk to l', () => {
+    expect(convert(volCat, 1, 'gal_uk', 'l')).toBeCloseTo(4.54609, 4);
+  });
+
+  it('converts tsp to ml', () => {
+    expect(convert(volCat, 1, 'tsp', 'ml')).toBeCloseTo(4.929, 2);
+  });
 });
 
 describe('getUnitPairs (area & volume)', () => {
-  it('area has 36 pairs (9 units)', () => {
+  it('area has 45 pairs (10 units)', () => {
     const cat = categories.find(c => c.id === 'area')!;
-    expect(getUnitPairs(cat).length).toBe(36);
+    expect(getUnitPairs(cat).length).toBe(45);
   });
 
-  it('volume has 55 pairs (11 units)', () => {
+  it('volume has 78 pairs (13 units)', () => {
     const cat = categories.find(c => c.id === 'volume')!;
-    expect(getUnitPairs(cat).length).toBe(55);
+    expect(getUnitPairs(cat).length).toBe(78);
+  });
+});
+
+describe('convert (speed)', () => {
+  const speedCat = categories.find(c => c.id === 'speed')!;
+
+  it('converts kmh to ms', () => {
+    expect(convert(speedCat, 1, 'kmh', 'ms')).toBeCloseTo(0.27778, 4);
+  });
+
+  it('converts mph to kmh', () => {
+    expect(convert(speedCat, 60, 'mph', 'kmh')).toBeCloseTo(96.5606, 2);
+  });
+
+  it('converts mach to ms', () => {
+    expect(convert(speedCat, 1, 'mach', 'ms')).toBe(343);
+  });
+
+  it('converts kn to kmh', () => {
+    expect(convert(speedCat, 1, 'kn', 'kmh')).toBeCloseTo(1.852, 2);
+  });
+});
+
+describe('convert (time)', () => {
+  const timeCat = categories.find(c => c.id === 'time')!;
+
+  it('converts h to min', () => {
+    expect(convert(timeCat, 1, 'h', 'min')).toBe(60);
+  });
+
+  it('converts d to h', () => {
+    expect(convert(timeCat, 1, 'd', 'h')).toBe(24);
+  });
+
+  it('converts yr to d', () => {
+    expect(convert(timeCat, 1, 'yr', 'd')).toBeCloseTo(365.25, 1);
+  });
+
+  it('converts wk to d', () => {
+    expect(convert(timeCat, 1, 'wk', 'd')).toBe(7);
+  });
+});
+
+describe('convert (pressure)', () => {
+  const presCat = categories.find(c => c.id === 'pressure')!;
+
+  it('converts kpa to pa', () => {
+    expect(convert(presCat, 1, 'kpa', 'pa')).toBe(1000);
+  });
+
+  it('converts atm to pa', () => {
+    expect(convert(presCat, 1, 'atm', 'pa')).toBe(101325);
+  });
+
+  it('converts bar to kpa', () => {
+    expect(convert(presCat, 1, 'bar', 'kpa')).toBe(100);
+  });
+
+  it('converts psi to kpa', () => {
+    expect(convert(presCat, 1, 'psi', 'kpa')).toBeCloseTo(6.8948, 3);
+  });
+});
+
+describe('convert (energy)', () => {
+  const energyCat = categories.find(c => c.id === 'energy')!;
+
+  it('converts kj to j', () => {
+    expect(convert(energyCat, 1, 'kj', 'j')).toBe(1000);
+  });
+
+  it('converts kcal to cal', () => {
+    expect(convert(energyCat, 1, 'kcal', 'cal')).toBe(1000);
+  });
+
+  it('converts kwh to j', () => {
+    expect(convert(energyCat, 1, 'kwh', 'j')).toBe(3600000);
+  });
+
+  it('converts cal to j', () => {
+    expect(convert(energyCat, 1, 'cal', 'j')).toBeCloseTo(4.184, 3);
+  });
+});
+
+describe('getUnitPairs (phase 3 categories)', () => {
+  it('speed has 15 pairs (6 units)', () => {
+    const cat = categories.find(c => c.id === 'speed')!;
+    expect(getUnitPairs(cat).length).toBe(15);
+  });
+
+  it('time has 28 pairs (8 units)', () => {
+    const cat = categories.find(c => c.id === 'time')!;
+    expect(getUnitPairs(cat).length).toBe(28);
+  });
+
+  it('pressure has 28 pairs (8 units)', () => {
+    const cat = categories.find(c => c.id === 'pressure')!;
+    expect(getUnitPairs(cat).length).toBe(28);
+  });
+
+  it('energy has 21 pairs (7 units)', () => {
+    const cat = categories.find(c => c.id === 'energy')!;
+    expect(getUnitPairs(cat).length).toBe(21);
   });
 });

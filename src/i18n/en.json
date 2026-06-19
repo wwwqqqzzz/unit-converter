@@ -11,7 +11,11 @@
     "temperature": "Temperature",
     "data": "Data Storage",
     "area": "Area",
-    "volume": "Volume"
+    "volume": "Volume",
+    "speed": "Speed",
+    "time": "Time",
+    "pressure": "Pressure",
+    "energy": "Energy"
   },
   "home": {
     "title": "Unit Converter",

@@ -11,7 +11,11 @@
     "temperature": "温度",
     "data": "数据存储",
     "area": "面积",
-    "volume": "体积"
+    "volume": "体积",
+    "speed": "速度",
+    "time": "时间",
+    "pressure": "压力",
+    "energy": "能量"
   },
   "home": {
     "title": "单位换算",
