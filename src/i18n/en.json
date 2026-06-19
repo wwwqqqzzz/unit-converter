@@ -15,7 +15,14 @@
     "speed": "Speed",
     "time": "Time",
     "pressure": "Pressure",
-    "energy": "Energy"
+    "energy": "Energy",
+    "power": "Power",
+    "fuel": "Fuel Efficiency",
+    "frequency": "Frequency",
+    "angle": "Angle",
+    "force": "Force",
+    "torque": "Torque",
+    "shoe": "Shoe Size"
   },
   "home": {
     "title": "Unit Converter",

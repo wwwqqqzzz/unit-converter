@@ -15,7 +15,14 @@
     "speed": "速度",
     "time": "时间",
     "pressure": "压力",
-    "energy": "能量"
+    "energy": "能量",
+    "power": "功率",
+    "fuel": "燃油效率",
+    "frequency": "频率",
+    "angle": "角度",
+    "force": "力",
+    "torque": "扭矩",
+    "shoe": "鞋码"
   },
   "home": {
     "title": "单位换算",

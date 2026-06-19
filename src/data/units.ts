@@ -33,7 +33,9 @@ export const COMMON_VALUES = [1, 2, 3, 5, 10, 20, 50, 100, 500, 1000];
 export const CATEGORY_ICONS: Record<string, string> = {
   length: '📏', weight: '⚖️', temperature: '🌡️', data: '💾',
   area: '📐', volume: '🧪', speed: '🏎️', time: '⏱️',
-  pressure: '🔧', energy: '⚡',
+  pressure: '🔧', energy: '⚡', power: '💡', fuel: '⛽',
+  frequency: '📡', angle: '📐', force: '🏋️', torque: '🔩',
+  shoe: '👟',
 };
 
 export const CATEGORY_VALUES: Record<string, number[]> = {
@@ -47,6 +49,13 @@ export const CATEGORY_VALUES: Record<string, number[]> = {
   time: [1, 5, 10, 30, 60, 100, 500, 1000],
   pressure: [1, 5, 10, 50, 100, 500, 1000],
   energy: [1, 5, 10, 50, 100, 500, 1000],
+  power: [1, 5, 10, 50, 100, 500, 1000, 5000],
+  fuel: [1, 5, 10, 20, 50, 100],
+  frequency: [1, 10, 100, 1000, 10000, 100000, 1000000],
+  angle: [1, 5, 10, 30, 45, 90, 180, 360],
+  force: [1, 5, 10, 50, 100, 500, 1000],
+  torque: [1, 5, 10, 50, 100, 500, 1000],
+  shoe: [],
 };
 
 export const categories: Category[] = [
@@ -216,5 +225,160 @@ export const categories: Category[] = [
       { id: 'btu',  name: { en: 'BTU',                zh: '英热单位' }, symbol: 'BTU', toBase: 1055.06 },
       { id: 'wh',   name: { en: 'Watt-hours',         zh: '瓦时' },    symbol: 'Wh',  toBase: 3600 },
     ],
+  },
+  {
+    id: 'power',
+    name: { en: 'Power', zh: '功率' },
+    baseUnitId: 'w',
+    units: [
+      { id: 'w',     name: { en: 'Watts',         zh: '瓦特' },   symbol: 'W',    toBase: 1 },
+      { id: 'kw',    name: { en: 'Kilowatts',     zh: '千瓦' },   symbol: 'kW',   toBase: 1000 },
+      { id: 'mw',    name: { en: 'Megawatts',     zh: '兆瓦' },   symbol: 'MW',   toBase: 1000000 },
+      { id: 'hp',    name: { en: 'Horsepower',    zh: '马力' },   symbol: 'hp',   toBase: 745.7 },
+      { id: 'ps',    name: { en: 'Metric Horsepower', zh: '公制马力' }, symbol: 'PS', toBase: 735.499 },
+      { id: 'btuh',  name: { en: 'BTU/hour',      zh: '英热单位/时' }, symbol: 'BTU/h', toBase: 0.29307107 },
+      { id: 'ftlbs', name: { en: 'Foot-pounds/second', zh: '英尺磅/秒' }, symbol: 'ft·lbf/s', toBase: 1.35582 },
+      { id: 'calps', name: { en: 'Calories/second', zh: '卡路里/秒' }, symbol: 'cal/s', toBase: 4.184 },
+    ],
+  },
+  {
+    id: 'fuel',
+    name: { en: 'Fuel Efficiency', zh: '燃油效率' },
+    baseUnitId: 'kml',
+    units: [
+      { id: 'kml',  name: { en: 'Kilometers per Liter',  zh: '千米每升' },   symbol: 'km/L',  toBase: 1 },
+      { id: 'l100',  name: { en: 'Liters per 100km',      zh: '升每百千米' },  symbol: 'L/100km', toBase: 0 },
+      { id: 'mpg_us', name: { en: 'Miles per Gallon (US)', zh: '英里每加仑(美)' }, symbol: 'mpg', toBase: 0.425144 },
+      { id: 'mpg_uk', name: { en: 'Miles per Gallon (UK)', zh: '英里每加仑(英)' }, symbol: 'mpg', toBase: 0.354006 },
+    ],
+    convertFn: (value: number, fromId: string, toId: string): number => {
+      // Convert everything through km/L
+      let kml: number;
+      switch (fromId) {
+        case 'kml': kml = value; break;
+        case 'l100': kml = value === 0 ? NaN : 100 / value; break;
+        case 'mpg_us': kml = value * 0.425144; break;
+        case 'mpg_uk': kml = value * 0.354006; break;
+        default: return NaN;
+      }
+      switch (toId) {
+        case 'kml': return kml;
+        case 'l100': return kml === 0 ? NaN : 100 / kml;
+        case 'mpg_us': return kml / 0.425144;
+        case 'mpg_uk': return kml / 0.354006;
+        default: return NaN;
+      }
+    },
+  },
+  {
+    id: 'frequency',
+    name: { en: 'Frequency', zh: '频率' },
+    baseUnitId: 'hz',
+    units: [
+      { id: 'hz',  name: { en: 'Hertz',      zh: '赫兹' },   symbol: 'Hz',  toBase: 1 },
+      { id: 'khz', name: { en: 'Kilohertz',   zh: '千赫兹' }, symbol: 'kHz', toBase: 1000 },
+      { id: 'mhz', name: { en: 'Megahertz',   zh: '兆赫兹' }, symbol: 'MHz', toBase: 1000000 },
+      { id: 'ghz', name: { en: 'Gigahertz',   zh: '吉赫兹' }, symbol: 'GHz', toBase: 1000000000 },
+      { id: 'rpm', name: { en: 'Revolutions per Minute', zh: '转每分' }, symbol: 'rpm', toBase: 1 / 60 },
+      { id: 'rps', name: { en: 'Revolutions per Second', zh: '转每秒' },  symbol: 'rps', toBase: 1 },
+    ],
+  },
+  {
+    id: 'angle',
+    name: { en: 'Angle', zh: '角度' },
+    baseUnitId: 'deg',
+    units: [
+      { id: 'deg',  name: { en: 'Degrees',         zh: '度' },    symbol: '°',   toBase: 1 },
+      { id: 'rad',  name: { en: 'Radians',          zh: '弧度' },  symbol: 'rad', toBase: 0 },
+      { id: 'grad', name: { en: 'Gradians',          zh: '梯度' },  symbol: 'gon', toBase: 0 },
+      { id: 'arcmin', name: { en: 'Arcminutes',      zh: '角分' },  symbol: '′',   toBase: 1 / 60 },
+      { id: 'arcsec', name: { en: 'Arcseconds',      zh: '角秒' },  symbol: '″',   toBase: 1 / 3600 },
+      { id: 'turn', name: { en: 'Turns',              zh: '圈' },    symbol: 'tr',  toBase: 0 },
+    ],
+    convertFn: (value: number, fromId: string, toId: string): number => {
+      // Convert through degrees
+      let deg: number;
+      switch (fromId) {
+        case 'deg': deg = value; break;
+        case 'rad': deg = value * (180 / Math.PI); break;
+        case 'grad': deg = value * 0.9; break;
+        case 'arcmin': deg = value / 60; break;
+        case 'arcsec': deg = value / 3600; break;
+        case 'turn': deg = value * 360; break;
+        default: return NaN;
+      }
+      switch (toId) {
+        case 'deg': return deg;
+        case 'rad': return deg * (Math.PI / 180);
+        case 'grad': return deg / 0.9;
+        case 'arcmin': return deg * 60;
+        case 'arcsec': return deg * 3600;
+        case 'turn': return deg / 360;
+        default: return NaN;
+      }
+    },
+  },
+  {
+    id: 'force',
+    name: { en: 'Force', zh: '力' },
+    baseUnitId: 'n',
+    units: [
+      { id: 'n',    name: { en: 'Newtons',         zh: '牛顿' },   symbol: 'N',    toBase: 1 },
+      { id: 'kn',   name: { en: 'Kilonewtons',     zh: '千牛' },   symbol: 'kN',   toBase: 1000 },
+      { id: 'lbf',  name: { en: 'Pound-force',     zh: '磅力' },   symbol: 'lbf',  toBase: 4.44822 },
+      { id: 'kgf',  name: { en: 'Kilogram-force',   zh: '千克力' }, symbol: 'kgf',  toBase: 9.80665 },
+      { id: 'dyn',  name: { en: 'Dynes',            zh: '达因' },   symbol: 'dyn',  toBase: 0.00001 },
+      { id: 'ozf',  name: { en: 'Ounce-force',      zh: '盎司力' }, symbol: 'ozf',  toBase: 0.278014 },
+    ],
+  },
+  {
+    id: 'torque',
+    name: { en: 'Torque', zh: '扭矩' },
+    baseUnitId: 'nm',
+    units: [
+      { id: 'nm',    name: { en: 'Newton-meters',       zh: '牛顿米' },   symbol: 'N·m',   toBase: 1 },
+      { id: 'kNm',   name: { en: 'Kilonewton-meters',    zh: '千牛米' },   symbol: 'kN·m',  toBase: 1000 },
+      { id: 'lbft',  name: { en: 'Pound-feet',           zh: '磅英尺' },   symbol: 'lb·ft', toBase: 1.35582 },
+      { id: 'lbin',  name: { en: 'Pound-inches',         zh: '磅英寸' },   symbol: 'lb·in', toBase: 0.112985 },
+      { id: 'kgfm',  name: { en: 'Kilogram-force meters', zh: '千克力米' }, symbol: 'kgf·m', toBase: 9.80665 },
+      { id: 'ozin',  name: { en: 'Ounce-inches',         zh: '盎司英寸' }, symbol: 'oz·in', toBase: 0.0070616 },
+    ],
+  },
+  {
+    id: 'shoe',
+    name: { en: 'Shoe Size', zh: '鞋码' },
+    baseUnitId: 'cm',
+    units: [
+      { id: 'cm',    name: { en: 'Centimeters (foot length)', zh: '厘米（脚长）' }, symbol: 'cm', toBase: 1 },
+      { id: 'us_m',  name: { en: 'US Men',        zh: '美码（男）' },  symbol: 'US M',  toBase: 0 },
+      { id: 'us_w',  name: { en: 'US Women',      zh: '美码（女）' },  symbol: 'US W',  toBase: 0 },
+      { id: 'uk',    name: { en: 'UK',             zh: '英码' },      symbol: 'UK',    toBase: 0 },
+      { id: 'eu',    name: { en: 'EU',              zh: '欧码' },      symbol: 'EU',    toBase: 0 },
+      { id: 'jp',    name: { en: 'Japan',           zh: '日码' },      symbol: 'JP',    toBase: 0 },
+    ],
+    // Shoe sizes are non-linear — use lookup-based conversion through foot length in cm
+    convertFn: (value: number, fromId: string, toId: string): number => {
+      // Step 1: Convert from source to foot length in cm
+      let cm: number;
+      switch (fromId) {
+        case 'cm': cm = value; break;
+        case 'us_m': cm = (value + 16) * 0.838 + 1.27; break;  // US Men approx
+        case 'us_w': cm = (value + 14.5) * 0.838 + 1.27; break; // US Women approx
+        case 'uk': cm = (value + 16.5) * 0.838 + 1.27; break;   // UK approx
+        case 'eu': cm = (value * 0.667) + 1.27; break;           // EU approx
+        case 'jp': cm = value * 0.1; break;                       // JP = mm, to cm
+        default: return NaN;
+      }
+      // Step 2: Convert from cm to target
+      switch (toId) {
+        case 'cm': return cm;
+        case 'us_m': return (cm - 1.27) / 0.838 - 16;
+        case 'us_w': return (cm - 1.27) / 0.838 - 14.5;
+        case 'uk': return (cm - 1.27) / 0.838 - 16.5;
+        case 'eu': return (cm - 1.27) / 0.667;
+        case 'jp': return cm * 10;
+        default: return NaN;
+      }
+    },
   },
 ];

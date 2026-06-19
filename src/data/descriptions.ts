@@ -363,4 +363,186 @@ export const unitDescriptions: Record<string, Record<string, UnitDescription>> =
       zh: "瓦时（Wh）等于3600焦耳，代表一瓦设备运行一小时所消耗的能量。它常用于小型电池容量、太阳能板输出评级和电动汽车充电指标，这些场景中千瓦时作为单位过大。一瓦时精确等于0.001千瓦时或约3.412英热单位。",
     },
   },
+  power: {
+    w: {
+      en: "The watt (W) is the SI base unit of power, defined as one joule per second, measuring the rate of energy transfer. From light bulb brightness ratings to phone charger output, the watt appears in everyday product specifications worldwide. One watt equals exactly 1 joule per second, or about 0.001341 horsepower.",
+      zh: "瓦特（W）是国际单位制功率基本单位，定义为一焦耳每秒，衡量能量传输速率。从灯泡亮度到手机充电器输出功率，瓦特出现在全球日常产品规格中。一瓦精确等于1焦耳每秒，或约0.001341马力。",
+    },
+    kw: {
+      en: "The kilowatt (kW) equals 1,000 watts and is the standard unit for measuring the power output of engines, electric heaters, and industrial machinery. Electricity bills use kilowatt-hours (kW × hours), making the kilowatt the most familiar power unit for consumers. One kilowatt equals approximately 1.341 horsepower.",
+      zh: "千瓦（kW）等于1000瓦，是衡量发动机、电暖器和工业机械功率输出的标准单位。电费账单使用千瓦时（kW × 小时），使千瓦成为消费者最熟悉的功率单位。一千瓦约等于1.341马力。",
+    },
+    mw: {
+      en: "The megawatt (MW) equals one million watts, used to express the output of power plants, large industrial facilities, and data centers. A typical wind turbine generates 2–3 MW, while a large coal plant may produce 500–1,000 MW. One megawatt can power roughly 800–1,000 homes simultaneously.",
+      zh: "兆瓦（MW）等于一百万瓦，用于表示发电厂、大型工业设施和数据中心的输出功率。一台风力发电机通常产生2-3兆瓦，而一座大型燃煤电厂可能产生500-1000兆瓦。一兆瓦大约可同时为800-1000户家庭供电。",
+    },
+    hp: {
+      en: "Horsepower (hp) is an imperial unit of power equal to approximately 745.7 watts, originally defined by James Watt to compare steam engine output to draft horses. It remains the standard unit for rating car engines, lawnmowers, and boat motors, especially in the United States. One horsepower equals about 0.7457 kilowatts or 1.0139 metric horsepower.",
+      zh: "马力（hp）是英制功率单位，约等于745.7瓦，最初由詹姆斯·瓦特定义，用于比较蒸汽机输出与挽马功率。它仍是评价汽车引擎、割草机和船用马达功率的标准单位，尤其在美国。一马力约等于0.7457千瓦或1.0139公制马力。",
+    },
+    ps: {
+      en: "Metric horsepower (PS, Pferdestärke) equals approximately 735.5 watts, slightly less than imperial horsepower, and is the standard power unit for vehicle ratings throughout Europe and Asia. Car specifications in Germany, Japan, and China typically list engine output in PS. One PS equals about 0.9863 imperial horsepower or 0.7355 kilowatts.",
+      zh: "公制马力（PS）约等于735.5瓦，略小于英制马力，是欧洲和亚洲车辆功率评定的标准单位。德国、日本和中国的汽车规格通常以PS列出引擎输出功率。一公制马力约等于0.9863英制马力或0.7355千瓦。",
+    },
+    btuh: {
+      en: "BTU per hour (BTU/h) equals approximately 0.293 watts, the standard rating unit for air conditioners, heaters, and furnaces in North America. A typical window air conditioner rated at 10,000 BTU/h can cool a 400–500 square foot room, making this unit essential for HVAC system sizing. One BTU/h equals about 0.2931 watts.",
+      zh: "英热单位每小时（BTU/h）约等于0.293瓦，是北美空调、加热器和炉具的标准额定功率单位。一台额定10000 BTU/h的窗式空调可冷却约37-46平方米的房间，是暖通空调系统选型的关键单位。一BTU/h约等于0.2931瓦。",
+    },
+    ftlbs: {
+      en: "Foot-pounds per second (ft·lbf/s) equals approximately 1.356 watts, an imperial power unit occasionally used in mechanical engineering contexts. While less common than horsepower for engine ratings, it provides a direct connection between torque and rotational speed. One foot-pound per second equals about 1.356 watts or 0.00182 horsepower.",
+      zh: "英尺磅每秒（ft·lbf/s）约等于1.356瓦，是偶尔用于机械工程领域的英制功率单位。虽然不如马力在引擎评级中常见，但它直接连接扭矩和转速。一英尺磅每秒约等于1.356瓦或0.00182马力。",
+    },
+    calps: {
+      en: "Calories per second (cal/s) equals exactly 4.184 watts, used primarily in thermodynamics and physics to express heat transfer rates. While not a common everyday unit, it bridges thermal and mechanical power calculations in scientific research. One calorie per second equals exactly 4.184 watts or about 0.00561 horsepower.",
+      zh: "卡路里每秒（cal/s）精确等于4.184瓦，主要用于热力学和物理学中表示热传递速率。虽然不是常见的日常单位，但它在科学研究中连接了热功率和机械功率的计算。一卡路里每秒精确等于4.184瓦或约0.00561马力。",
+    },
+  },
+  fuel: {
+    kml: {
+      en: "Kilometers per liter (km/L) is the standard fuel efficiency metric used in most countries outside the US and UK, measuring how far a vehicle travels on one liter of fuel. A typical compact car achieves 12–18 km/L, while hybrids can exceed 25 km/L. One km/L equals approximately 2.352 miles per US gallon.",
+      zh: "千米每升（km/L）是美国和英国以外大多数国家使用的标准燃油效率指标，衡量车辆每升燃料能行驶的距离。一辆典型紧凑型车的燃油效率约为12-18 km/L，混合动力车可超过25 km/L。一km/L约等于2.352美制英里每加仑。",
+    },
+    l100: {
+      en: "Liters per 100km (L/100km) is the inverse fuel efficiency metric used in Europe and Australia, measuring how many liters of fuel a vehicle consumes over 100 kilometers. Lower numbers mean better efficiency — a car rated at 5 L/100km uses less fuel than one rated at 8 L/100km. This is the inverse of km/L: L/100km = 100 / km/L.",
+      zh: "升每百公里（L/100km）是欧洲和澳大利亚使用的燃油效率反向指标，衡量车辆行驶100公里消耗的燃油升数。数值越低越省油——5 L/100km的车比8 L/100km的更省油。它是km/L的倒数：L/100km = 100 / km/L。",
+    },
+    mpg_us: {
+      en: "Miles per gallon US (mpg) measures how many miles a vehicle can travel on one US gallon (3.785 liters) of fuel, the standard efficiency metric in the United States. US EPA fuel economy ratings display city and highway mpg figures for every new vehicle. One US mpg equals approximately 0.425 km/L or about 23.52 L/100km.",
+      zh: "美制英里每加仑（mpg）衡量车辆每美制加仑（3.785升）燃油能行驶的英里数，是美国的标准燃油效率指标。美国EPA为每辆新车标注城市和高速公路mpg数据。一美制mpg约等于0.425 km/L或约23.52 L/100km。",
+    },
+    mpg_uk: {
+      en: "Miles per gallon UK (imperial mpg) measures distance per imperial gallon (4.546 liters), used in the United Kingdom for fuel economy ratings. Because the imperial gallon is larger than the US gallon, the same car shows a higher mpg figure in the UK system. One UK mpg equals approximately 0.354 km/L or about 28.25 L/100km.",
+      zh: "英制英里每加仑衡量车辆每英制加仑（4.546升）燃油能行驶的英里数，在英国用于燃油经济性评级。由于英制加仑大于美制加仑，同一辆车在英制系统下显示更高的mpg数值。一英制mpg约等于0.354 km/L或约28.25 L/100km。",
+    },
+  },
+  frequency: {
+    hz: {
+      en: "The hertz (Hz) is the SI base unit of frequency, defined as one cycle per second, measuring how often a repeating event occurs. From AC power grid frequency (50 or 60 Hz) to audio tones and processor clock speeds, hertz is the universal language of frequency. One hertz equals exactly one cycle per second.",
+      zh: "赫兹（Hz）是国际单位制频率基本单位，定义为每秒一个周期，衡量重复事件发生的频率。从交流电网频率（50或60赫兹）到音频和处理器时钟速度，赫兹是频率的通用语言。一赫兹精确等于每秒一个周期。",
+    },
+    khz: {
+      en: "The kilohertz (kHz) equals 1,000 hertz, commonly used to describe audio frequencies, radio broadcasting bands, and early computer processor speeds. Human hearing ranges from about 20 Hz to 20 kHz, making this unit essential in audio engineering and music production. One kilohertz equals 1,000 cycles per second.",
+      zh: "千赫兹（kHz）等于1000赫兹，常用于描述音频频率、无线电广播频段和早期计算机处理器速度。人类听觉范围约为20赫兹到20千赫兹，使该单位在音频工程和音乐制作中至关重要。一千赫兹等于每秒1000个周期。",
+    },
+    mhz: {
+      en: "The megahertz (MHz) equals one million hertz, widely used for radio frequency bands, early CPU clock speeds, and wireless communication standards. FM radio broadcasts in the 88–108 MHz range, while early personal computers operated at just a few MHz. One megahertz equals 1,000,000 cycles per second.",
+      zh: "兆赫兹（MHz）等于一百万赫兹，广泛用于无线电频段、早期CPU时钟速度和无线通信标准。FM无线电广播在88-108 MHz范围内，而早期个人电脑仅以几兆赫兹运行。一兆赫兹等于每秒100万个周期。",
+    },
+    ghz: {
+      en: "The gigahertz (GHz) equals one billion hertz, the standard unit for modern CPU clock speeds, Wi-Fi frequencies, and 5G cellular bands. A typical laptop processor runs at 2–5 GHz, while Wi-Fi operates at 2.4 GHz or 5 GHz. One gigahertz equals 1,000 megahertz or one billion cycles per second.",
+      zh: "吉赫兹（GHz）等于十亿赫兹，是现代CPU时钟速度、Wi-Fi频率和5G蜂窝频段的标准单位。典型笔记本电脑处理器运行在2-5 GHz，Wi-Fi工作在2.4 GHz或5 GHz。一吉赫兹等于1000兆赫兹或每秒十亿个周期。",
+    },
+    rpm: {
+      en: "Revolutions per minute (rpm) measures rotational speed, expressing how many complete turns an object makes in one minute. It is the most common unit for engine speed, hard drive spin rates, and power tool specifications worldwide. One rpm equals exactly 1/60 hertz or approximately 0.01667 Hz.",
+      zh: "转每分（rpm）衡量旋转速度，表示物体每分钟完成的完整转数。它是全球最常用的引擎转速、硬盘转速和电动工具规格单位。一转每分精确等于1/60赫兹或约0.01667 Hz。",
+    },
+    rps: {
+      en: "Revolutions per second (rps) measures rotational speed as complete turns per second, equivalent to exactly one hertz. While less common than rpm in everyday specifications, rps is used in physics, engineering analysis, and some industrial equipment ratings. One rps equals exactly 60 rpm.",
+      zh: "转每秒（rps）以每秒完整转数衡量旋转速度，精确等于一赫兹。虽然在日常规格中不如rpm常见，rps在物理学、工程分析和部分工业设备评级中使用。一转每秒精确等于60 rpm。",
+    },
+  },
+  angle: {
+    deg: {
+      en: "The degree (°) is the most common unit for measuring angles, dividing a full circle into 360 equal parts. From navigation and construction to everyday geometry, degrees are the default angular unit worldwide. One degree equals π/180 radians or about 0.01745 radians.",
+      zh: "度（°）是最常用的角度测量单位，将一个完整的圆分为360等份。从导航、建筑到日常几何，度是全球默认的角度单位。一度等于π/180弧度或约0.01745弧度。",
+    },
+    rad: {
+      en: "The radian (rad) is the SI unit of angle measurement, defined as the angle subtended by an arc equal in length to the radius of the circle. It is the natural unit for trigonometric functions in mathematics and physics — sin, cos, and tan all assume radian input. One radian equals approximately 57.296 degrees.",
+      zh: "弧度（rad）是国际单位制角度测量单位，定义为弧长等于圆半径时所对应的角度。它是数学和物理中三角函数的自然单位——sin、cos、tan都以弧度为输入。一弧度约等于57.296度。",
+    },
+    grad: {
+      en: "The gradian (gon), also called the grad, divides a right angle into 100 equal parts, making a full circle 400 gradians. It is used primarily in surveying and some European military mapping systems, where the base-100 system simplifies decimal calculations. One gradian equals exactly 0.9 degrees.",
+      zh: "梯度（gon），又称grad，将直角分为100等份，使一个完整圆为400梯度。它主要用于测绘和一些欧洲军事地图系统，其中百进制简化了小数计算。一梯度精确等于0.9度。",
+    },
+    arcmin: {
+      en: "The arcminute (′) equals 1/60 of a degree, used in astronomy, cartography, and precision navigation where fine angular resolution is needed. Stars are cataloged by their coordinates in degrees and arcminutes, and telescope pointing accuracy is often specified in arcminutes. One arcminute equals 1/60 degree or about 0.000291 radians.",
+      zh: "角分（′）等于1/60度，用于天文学、制图学和精密导航等需要精细角度分辨率的领域。恒星按度和角分的坐标编目，望远镜指向精度常以角分表示。一角分等于1/60度或约0.000291弧度。",
+    },
+    arcsec: {
+      en: "The arcsecond (″) equals 1/3,600 of a degree, providing extremely fine angular resolution for astronomy, optics, and satellite imaging. The Hubble Space Telescope has a resolution of about 0.05 arcseconds, and stellar parallax measurements use milliarcsecond precision. One arcsecond equals 1/3600 degree or about 0.00000485 radians.",
+      zh: "角秒（″）等于1/3600度，为天文学、光学和卫星成像提供极高角度分辨率。哈勃太空望远镜的分辨率约为0.05角秒，恒星视差测量使用毫角秒精度。一角秒等于1/3600度或约0.00000485弧度。",
+    },
+    turn: {
+      en: "A turn (tr), also called a revolution, represents one complete rotation of 360 degrees or 2π radians. It is used in engineering contexts involving rotational mechanics, electric motor specifications, and angular velocity calculations where whole rotations are more intuitive than degrees or radians. One turn equals exactly 360 degrees.",
+      zh: "圈（tr），又称转，代表360度或2π弧度的完整旋转。它用于涉及旋转力学的工程场景、电动机规格和角速度计算，这些场景中整圈旋转比度或弧度更直观。一圈精确等于360度。",
+    },
+  },
+  force: {
+    n: {
+      en: "The newton (N) is the SI base unit of force, defined as the force needed to accelerate one kilogram of mass at one meter per second squared. Named after Isaac Newton, it is the fundamental unit in mechanics, structural engineering, and physics worldwide. One newton equals approximately 0.2248 pound-force.",
+      zh: "牛顿（N）是国际单位制力的基本单位，定义为使一千克质量以每秒平方一米加速所需的力。以艾萨克·牛顿命名，是全球力学、结构工程和物理学的基本单位。一牛顿约等于0.2248磅力。",
+    },
+    kn: {
+      en: "The kilonewton (kN) equals 1,000 newtons, used in structural engineering to express building loads, bridge capacities, and material strength ratings. A typical passenger car weighs about 10–15 kN, and building codes specify design loads in kN per square meter. One kilonewton equals approximately 224.8 pound-force.",
+      zh: "千牛（kN）等于1000牛顿，用于结构工程中表示建筑荷载、桥梁承载力和材料强度评级。一辆典型乘用车重约10-15千牛，建筑规范以千牛每平方米规定设计荷载。一千牛约等于224.8磅力。",
+    },
+    lbf: {
+      en: "Pound-force (lbf) is the standard imperial unit of force in the United States, defined as the gravitational force exerted on one pound of mass at sea level. It appears in bolt tension ratings, material testing, and mechanical engineering specifications throughout North America. One pound-force equals approximately 4.448 newtons.",
+      zh: "磅力（lbf）是美国的标准英制力单位，定义为海平面上一磅质量所受的重力。它出现在螺栓张力评级、材料测试和北美的机械工程规格中。一磅力约等于4.448牛顿。",
+    },
+    kgf: {
+      en: "Kilogram-force (kgf) is a non-SI unit defined as the gravitational force on one kilogram of mass at standard gravity, equal to exactly 9.80665 newtons. It is commonly used in some engineering fields and in countries transitioning from metric technical units to SI. One kilogram-force equals approximately 2.205 pound-force.",
+      zh: "千克力（kgf）是非国际单位制单位，定义为一千克质量在标准重力下所受的重力，精确等于9.80665牛顿。它常用于某些工程领域和正在从公制技术单位向SI过渡的国家。一千克力约等于2.205磅力。",
+    },
+    dyn: {
+      en: "The dyne (dyn) is a centimeter-gram-second (CGS) unit of force equal to exactly 0.00001 newtons, used primarily in physics for small-scale force calculations. It represents the force needed to accelerate one gram of mass at one centimeter per second squared, and appears in surface tension and electromagnetic force measurements. One dyne equals exactly 10 micro-newtons.",
+      zh: "达因（dyn）是厘米-克-秒（CGS）制的力单位，精确等于0.00001牛顿，主要用于物理学中的小尺度力计算。它代表使一克质量以每秒平方一厘米加速所需的力，出现在表面张力和电磁力测量中。一达因精确等于10微牛顿。",
+    },
+    ozf: {
+      en: "Ounce-force (ozf) equals approximately 0.278 newtons, the imperial unit for small force measurements in precision engineering, spring calibration, and micro-mechanical testing. It is particularly useful for measuring trigger pull weights, small spring tensions, and delicate instrument calibrations. One ounce-force equals about 1/16 of a pound-force.",
+      zh: "盎司力（ozf）约等于0.278牛顿，是精密工程、弹簧校准和微机械测试中使用的英制小力单位。它特别适用于测量扳机拉力、小弹簧张力和精密仪器校准。一盎司力约等于1/16磅力。",
+    },
+  },
+  torque: {
+    nm: {
+      en: "The newton-meter (N·m) is the SI unit of torque, measuring the rotational force produced when one newton of force is applied at a one-meter distance from the pivot point. It is the standard unit for engine torque specifications, bolt tightening requirements, and mechanical design worldwide. One newton-meter equals approximately 0.7376 pound-feet.",
+      zh: "牛顿米（N·m）是国际单位制扭矩单位，衡量在一米距离的支点上施加一牛顿力所产生的旋转力。它是全球引擎扭矩规格、螺栓拧紧要求和机械设计的标准单位。一牛顿米约等于0.7376磅英尺。",
+    },
+    kNm: {
+      en: "The kilonewton-meter (kN·m) equals 1,000 newton-meters, used in civil and structural engineering for large-scale torque specifications on bridges, cranes, and heavy industrial equipment. Foundation bolt specifications and wind turbine torque ratings are commonly expressed in kN·m. One kN·m equals approximately 737.6 pound-feet.",
+      zh: "千牛米（kN·m）等于1000牛顿米，用于土木和结构工程中桥梁、起重机和重型工业设备的大规格扭矩。基础螺栓规格和风力涡轮机扭矩评级常以千牛米表示。一千牛米约等于737.6磅英尺。",
+    },
+    lbft: {
+      en: "Pound-foot (lb·ft) is the imperial unit of torque used primarily in the United States and UK for automotive engine specifications and mechanical fastener tightening. Car enthusiasts discuss engine output in lb·ft, and torque wrenches in the US are calibrated in this unit. One pound-foot equals approximately 1.356 newton-meters.",
+      zh: "磅英尺（lb·ft）是英制扭矩单位，主要用于美国和英国的汽车引擎规格和机械紧固件拧紧。汽车爱好者以磅英尺讨论引擎输出，美国的扭矩扳手以该单位校准。一磅英尺约等于1.356牛顿米。",
+    },
+    lbin: {
+      en: "Pound-inch (lb·in) is an imperial torque unit for smaller precision applications, commonly used for electronics assembly, small engine specifications, and instrument calibration. Torque screwdrivers and precision fastener specifications in the US typically use lb·in. One pound-inch equals approximately 0.113 newton-meters or 1/12 of a pound-foot.",
+      zh: "磅英寸（lb·in）是用于较小精密应用的英制扭矩单位，常用于电子组装、小型引擎规格和仪器校准。美国的扭矩螺丝刀和精密紧固件规格通常使用磅英寸。一磅英寸约等于0.113牛顿米或1/12磅英尺。",
+    },
+    kgfm: {
+      en: "Kilogram-force meter (kgf·m) is a metric technical unit of torque commonly used in Japan, China, and other Asian countries for engine and motor specifications. While not part of the SI system, it remains standard in automotive specifications throughout East Asia. One kgf·m equals approximately 9.807 newton-meters or about 7.233 pound-feet.",
+      zh: "千克力米（kgf·m）是公制技术扭矩单位，在日本、中国和其他亚洲国家常用于引擎和电机规格。虽然不属于国际单位制，它在东亚汽车规格中仍是标准。一千克力米约等于9.807牛顿米或约7.233磅英尺。",
+    },
+    ozin: {
+      en: "Ounce-inch (oz·in) is a small imperial torque unit used for precision instruments, watchmaking, and micro-mechanical assembly where even pound-inches would be too large. Small servo motors, camera lens mechanisms, and delicate electronics fasteners are rated in oz·in. One ounce-inch equals approximately 0.00706 newton-meters.",
+      zh: "盎司英寸（oz·in）是用于精密仪器、钟表制造和微机械组装的小型英制扭矩单位，这些场景中磅英寸也嫌太大。小型伺服电机、相机镜头机构和精密电子紧固件以盎司英寸评级。一盎司英寸约等于0.00706牛顿米。",
+    },
+  },
+  shoe: {
+    cm: {
+      en: "Centimeters (cm) represent the actual foot length measurement, the universal reference point for all shoe size conversion systems. Measuring your foot in centimeters first is the most reliable way to find your correct size across US, UK, EU, and Japanese systems, as each region uses different numbering scales. A typical adult male foot measures 26–28 cm.",
+      zh: "厘米（cm）代表实际脚长测量值，是所有鞋码换算系统的通用参考点。先以厘米测量脚长是找到US、UK、EU和日码正确尺码最可靠的方法，因为各地区使用不同的编号标准。成年男性脚长通常为26-28厘米。",
+    },
+    us_m: {
+      en: "US Men's shoe sizes follow a scale where size 9 corresponds to a foot length of approximately 27 cm, with each half-size adding about 0.42 cm. The US system is used throughout North America and differs from UK sizes by approximately one full size (US 9 ≈ UK 8). Athletic shoe sizes may vary slightly between brands.",
+      zh: "美码男鞋尺寸遵循一个标度，9码对应脚长约27厘米，每半码增加约0.42厘米。美码系统在北美广泛使用，与英码大约差一个整码（US 9 ≈ UK 8）。运动鞋尺码可能因品牌略有差异。",
+    },
+    us_w: {
+      en: "US Women's shoe sizes run approximately 1.5 sizes larger in number than US Men's for the same foot length, with US Women's 9 corresponding to about 25.4 cm foot length. This offset often causes confusion when shopping for unisex or athletic shoes. US Women's 9 ≈ US Men's 7.5 ≈ EU 40 ≈ UK 6.5.",
+      zh: "美码女鞋尺码数字比相同脚长的男码大约大1.5码，美码女9对应脚长约25.4厘米。这种偏移常在购买中性鞋或运动鞋时造成混淆。美码女9 ≈ 美码男7.5 ≈ 欧码40 ≈ 英码6.5。",
+    },
+    uk: {
+      en: "UK shoe sizes are the basis for the US system but offset by approximately one size — UK 8 corresponds to a US Men's 9 and a foot length of about 27 cm. The UK system is used throughout Britain, Ireland, and many Commonwealth countries, and it closely matches the Indian shoe size system.",
+      zh: "英码鞋码是美码系统的基础，但偏移约一个码——英码8对应美码男9，脚长约27厘米。英码系统在英国、爱尔兰和许多英联邦国家使用，与印度鞋码系统接近。",
+    },
+    eu: {
+      en: "EU shoe sizes (also called Continental or Paris Point sizes) use a scale where each size increment equals 2/3 cm (6.67 mm) in foot length, making EU 42 approximately 26.7 cm. The EU system is used throughout continental Europe and is the most common international standard. Converting between EU and US/UK sizes requires knowing the foot length.",
+      zh: "欧码鞋码（又称大陆码或巴黎点）使用一个每码增量等于2/3厘米（6.67毫米）脚长的标度，使欧码42约对应26.7厘米。欧码系统在整个欧洲大陆使用，是最常见的国际标准。欧码与美码/英码之间的换算需要知道脚长。",
+    },
+    jp: {
+      en: "Japanese shoe sizes (also used in Korea) directly represent foot length in millimeters — JP 260 means a 26 cm foot, JP 270 means 27 cm. This makes the Japanese system the simplest and most intuitive, as the size number directly equals the foot measurement. Japanese sizes range typically from 230 (women's) to 290 (men's large).",
+      zh: "日码鞋码（韩国也使用）直接以毫米表示脚长——JP 260表示26厘米脚长，JP 270表示27厘米。这使得日码系统最简单直观，因为尺码数字直接等于脚长测量值。日码范围通常从230（女款）到290（男款大码）。",
+    },
+  },
 };
