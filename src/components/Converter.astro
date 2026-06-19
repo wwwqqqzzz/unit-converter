@@ -164,7 +164,7 @@ const placeholder = lang === 'zh' ? '输入数值' : 'Enter value';
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.1em;
-    opacity: 0.6;
+    color: var(--c-text-secondary);
     margin-bottom: var(--sp-1);
   }
   .conv-select {
@@ -179,7 +179,7 @@ const placeholder = lang === 'zh' ? '输入数值' : 'Enter value';
     cursor: pointer;
     appearance: none;
     -webkit-appearance: none;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='none' stroke='%23999' stroke-width='2'%3E%3Cpath d='M3 4.5L6 7.5L9 4.5'/%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='none' stroke='%23666' stroke-width='2'%3E%3Cpath d='M3 4.5L6 7.5L9 4.5'/%3E%3C/svg%3E");
     background-repeat: no-repeat;
     background-position: right 12px center;
     padding-right: 32px;
@@ -255,5 +255,8 @@ const placeholder = lang === 'zh' ? '输入数值' : 'Enter value';
 
   @media (prefers-color-scheme: dark) {
     .conv-select option { color: #f0f0f0; background: #1a1a1a; }
+    .conv-select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='none' stroke='%23ccc' stroke-width='2'%3E%3Cpath d='M3 4.5L6 7.5L9 4.5'/%3E%3C/svg%3E");
+    }
   }
 </style>
