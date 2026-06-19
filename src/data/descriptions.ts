@@ -4,8 +4,18 @@
 // ============================================================
 
 export interface UnitDescription {
-  en: string; // 2-3 sentences, 50-100 words
-  zh: string; // 2-3 sentences, Chinese translation
+  en: string;
+  zh: string;
+  es?: string;
+  fr?: string;
+  de?: string;
+  ja?: string;
+  pt?: string;
+  it?: string;
+  ko?: string;
+  ru?: string;
+  hi?: string;
+  tr?: string;
 }
 
 // Key: categoryId, then unitId

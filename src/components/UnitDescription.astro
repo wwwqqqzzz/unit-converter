@@ -9,7 +9,7 @@ export interface Props { lang: Lang; unit: Unit; categoryId: string; }
 const { lang, unit, categoryId } = Astro.props;
 const desc = unitDescriptions[categoryId]?.[unit.id];
 if (!desc) return;
-const text = desc[lang];
+const text = desc[lang] || desc.en;
 if (!text) return;
 const label = t(lang, 'converter.aboutUnit', { unit: unit.name[lang] });
 ---
