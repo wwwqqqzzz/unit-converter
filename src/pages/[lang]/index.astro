@@ -33,6 +33,7 @@ const categories = getCategories();
   <div class="home-hero">
     <h1>{t(lang, 'home.title')}</h1>
     <p class="home-subtitle">{t(lang, 'home.subtitle')}</p>
+    <p class="home-trust">{lang === 'zh' ? '免费 · 即时 · 无需注册' : 'Free · Instant · No signup required'}</p>
   </div>
 
   <AdSense position="top" />
@@ -58,65 +59,82 @@ const categories = getCategories();
 <style>
   .home-hero {
     text-align: center;
-    padding: 2rem 0 1rem;
+    padding: var(--sp-12) 0 var(--sp-8);
   }
   .home-hero h1 {
-    font-size: 2.2rem;
+    font-size: var(--text-4xl);
     font-weight: 800;
-    background: linear-gradient(135deg, #667eea, #764ba2);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+    color: var(--c-text);
   }
   .home-subtitle {
-    color: #666;
-    font-size: 1.1rem;
-    margin-top: 0.5rem;
+    color: var(--c-text-secondary);
+    font-size: var(--text-lg);
+    margin-top: var(--sp-3);
+    line-height: 1.5;
+  }
+  .home-trust {
+    color: var(--c-text-tertiary);
+    font-size: var(--text-sm);
+    margin-top: var(--sp-2);
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
   }
   .category-list {
-    margin: 2rem 0;
+    margin: var(--sp-10) 0;
   }
   .category-list h2 {
-    font-size: 1.2rem;
-    margin-bottom: 1rem;
+    font-size: var(--text-sm);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--c-text-tertiary);
+    margin-bottom: var(--sp-4);
   }
   .category-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 1rem;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: var(--sp-2);
   }
   .category-card {
     display: flex;
     flex-direction: column;
     align-items: center;
     text-align: center;
-    padding: 1.5rem 1rem;
-    background: #fafafa;
-    border: 1px solid #eee;
-    border-radius: 12px;
+    padding: var(--sp-4) var(--sp-3);
+    background: var(--c-surface);
+    border: 1px solid var(--c-border);
+    border-radius: var(--r-lg);
     text-decoration: none;
-    color: #333;
-    transition: transform 0.15s, box-shadow 0.15s;
+    color: var(--c-text);
+    transition: all var(--t-base);
   }
   .category-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    background: var(--c-surface-hover);
+    border-color: var(--c-border-strong);
+    box-shadow: var(--shadow-card-hover);
     text-decoration: none;
+    transform: translateY(-1px);
   }
   .category-icon {
-    font-size: 2rem;
-    margin-bottom: 0.5rem;
+    font-size: 1.5rem;
+    margin-bottom: var(--sp-1);
   }
   .category-name {
     font-weight: 600;
-    font-size: 1rem;
+    font-size: var(--text-base);
   }
   .category-count {
-    font-size: 0.8rem;
-    color: #888;
-    margin-top: 0.25rem;
+    font-size: var(--text-xs);
+    color: var(--c-text-tertiary);
+    margin-top: 2px;
   }
-  @media (max-width: 600px) {
-    .home-hero h1 { font-size: 1.6rem; }
+
+  @media (max-width: 480px) {
+    .home-hero { padding: var(--sp-8) 0 var(--sp-6); }
+    .home-hero h1 { font-size: var(--text-3xl); }
+    .category-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); }
   }
 </style>

@@ -1,5 +1,6 @@
 ---
-// Cross-linking section — reverse link + more conversions in category + cross-category links
+// Cross-linking section — reverse link + more conversions + cross-category links
+// Minimalist monochrome: pill-style links, clean hierarchy
 
 import type { Unit } from '../data/units';
 import { getUnitPairs, pairSlug } from '../lib/units';
@@ -9,15 +10,10 @@ import { t, type Lang } from '../utils/i18n';
 
 export interface Props {
   lang: Lang;
-  /** Category ID (e.g. "length") */
   categoryId: string;
-  /** Unit 1 ID */
   unit1Id: string;
-  /** Unit 2 ID */
   unit2Id: string;
-  /** Unit 1 display name */
   unit1Name: string;
-  /** Unit 2 display name */
   unit2Name: string;
 }
 
@@ -38,100 +34,129 @@ const otherCategories = getCategories().filter(c => c.id !== categoryId);
 const otherCatsLabel = l === 'zh' ? '其他换算类别' : 'Other Conversion Categories';
 ---
 
-<div class="cross-links">
-  <h3>{t(l, 'converter.seeAlso')}</h3>
-  <ul>
-    <li>
-      <a href={"/" + l + "/" + categoryId + "/" + reverseSlug + "/"}>{reverseLabel}</a>
-    </li>
-  </ul>
-
-  <h3>{seeAlsoLabel}</h3>
-  <ul class="more-links">
-    {
-      allPairs
-        .filter(([a, b]) => !(a.id === unit1Id && b.id === unit2Id) && !(a.id === unit2Id && b.id === unit1Id))
-        .slice(0, 12)
-        .map(([a, b]) => {
-          const slug = pairSlug(a, b, l);
-          const label = l === 'zh'
-            ? `${a.name.zh} 换算 ${b.name.zh}`
-            : `${a.name.en} to ${b.name.en}`;
-          return (
-            <li><a href={"/" + l + "/" + categoryId + "/" + slug + "/"}>{label}</a></li>
-          );
-        })
-    }
-  </ul>
-
-  <h3>{otherCatsLabel}</h3>
-  <div class="category-links">
-    {
-      otherCategories.map(cat => (
-        <a href={"/" + l + "/" + cat.id + "/"} class="category-link">
-          <span class="cat-icon">{CATEGORY_ICONS[cat.id] ?? '📐'}</span>
-          <span>{cat.name[l]}</span>
-        </a>
-      ))
-    }
+<aside class="cross-links">
+  <div class="cross-section">
+    <h4>{t(l, 'converter.seeAlso')}</h4>
+    <a href={"/" + l + "/" + categoryId + "/" + reverseSlug + "/"} class="reverse-link">
+      {reverseLabel} &rarr;
+    </a>
   </div>
-</div>
+
+  <div class="cross-section">
+    <h4>{seeAlsoLabel}</h4>
+    <div class="more-links">
+      {
+        allPairs
+          .filter(([a, b]) => !(a.id === unit1Id && b.id === unit2Id) && !(a.id === unit2Id && b.id === unit1Id))
+          .slice(0, 12)
+          .map(([a, b]) => {
+            const slug = pairSlug(a, b, l);
+            const label = l === 'zh'
+              ? `${a.name.zh} → ${b.name.zh}`
+              : `${a.name.en} → ${b.name.en}`;
+            return (
+              <a href={"/" + l + "/" + categoryId + "/" + slug + "/"} class="link-pill">{label}</a>
+            );
+          })
+      }
+    </div>
+  </div>
+
+  <div class="cross-section">
+    <h4>{otherCatsLabel}</h4>
+    <div class="category-links">
+      {
+        otherCategories.map(cat => (
+          <a href={"/" + l + "/" + cat.id + "/"} class="category-chip">
+            <span class="cat-icon">{CATEGORY_ICONS[cat.id] ?? '📐'}</span>
+            <span>{cat.name[l]}</span>
+          </a>
+        ))
+      }
+    </div>
+  </div>
+</aside>
 
 <style>
   .cross-links {
-    margin: 2rem 0;
-    padding: 1rem 0;
-    border-top: 1px solid #eee;
+    margin: var(--sp-10) 0 var(--sp-6);
   }
-  .cross-links h3 {
-    font-size: 1.1rem;
-    margin: 1rem 0 0.5rem;
+  .cross-section {
+    margin-bottom: var(--sp-6);
   }
-  .cross-links ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
+  .cross-section h4 {
+    font-size: var(--text-xs);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--c-text-tertiary);
+    margin-bottom: var(--sp-3);
   }
-  .cross-links li {
-    margin: 0.3rem 0;
+  .reverse-link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--sp-1);
+    padding: var(--sp-2) var(--sp-4);
+    background: var(--c-surface);
+    border: 1px solid var(--c-border);
+    border-radius: var(--r-full);
+    color: var(--c-text);
+    text-decoration: none;
+    font-size: var(--text-sm);
+    font-weight: 500;
+    transition: all var(--t-fast);
   }
-  .cross-links a {
-    color: #667eea;
+  .reverse-link:hover {
+    background: var(--c-surface-active);
+    border-color: var(--c-border-strong);
     text-decoration: none;
   }
-  .cross-links a:hover {
-    text-decoration: underline;
-  }
   .more-links {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-    gap: 0.3rem 1rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-2);
+  }
+  .link-pill {
+    padding: var(--sp-1) var(--sp-3);
+    background: var(--c-surface);
+    border: 1px solid var(--c-border);
+    border-radius: var(--r-full);
+    color: var(--c-text-secondary);
+    text-decoration: none;
+    font-size: var(--text-sm);
+    transition: all var(--t-fast);
+  }
+  .link-pill:hover {
+    background: var(--c-surface-active);
+    border-color: var(--c-border-strong);
+    color: var(--c-text);
+    text-decoration: none;
   }
   .category-links {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.5rem;
-    margin-top: 0.5rem;
+    gap: var(--sp-2);
   }
-  .category-link {
+  .category-chip {
     display: inline-flex;
     align-items: center;
-    gap: 0.3rem;
-    padding: 0.4rem 0.75rem;
-    background: #f5f5ff;
-    border: 1px solid #e0e0f0;
-    border-radius: 6px;
-    color: #333;
+    gap: var(--sp-1);
+    padding: var(--sp-1) var(--sp-3);
+    background: var(--c-surface);
+    border: 1px solid var(--c-border);
+    border-radius: var(--r-full);
+    color: var(--c-text-secondary);
     text-decoration: none;
-    font-size: 0.85rem;
-    transition: background 0.15s, border-color 0.15s;
+    font-size: var(--text-sm);
+    transition: all var(--t-fast);
   }
-  .category-link:hover {
-    background: #e8e8ff;
-    border-color: #667eea;
+  .category-chip:hover {
+    background: var(--c-surface-active);
+    border-color: var(--c-border-strong);
+    color: var(--c-text);
     text-decoration: none;
   }
   .cat-icon {
-    font-size: 1rem;
+    font-size: var(--text-base);
   }
 </style>

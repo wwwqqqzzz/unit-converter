@@ -1,83 +1,89 @@
 ---
-// ============================================================
 // Quick conversion table for a unit pair
-// ============================================================
+// Minimalist monochrome design — clean data table
 
 import { formatResult } from '../lib/units';
 
 export interface Props {
   lang: string;
-  /** Display name for unit 1 */
   unit1Name: string;
-  /** Display name for unit 2 */
   unit2Name: string;
-  /** Conversion rate: 1 unit1 = rate unit2 */
   rate: number;
-  /** Common values to display */
   values: number[];
 }
 
 const { lang, unit1Name, unit2Name, rate, values } = Astro.props;
 
-const headLabel1 = lang === 'zh' ? unit1Name : unit1Name;
-const headLabel2 = lang === 'zh' ? unit2Name : unit2Name;
-const caption    = lang === 'zh' ? `常用${unit1Name}换算表` : `Quick ${unit1Name} to ${unit2Name} Conversion Table`;
+const caption = lang === 'zh' ? `${unit1Name}换算${unit2Name}对照表` : `${unit1Name} to ${unit2Name}`;
 ---
 
-<table class="conv-table">
-  <caption>{caption}</caption>
-  <thead>
-    <tr>
-      <th scope="col">{headLabel1}</th>
-      <th scope="col">{headLabel2}</th>
-    </tr>
-  </thead>
-  <tbody>
-    {
-      values.map(v => (
+<section class="conv-table-section">
+  <h3>{caption}</h3>
+  <div class="table-wrap">
+    <table class="conv-table">
+      <thead>
         <tr>
-          <td>{v} {unit1Name}</td>
-          <td>{formatResult(v * rate)} {unit2Name}</td>
+          <th scope="col">{unit1Name}</th>
+          <th scope="col">{unit2Name}</th>
         </tr>
-      ))
-    }
-  </tbody>
-</table>
+      </thead>
+      <tbody>
+        {values.map(v => (
+          <tr>
+            <td>{v} {unit1Name}</td>
+            <td>{formatResult(v * rate)} {unit2Name}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+</section>
 
 <style>
+  .conv-table-section {
+    margin: var(--sp-8) 0;
+  }
+  .conv-table-section h3 {
+    font-size: var(--text-sm);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--c-text-tertiary);
+    margin-bottom: var(--sp-3);
+  }
+  .table-wrap {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
   .conv-table {
     width: 100%;
     border-collapse: collapse;
-    margin: 1rem 0;
-    font-size: 0.95rem;
-  }
-  .conv-table caption {
-    font-weight: 600;
-    margin-bottom: 0.5rem;
-    text-align: left;
-    font-size: 1.1rem;
+    font-size: var(--text-sm);
   }
   .conv-table th {
-    background: #f0f0f0;
-    padding: 0.5rem 0.75rem;
+    padding: var(--sp-2) var(--sp-3);
     text-align: left;
     font-weight: 600;
-    border-bottom: 2px solid #ddd;
+    font-size: var(--text-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--c-text-tertiary);
+    border-bottom: 2px solid var(--c-border);
   }
   .conv-table td {
-    padding: 0.5rem 0.75rem;
-    border-bottom: 1px solid #eee;
+    padding: var(--sp-2) var(--sp-3);
+    border-bottom: 1px solid var(--c-border);
+    color: var(--c-text-secondary);
   }
   .conv-table tbody tr:hover {
-    background: #fafafa;
+    background: var(--c-surface-hover);
   }
-  @media (max-width: 600px) {
-    .conv-table {
-      font-size: 0.85rem;
-    }
-    .conv-table th,
-    .conv-table td {
-      padding: 0.4rem 0.5rem;
-    }
+  .conv-table tbody tr:last-child td {
+    border-bottom: none;
+  }
+
+  @media (max-width: 480px) {
+    .conv-table { font-size: var(--text-xs); }
+    .conv-table th, .conv-table td { padding: var(--sp-1) var(--sp-2); }
   }
 </style>

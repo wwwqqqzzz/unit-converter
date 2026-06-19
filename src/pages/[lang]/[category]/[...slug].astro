@@ -28,29 +28,17 @@ export function getStaticPaths() {
       const commonValues = getCommonValues(cat.id);
 
       for (const [u1, u2] of pairs) {
-        // Converter page for the pair
         paths.push({
-          params: {
-            lang,
-            category: cat.id,
-            slug: pairSlug(u1, u2, lang),
-          },
+          params: { lang, category: cat.id, slug: pairSlug(u1, u2, lang) },
         });
-
-        // Specific value pages
         for (const val of commonValues) {
           paths.push({
-            params: {
-              lang,
-              category: cat.id,
-              slug: valueSlug(val, u1, u2, lang),
-            },
+            params: { lang, category: cat.id, slug: valueSlug(val, u1, u2, lang) },
           });
         }
       }
     }
   }
-
   return paths;
 }
 
@@ -59,25 +47,15 @@ const catId = Astro.params.category as string;
 const category = getCategory(catId);
 if (!category || !slug) return Astro.redirect(`/${lang}/`);
 
-// slug is a rest parameter — Astro always gives it as string[] from the URL
 const rawSlug = Array.isArray(slug) ? slug.join('/') : slug;
 if (!rawSlug) return Astro.redirect(`/${lang}/${catId}/`);
 
-// ============================================================
-// Parse slug to figure out if it's a converter page or value page
-// ============================================================
-
-interface PageData {
-  unit1Id: string;
-  unit2Id: string;
-  value: number | null; // null = converter page (no specific value)
-}
+// Parse slug
+interface PageData { unit1Id: string; unit2Id: string; value: number | null; }
 
 function parseSlug(slugStr: string, cat: typeof category, l: Lang): PageData | null {
   if (!cat) return null;
-
   if (l === 'zh') {
-    // Chinese slug format: "厘米-英寸" or "5-厘米-英寸"
     const match = slugStr.match(/^(\d+)-(.*)$/);
     if (match) {
       const val = parseInt(match[1], 10);
@@ -95,7 +73,6 @@ function parseSlug(slugStr: string, cat: typeof category, l: Lang): PageData | n
       if (u1 && u2) return { unit1Id: u1.id, unit2Id: u2.id, value: null };
     }
   } else {
-    // English slug format: "cm-to-inches" or "5-cm-to-inches"
     const match = slugStr.match(/^(\d+)-(.*)$/);
     if (match) {
       const val = parseInt(match[1], 10);
@@ -136,34 +113,21 @@ const u1Name = u1.name[lang];
 const u2Name = u2.name[lang];
 const pageSlug = isConverterPage ? pairSlug(u1, u2, lang) : rawSlug;
 
-// Page metadata
 const pageTitle = isConverterPage
   ? t(lang, 'converter.pageTitleConverter', { unit1: u1Name, unit2: u2Name, name: catName })
   : t(lang, 'converter.pageTitle', { value: String(displayValue), unit1: u1Name, unit2: u2Name, result: formattedResult });
 
 const pageDesc = isConverterPage
   ? t(lang, 'converter.pageDescriptionConverter', { unit1: u1Name, unit2: u2Name, name: catName })
-  : t(lang, 'converter.pageDescription', {
-      value: String(displayValue),
-      unit1: u1Name,
-      unit2: u2Name,
-      result: formattedResult,
-      name: catName,
-    });
+  : t(lang, 'converter.pageDescription', { value: String(displayValue), unit1: u1Name, unit2: u2Name, result: formattedResult, name: catName });
 
 const heading = isConverterPage
   ? t(lang, 'converter.headingConverter', { unit1: u1Name, unit2: u2Name })
-  : t(lang, 'converter.heading', {
-      value: String(displayValue),
-      unit1: u1Name,
-      unit2: u2Name,
-      result: formattedResult,
-    });
+  : t(lang, 'converter.heading', { value: String(displayValue), unit1: u1Name, unit2: u2Name, result: formattedResult });
 
-// Breadcrumb JSON-LD
+// JSON-LD
 const breadcrumbJsonld = {
-  '@context': 'https://schema.org',
-  '@type': 'BreadcrumbList',
+  '@context': 'https://schema.org', '@type': 'BreadcrumbList',
   itemListElement: [
     { '@type': 'ListItem', position: 1, name: lang === 'zh' ? '首页' : 'Home', item: `${Astro.site}${lang}/` },
     { '@type': 'ListItem', position: 2, name: catName, item: `${Astro.site}${lang}/${catId}/` },
@@ -171,64 +135,23 @@ const breadcrumbJsonld = {
   ],
 };
 
-// FAQ structured data
 const faqQuestions: Array<Record<string, any>> = [
-  {
-    '@type': 'Question',
-    name: `${lang === 'zh' ? '如何将' : 'How do I convert '}${displayValue} ${u1Name}${lang === 'zh' ? '换算成' : ' to '}${u2Name}？`,
-    acceptedAnswer: {
-      '@type': 'Answer',
-      text: `${displayValue} ${u1Name} = ${formattedResult} ${u2Name}。${lang === 'zh' ? '换算公式' : 'Formula'}: 1 ${u1Name} = ${formatResult(rate)} ${u2Name}。`,
-    },
-  },
-  {
-    '@type': 'Question',
-    name: `${lang === 'zh' ? '1' : 'What is '}${u1Name}${lang === 'zh' ? '等于多少' : ' in '}${u2Name}？`,
-    acceptedAnswer: {
-      '@type': 'Answer',
-      text: `1 ${u1Name} = ${formatResult(rate)} ${u2Name}。`,
-    },
-  },
+  { '@type': 'Question', name: `${lang === 'zh' ? '如何将' : 'How do I convert '}${displayValue} ${u1Name}${lang === 'zh' ? '换算成' : ' to '}${u2Name}？`,
+    acceptedAnswer: { '@type': 'Answer', text: `${displayValue} ${u1Name} = ${formattedResult} ${u2Name}。${lang === 'zh' ? '换算公式' : 'Formula'}: 1 ${u1Name} = ${formatResult(rate)} ${u2Name}。` } },
+  { '@type': 'Question', name: `${lang === 'zh' ? '1' : 'What is '}${u1Name}${lang === 'zh' ? '等于多少' : ' in '}${u2Name}？`,
+    acceptedAnswer: { '@type': 'Answer', text: `1 ${u1Name} = ${formatResult(rate)} ${u2Name}。` } },
 ];
 
-// Add "What is X?" questions from descriptions
 const desc1 = unitDescriptions[catId]?.[unit1Id];
 const desc2 = unitDescriptions[catId]?.[unit2Id];
-if (desc1) {
-  faqQuestions.push({
-    '@type': 'Question',
-    name: `${lang === 'zh' ? '什么是' : 'What is '}${u1Name}${lang === 'zh' ? '？' : '?'}`,
-    acceptedAnswer: {
-      '@type': 'Answer',
-      text: desc1[lang],
-    },
-  });
-}
-if (desc2) {
-  faqQuestions.push({
-    '@type': 'Question',
-    name: `${lang === 'zh' ? '什么是' : 'What is '}${u2Name}${lang === 'zh' ? '？' : '?'}`,
-    acceptedAnswer: {
-      '@type': 'Answer',
-      text: desc2[lang],
-    },
-  });
-}
+if (desc1) faqQuestions.push({ '@type': 'Question', name: `${lang === 'zh' ? '什么是' : 'What is '}${u1Name}${lang === 'zh' ? '？' : '?'}`, acceptedAnswer: { '@type': 'Answer', text: desc1[lang] } });
+if (desc2) faqQuestions.push({ '@type': 'Question', name: `${lang === 'zh' ? '什么是' : 'What is '}${u2Name}${lang === 'zh' ? '？' : '?'}`, acceptedAnswer: { '@type': 'Answer', text: desc2[lang] } });
 
-const faqJsonld = {
-  '@context': 'https://schema.org',
-  '@type': 'FAQPage',
-  mainEntity: faqQuestions,
-};
+const faqJsonld = { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faqQuestions };
 
-// HowTo structured data for conversion steps
-const howToName = lang === 'zh'
-  ? `如何将${u1Name}换算为${u2Name}`
-  : `How to convert ${u1Name} to ${u2Name}`;
-
+const howToName = lang === 'zh' ? `如何将${u1Name}换算为${u2Name}` : `How to convert ${u1Name} to ${u2Name}`;
 let howToSteps: Array<Record<string, any>>;
 if (category.convertFn) {
-  // Temperature: formula-specific steps
   if (unit1Id === 'f' && unit2Id === 'c') {
     howToSteps = [
       { '@type': 'HowToStep', position: 1, text: lang === 'zh' ? '从华氏度值中减去32' : 'Subtract 32 from the Fahrenheit value' },
@@ -242,14 +165,12 @@ if (category.convertFn) {
       { '@type': 'HowToStep', position: 3, text: lang === 'zh' ? '得到的结果就是华氏度' : 'The result is the temperature in Fahrenheit' },
     ];
   } else {
-    // Generic temperature conversion: convert via Celsius
     howToSteps = [
       { '@type': 'HowToStep', position: 1, text: lang === 'zh' ? `先将${u1Name}转换为摄氏度` : `First convert ${u1Name} to Celsius` },
       { '@type': 'HowToStep', position: 2, text: lang === 'zh' ? `再将摄氏度转换为${u2Name}` : `Then convert Celsius to ${u2Name}` },
     ];
   }
 } else {
-  // Linear conversion: multiply by rate
   howToSteps = [
     { '@type': 'HowToStep', position: 1, text: lang === 'zh' ? `取${u1Name}的数值` : `Take the value in ${u1Name}` },
     { '@type': 'HowToStep', position: 2, text: lang === 'zh' ? `乘以换算系数 ${formatResult(rate)}` : `Multiply by the conversion factor ${formatResult(rate)}` },
@@ -257,28 +178,13 @@ if (category.convertFn) {
   ];
 }
 
-const howToJsonld = {
-  '@context': 'https://schema.org',
-  '@type': 'HowTo',
-  name: howToName,
-  step: howToSteps,
-};
-
+const howToJsonld = { '@context': 'https://schema.org', '@type': 'HowTo', name: howToName, step: howToSteps };
 const jsonld = JSON.stringify([breadcrumbJsonld, faqJsonld, howToJsonld]);
 const pagePath = `${catId}/${pageSlug}`;
 
-// Build all units data for the Converter component
-const allUnits = category.units.map(u => ({
-  id: u.id,
-  name: u.name[lang],
-  symbol: u.symbol,
-}));
-
+const allUnits = category.units.map(u => ({ id: u.id, name: u.name[lang], symbol: u.symbol }));
 const ratesMap: Record<string, number> = {};
-for (const u of category.units) {
-  ratesMap[u.id] = u.toBase;
-}
-
+for (const u of category.units) ratesMap[u.id] = u.toBase;
 const commonValuesForTable = getCommonValues(catId);
 ---
 
@@ -291,25 +197,20 @@ const commonValuesForTable = getCommonValues(catId);
 >
   <nav class="breadcrumbs" aria-label="Breadcrumb">
     <a href={"/" + lang + "/"}>{t(lang, 'nav.home')}</a>
-    <span class="sep">›</span>
+    <span class="sep">/</span>
     <a href={"/" + lang + "/" + catId + "/"}>{catName}</a>
-    <span class="sep">›</span>
-    <span>{u1Name} → {u2Name}</span>
+    <span class="sep">/</span>
+    <span>{u1Name} &rarr; {u2Name}</span>
   </nav>
 
   {!isConverterPage && (
-    <h1>{heading}</h1>
-  )}
-
-  {!isConverterPage && (
     <div class="direct-answer">
-      <strong>{displayValue} {u1.symbol} {u1Name} = {formattedResult} {u2.symbol} {u2Name}</strong>
+      <span class="answer-value">{displayValue} {u1.symbol}</span>
+      <span class="answer-equals">=</span>
+      <span class="answer-result">{formattedResult} {u2.symbol}</span>
     </div>
   )}
 
-  <AdSense position="top" />
-
-  <!-- Interactive converter tool — always at top visible area -->
   <Converter
     lang={lang}
     categoryName={catName}
@@ -329,19 +230,23 @@ const commonValuesForTable = getCommonValues(catId);
   />
 
   {isConverterPage && (
-    <h1>{heading}</h1>
+    <h1 class="converter-heading">{heading}</h1>
   )}
 
-  <!-- Conversion formula -->
   <section class="formula-section">
     <h2>{t(lang, 'converter.formula')}</h2>
-    <p class="formula"><strong>{t(lang, 'converter.formulaText', { unit1: u1Name, unit2: u2Name, rate: formatResult(rate) })}</strong></p>
-    <p class="formula">{t(lang, 'converter.reverseFormulaText', { unit2: u2Name, unit1: u1Name, reverseRate: formatResult(reverseRate) })}</p>
+    <div class="formula-cards">
+      <div class="formula-card">
+        <span class="formula-label">{t(lang, 'converter.formulaText', { unit1: u1Name, unit2: u2Name, rate: formatResult(rate) })}</span>
+      </div>
+      <div class="formula-card">
+        <span class="formula-label">{t(lang, 'converter.reverseFormulaText', { unit2: u2Name, unit1: u1Name, reverseRate: formatResult(reverseRate) })}</span>
+      </div>
+    </div>
   </section>
 
   <AdSense position="middle" />
 
-  <!-- Quick conversion table -->
   <ConversionTable
     lang={lang}
     unit1Name={u1Name}
@@ -355,7 +260,6 @@ const commonValuesForTable = getCommonValues(catId);
 
   <AdSense position="bottom" />
 
-  <!-- Cross-links -->
   <CrossLinks
     lang={lang}
     categoryId={catId}
@@ -365,7 +269,6 @@ const commonValuesForTable = getCommonValues(catId);
     unit2Name={u2Name}
   />
 
-  <!-- Language hint for SEO -->
   <p class="lang-hint">
     {lang === 'zh'
       ? `此页面还有 English 版本：`
@@ -378,40 +281,95 @@ const commonValuesForTable = getCommonValues(catId);
 
 <style>
   .breadcrumbs {
-    font-size: 0.85rem;
-    margin-bottom: 0.75rem;
-    color: #888;
+    font-size: var(--text-sm);
+    margin-bottom: var(--sp-4);
+    color: var(--c-text-tertiary);
+    display: flex;
+    align-items: center;
+    gap: var(--sp-1);
+    flex-wrap: wrap;
   }
-  .breadcrumbs a { color: #667eea; text-decoration: none; }
-  .breadcrumbs a:hover { text-decoration: underline; }
-  .sep { margin: 0 0.4rem; }
-  h1 { font-size: 1.6rem; margin: 1rem 0 0.5rem; }
+  .breadcrumbs a { color: var(--c-text-secondary); text-decoration: none; }
+  .breadcrumbs a:hover { color: var(--c-text); }
+  .sep { opacity: 0.4; }
+  .converter-heading {
+    font-size: var(--text-xl);
+    margin: var(--sp-4) 0;
+    letter-spacing: -0.01em;
+  }
   .direct-answer {
-    background: #e8f5e9;
-    border-radius: 8px;
-    padding: 1rem 1.2rem;
-    font-size: 1.2rem;
-    margin: 0.5rem 0;
-    border-left: 4px solid #4caf50;
+    background: var(--c-success-bg);
+    border: 1px solid var(--c-success-border);
+    border-radius: var(--r-lg);
+    padding: var(--sp-4) var(--sp-5);
+    margin: var(--sp-4) 0;
+    display: flex;
+    align-items: baseline;
+    gap: var(--sp-2);
+    flex-wrap: wrap;
+  }
+  .answer-value {
+    font-size: var(--text-xl);
+    font-weight: 700;
+    color: var(--c-text);
+  }
+  .answer-equals {
+    font-size: var(--text-lg);
+    color: var(--c-text-tertiary);
+  }
+  .answer-result {
+    font-size: var(--text-xl);
+    font-weight: 700;
+    color: var(--c-success-text);
   }
   .formula-section {
-    margin: 1.5rem 0;
+    margin: var(--sp-6) 0;
   }
   .formula-section h2 {
-    font-size: 1.2rem;
-    margin-bottom: 0.5rem;
+    font-size: var(--text-sm);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--c-text-tertiary);
+    margin-bottom: var(--sp-3);
   }
-  .formula {
-    font-size: 1rem;
-    margin: 0.25rem 0;
-    background: #f9f9f9;
-    padding: 0.5rem 0.75rem;
-    border-radius: 6px;
+  .formula-cards {
+    display: flex;
+    gap: var(--sp-3);
+    flex-wrap: wrap;
+  }
+  .formula-card {
+    background: var(--c-surface);
+    border: 1px solid var(--c-border);
+    border-radius: var(--r-md);
+    padding: var(--sp-3) var(--sp-4);
+    font-size: var(--text-base);
+    flex: 1;
+    min-width: 200px;
+  }
+  .formula-label {
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
   }
   .lang-hint {
-    font-size: 0.85rem;
-    color: #888;
-    margin-top: 2rem;
+    font-size: var(--text-sm);
+    color: var(--c-text-tertiary);
+    margin-top: var(--sp-10);
     text-align: center;
+    padding: var(--sp-3) 0;
+    border-top: 1px solid var(--c-border);
+  }
+  .lang-hint a {
+    color: var(--c-text-secondary);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+  .lang-hint a:hover {
+    color: var(--c-text);
+  }
+
+  @media (max-width: 480px) {
+    .direct-answer { flex-direction: column; gap: var(--sp-1); }
+    .formula-cards { flex-direction: column; }
   }
 </style>

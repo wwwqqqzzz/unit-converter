@@ -55,7 +55,7 @@ const jsonld = JSON.stringify([breadcrumbJsonld]);
 >
   <nav class="breadcrumbs" aria-label="Breadcrumb">
     <a href={"/" + lang + "/"}>{t(lang, 'nav.home')}</a>
-    <span class="sep">›</span>
+    <span class="sep">/</span>
     <span>{catName}</span>
   </nav>
 
@@ -77,7 +77,7 @@ const jsonld = JSON.stringify([breadcrumbJsonld]);
         return (
           <a href={"/" + lang + "/" + catId + "/" + slug + "/"} class="pair-card">
             <span class="pair-label">{label}</span>
-            <span class="pair-arrow">→</span>
+            <span class="pair-arrow">&rarr;</span>
           </a>
         );
       })
@@ -94,11 +94,11 @@ const jsonld = JSON.stringify([breadcrumbJsonld]);
         const vs = valueSlug(val, a, b, lang);
         const label = lang === 'zh'
           ? `${val}${a.name.zh} 换算 ${b.name.zh}`
-          : `${val} ${a.name.en} to ${b.name.en}`;
+          : `${val} ${a.name.en} to ${a.name.en}`;
         return (
           <a href={"/" + lang + "/" + catId + "/" + vs + "/"} class="pair-card small">
             <span class="pair-label">{label}</span>
-            <span class="pair-arrow">→</span>
+            <span class="pair-arrow">&rarr;</span>
           </a>
         );
       })
@@ -109,7 +109,7 @@ const jsonld = JSON.stringify([breadcrumbJsonld]);
   <div class="other-categories">
     {
       otherCategories.map(cat => (
-        <a href={"/" + lang + "/" + cat.id + "/"} class="category-card">
+        <a href={"/" + lang + "/" + cat.id + "/"} class="category-chip">
           <span class="cat-icon">{CATEGORY_ICONS[cat.id] ?? '📐'}</span>
           <span>{cat.name[lang]}</span>
         </a>
@@ -122,65 +122,88 @@ const jsonld = JSON.stringify([breadcrumbJsonld]);
 
 <style>
   .breadcrumbs {
-    font-size: 0.85rem;
-    margin-bottom: 1rem;
-    color: #888;
+    font-size: var(--text-sm);
+    margin-bottom: var(--sp-4);
+    color: var(--c-text-tertiary);
+    display: flex;
+    align-items: center;
+    gap: var(--sp-1);
   }
-  .breadcrumbs a { color: #667eea; text-decoration: none; }
-  .breadcrumbs a:hover { text-decoration: underline; }
-  .sep { margin: 0 0.4rem; }
-  h1 { font-size: 1.8rem; margin-bottom: 0.5rem; }
-  .category-desc { color: #666; margin-bottom: 1.5rem; line-height: 1.6; }
-  h2 { font-size: 1.2rem; margin: 1.5rem 0 0.75rem; }
+  .breadcrumbs a { color: var(--c-text-secondary); text-decoration: none; }
+  .breadcrumbs a:hover { color: var(--c-text); }
+  .sep { opacity: 0.4; }
+  h1 { font-size: var(--text-2xl); margin-bottom: var(--sp-2); letter-spacing: -0.02em; }
+  .category-desc { color: var(--c-text-secondary); margin-bottom: var(--sp-6); line-height: 1.6; }
+  h2 {
+    font-size: var(--text-sm);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--c-text-tertiary);
+    margin: var(--sp-8) 0 var(--sp-4);
+  }
   .pair-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    gap: 0.6rem;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: var(--sp-2);
   }
   .pair-card {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0.6rem 0.8rem;
-    background: #fafafa;
-    border: 1px solid #eee;
-    border-radius: 8px;
+    padding: var(--sp-2) var(--sp-3);
+    background: var(--c-surface);
+    border: 1px solid var(--c-border);
+    border-radius: var(--r-md);
     text-decoration: none;
-    color: #333;
-    transition: background 0.15s;
-    font-size: 0.9rem;
+    color: var(--c-text);
+    transition: all var(--t-fast);
+    font-size: var(--text-sm);
   }
   .pair-card:hover {
-    background: #f0f0ff;
+    background: var(--c-surface-hover);
+    border-color: var(--c-border-strong);
     text-decoration: none;
   }
-  .pair-card.small { font-size: 0.85rem; }
-  .pair-arrow { color: #667eea; font-weight: 600; }
+  .pair-card.small {
+    font-size: var(--text-xs);
+    padding: var(--sp-1) var(--sp-2);
+  }
+  .pair-arrow {
+    color: var(--c-text-tertiary);
+    font-weight: 400;
+    margin-left: var(--sp-1);
+  }
   .other-categories {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.5rem;
-    margin-bottom: 1rem;
+    gap: var(--sp-2);
+    margin-bottom: var(--sp-4);
   }
-  .category-card {
+  .category-chip {
     display: inline-flex;
     align-items: center;
-    gap: 0.3rem;
-    padding: 0.4rem 0.75rem;
-    background: #f5f5ff;
-    border: 1px solid #e0e0f0;
-    border-radius: 6px;
-    color: #333;
+    gap: var(--sp-1);
+    padding: var(--sp-1) var(--sp-3);
+    background: var(--c-surface);
+    border: 1px solid var(--c-border);
+    border-radius: var(--r-full);
+    color: var(--c-text-secondary);
     text-decoration: none;
-    font-size: 0.85rem;
-    transition: background 0.15s, border-color 0.15s;
+    font-size: var(--text-sm);
+    transition: all var(--t-fast);
   }
-  .category-card:hover {
-    background: #e8e8ff;
-    border-color: #667eea;
+  .category-chip:hover {
+    background: var(--c-surface-active);
+    border-color: var(--c-border-strong);
+    color: var(--c-text);
     text-decoration: none;
   }
   .cat-icon {
-    font-size: 1rem;
+    font-size: var(--text-base);
+  }
+
+  @media (max-width: 480px) {
+    .pair-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
   }
 </style>

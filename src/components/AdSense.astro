@@ -1,26 +1,23 @@
 ---
 // ============================================================
-// Reusable AdSense placeholder.
+// Reusable AdSense placeholder — minimalist monochrome style
 // Set PUBLISHER_ID env var or edit the constant below after approval.
 // ============================================================
 
 export interface Props {
-  /** 'top' | 'middle' | 'bottom' — controls styling */
   position?: 'top' | 'middle' | 'bottom';
-  /** Optional custom class */
   class?: string;
 }
 
 const { position = 'middle' } = Astro.props;
 const PUBLISHER_ID = import.meta.env.PUBLIC_ADSENSE_ID || 'ca-pub-XXXXXXXX';
-const AD_SLOT = '1234567890'; // Replace with actual slot ID
+const AD_SLOT = '1234567890';
 ---
 
 {
   PUBLISHER_ID === 'ca-pub-XXXXXXXX' ? (
     <div class={`ad-placeholder ad-${position}`} aria-label="Advertisement placeholder">
-      <p class="ad-placeholder-label">Ad</p>
-      <p class="ad-placeholder-text">AdSense will appear here after setup</p>
+      <span class="ad-label">Ad</span>
     </div>
   ) : (
     <div class={`ad-container ad-${position}`}>
@@ -40,29 +37,23 @@ const AD_SLOT = '1234567890'; // Replace with actual slot ID
 <style>
   .ad-placeholder {
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
-    background: #f5f5f5;
-    border: 2px dashed #ccc;
-    border-radius: 8px;
+    background: var(--c-surface);
+    border: 1px dashed var(--c-border);
+    border-radius: var(--r-md);
     min-height: 90px;
-    margin: 1.5rem 0;
-    color: #999;
-    font-size: 0.875rem;
+    margin: var(--sp-6) 0;
   }
-  .ad-placeholder-label {
-    font-weight: 700;
+  .ad-label {
+    font-size: var(--text-xs);
+    font-weight: 600;
     text-transform: uppercase;
-    font-size: 0.75rem;
-    letter-spacing: 1px;
-    margin: 0;
-  }
-  .ad-placeholder-text {
-    margin: 0.25rem 0 0;
+    letter-spacing: 0.1em;
+    color: var(--c-text-tertiary);
   }
   .ad-container {
-    margin: 1.5rem 0;
+    margin: var(--sp-6) 0;
     text-align: center;
     min-height: 90px;
   }
