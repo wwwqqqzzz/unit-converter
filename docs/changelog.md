@@ -1,5 +1,97 @@
 # 实施日志
 
+## 2026-06-19 (深夜) — Phase 4.5 ~ 4.7 完成：视觉重设计 + 对比度修复 + 7新类别
+
+### Phase 4.5: Neo-Brutalist 视觉重设计 ✅
+
+**设计语言**:
+- 字体: Space Grotesk (几何感、粗犷、有辨识度)
+- 边框: 3px 实线黑色 (`--b: 3px solid #000`)
+- 阴影: 4px 硬偏移 (`--shadow-hard: 4px 4px 0 #000`)
+- 强调色: `#ffe033` 黄色
+- 圆角: 0px (零圆角，粗野主义)
+- 暗色模式: 白色边框/阴影，黄色不变
+
+**更新文件 (8个)**:
+| 文件 | 变更 |
+|------|------|
+| BaseLayout.astro | 完整CSS变量系统, 暗色模式, sticky header |
+| Converter.astro | 黑色hero卡, 硬阴影, 黄色hover |
+| index.astro (首页) | 黄色信任徽章, 阴影卡片 |
+| [category]/index.astro | 配对卡片阴影+hover, 黄色分类芯片 |
+| [...slug].astro (详情页) | 黄色直接答案卡, 公式边框卡 |
+| ConversionTable.astro | 边框表格, 黄色hover行 |
+| CrossLinks.astro | 阴影反向链接, 黄色分类芯片 |
+| UnitDescription.astro | 边框details, 黄色+号切换 |
+| AdSense.astro | 虚线边框占位, 大写AD标签 |
+
+**交互效果**:
+- hover: `translate(-1px, -1px)` + 阴影增大 → 元素浮起感
+- active: `translate(1px, 1px)` + 阴影消失 → 按下感
+
+### Phase 4.6: 对比度修复 ✅
+
+**用户反馈**: "灰色配黑色看不清"
+
+**亮色模式**:
+| 变量 | 修复前 | 修复后 | 原因 |
+|------|--------|--------|------|
+| --c-text-secondary | #333 | #222 | 正文更清晰 |
+| --c-text-tertiary | #666 | #555 | WCAG AA 4.5:1 on #f5f5f0 |
+| --c-border-light | #ccc | #bbb | 边框更可见 |
+
+**暗色模式（重点修复）**:
+| 变量 | 修复前 | 修复后 | 对比度 |
+|------|--------|--------|--------|
+| --c-text-secondary | #bbb | #d4d4d4 | 3.3:1 → 7.5:1 |
+| --c-text-tertiary | #777 | #999 | 3.3:1 → 4.7:1 |
+| --c-border-light | #555 | #666 | 不可见 → 可见 |
+| --c-surface-hover | #222 | #252525 | 与 #1a1a1a 区分 |
+| --c-surface-active | #2a2a2a | #303030 | 与 hover 区分 |
+| --c-hero-border | #444 | #666 | hero内可见 |
+| --c-hero-surface | #222 | #252525 | 与 #111 区分 |
+| --c-hero-input-bg | #222 | #252525 | 一致性 |
+
+**Converter 组件**:
+- `opacity: 0.6` 标签 → `color: var(--c-text-secondary)` (不再淡化文字)
+- 暗色模式下拉箭头 SVG `#999` → `#ccc`
+
+### Phase 4.7: 7新类别 ✅
+
+**页面数**: 6,419 → 8,041 (+25%)
+
+| 分类 | 单位数 | 转换方式 | 常用值 | 页面数 |
+|------|--------|----------|--------|--------|
+| Power/功率 | 8 | 线性 (W基准) | 8 | 504 |
+| Fuel Efficiency/燃油效率 | 4 | 非线性 (km/L中转) | 6 | 43 |
+| Frequency/频率 | 6 | 线性 (Hz基准) | 7 | 136 |
+| Angle/角度 | 6 | 非线性 (度中转) | 8 | 136 |
+| Force/力 | 6 | 线性 (N基准) | 7 | 120 |
+| Torque/扭矩 | 6 | 线性 (N·m基准) | 7 | 120 |
+| Shoe Size/鞋码 | 6 | 非线性 (cm脚长中转) | 0 | 32 |
+
+**非线性转换**:
+- **Fuel Efficiency**: 通过 km/L 中转，L/100km 是倒数关系
+- **Angle**: 通过度中转，弧度/梯度/角分/角秒/圈均有精确公式
+- **Shoe Size**: 通过 cm 脚长中转，US Men/Women/UK/EU/JP 各有近似公式
+
+**新增描述**: 42个单位 × 2语言 = 84段 SEO 描述
+
+**新增 i18n**: 7个分类名加入 en.json 和 zh.json
+
+### 当前项目状态
+
+- **构建**: 8,041 页面, 74 测试通过
+- **分类**: 17 个
+- **单位**: 123 个 (42 新增)
+- **语言**: 2 (en, zh)
+- **每页内链**: ~22 个
+- **结构化数据**: BreadcrumbList + FAQPage + HowTo
+- **视觉**: Neo-Brutalist (Space Grotesk, 3px borders, hard shadows, #ffe033 accent)
+- **设计系统**: CSS 变量完整, 暗色模式支持, WCAG AA 对比度
+
+---
+
 ## 2026-06-19 (晚间) — Phase 2 & Phase 3 & Phase 4 完成 + 多语言修复
 
 ### Phase 2: P1 分类 (Area, Volume) ✅

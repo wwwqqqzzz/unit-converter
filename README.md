@@ -1,6 +1,6 @@
 # Unit Converter — Multilingual pSEO Tool Site
 
-A programmatic SEO (pSEO) unit conversion website built with **Astro + TypeScript**, statically generating **6,419 pages** across **10 categories**, **81 units**, and **2 languages** (English + Chinese). Designed for passive income through AdSense.
+A programmatic SEO (pSEO) unit conversion website built with **Astro + TypeScript**, statically generating **8,041 pages** across **17 categories**, **123 units**, and **2 languages** (English + Chinese). Designed for passive income through AdSense.
 
 ## Tech Stack
 
@@ -14,13 +14,14 @@ A programmatic SEO (pSEO) unit conversion website built with **Astro + TypeScrip
 
 | Metric | Value |
 |--------|-------|
-| Total pages | 6,419 |
-| Categories | 10 (Length, Weight, Temperature, Data, Area, Volume, Speed, Time, Pressure, Energy) |
-| Units | 81 |
+| Total pages | 8,041 |
+| Categories | 17 (Length, Weight, Temperature, Data, Area, Volume, Speed, Time, Pressure, Energy, Power, Fuel Efficiency, Frequency, Angle, Force, Torque, Shoe Size) |
+| Units | 123 |
 | Languages | 2 (English, Chinese) |
 | Internal links/page | ~22 |
 | Structured data | BreadcrumbList + FAQPage + HowTo |
 | Tests | 74 passing |
+| Design | Neo-Brutalist (Space Grotesk, 3px borders, hard shadows, #ffe033 accent) |
 
 ## Quick Start
 
@@ -38,7 +39,7 @@ npm test         # run 74 vitest tests
 src/
 ├── data/
 │   ├── units.ts          ← Unit definitions (edit this to add categories/units)
-│   └── descriptions.ts   ← SEO descriptions for all 81 units × 2 languages
+│   └── descriptions.ts   ← SEO descriptions for all 123 units × 2 languages
 ├── i18n/
 │   ├── en.json           ← English UI strings
 │   └── zh.json           ← Chinese UI strings
@@ -77,6 +78,17 @@ src/
 | Volume | 13 | 78 | 9 | 1,404 |
 | Speed | 6 | 15 | 8 | 240 |
 | Time | 8 | 28 | 8 | 448 |
+| Pressure | 8 | 28 | 7 | 392 |
+| Energy | 7 | 21 | 7 | 294 |
+| Power | 8 | 28 | 8 | 504 |
+| Fuel Efficiency | 4 | 6 | 6 | 43 |
+| Frequency | 6 | 15 | 7 | 136 |
+| Angle | 6 | 15 | 8 | 136 |
+| Force | 6 | 15 | 7 | 120 |
+| Torque | 6 | 15 | 7 | 120 |
+| Shoe Size | 6 | 15 | 0 | 32 |
+
+**Total**: 123 units, 433 pairs, ~8,037 content pages + category/home/sitemap = **8,041 pages**
 | Pressure | 8 | 28 | 7 | 392 |
 | Energy | 7 | 21 | 7 | 294 |
 

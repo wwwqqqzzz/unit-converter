@@ -11,6 +11,9 @@
 | **2** | ✅ 已完成 — Area/Volume 分类已添加 |
 | **3** | ✅ 已完成 — Speed/Time/Pressure/Energy 分类已添加 |
 | **4** | ✅ 已完成 — SEO优化+内容充实 |
+| **4.5** | ✅ 已完成 — Neo-Brutalist 视觉重设计 |
+| **4.6** | ✅ 已完成 — 对比度修复（暗色/亮色模式可读性） |
+| **4.7** | ✅ 已完成 — 7个新类别（Power, Fuel, Frequency, Angle, Force, Torque, Shoe） |
 | **5** | ⬜ 待开始 — AdSense优化 |
 | **6** | ⬜ 待开始 — 多站群架构 |
 | **7** | ⬜ 待开始 — 部署+监控 |
@@ -25,12 +28,15 @@
 | **2** | P1: Area/Volume | 3h | ~4,306 | ✅ Done |
 | **3** | P2: Speed/Time/Pressure/Energy | 4.5h | ~6,419 | ✅ Done |
 | **4** | SEO优化+内容充实 | 34h | ~6,419 | ✅ Done |
-| **5** | AdSense优化 | 4.5h | ~6,419 | ⬜ |
+| **4.5** | Neo-Brutalist 重设计 | 4h | ~6,419 | ✅ Done |
+| **4.6** | 对比度修复 | 1h | ~6,419 | ✅ Done |
+| **4.7** | 7新类别 | 3h | ~8,041 | ✅ Done |
+| **5** | AdSense优化 | 4.5h | ~8,041 | ⬜ |
 | **6** | 多站群架构 | 20h | 多站点 | ⬜ |
 | **7** | 部署+监控 | 4h | — | ⬜ |
-| **8** | 语言扩展 | 8h/语言 | ~3,200/语言 | ⬜ |
+| **8** | 语言扩展 | 8h/语言 | ~4,000/语言 | ⬜ |
 
-**当前页面数**: 6,419 | **目标**: 万页(加语言或多站) | **9分类, 81单位, 2语言**
+**当前页面数**: 8,041 | **目标**: 万页(加语言即可) | **17分类, 123单位, 2语言**
 
 ---
 
@@ -50,9 +56,16 @@
 | Time/时间 | 8 | 28 | 8 | en/zh | 448 |
 | Pressure/压力 | 8 | 28 | 7 | en/zh | 392 |
 | Energy/能量 | 7 | 21 | 7 | en/zh | 294 |
-| **合计** | **81** | **297** | — | — | **~6,056** |
+| Power/功率 | 8 | 28 | 8 | en/zh | 504 |
+| Fuel Efficiency/燃油效率 | 4 | 6 | 6 | en/zh | 43 |
+| Frequency/频率 | 6 | 15 | 7 | en/zh | 136 |
+| Angle/角度 | 6 | 15 | 8 | en/zh | 136 |
+| Force/力 | 6 | 15 | 7 | en/zh | 120 |
+| Torque/扭矩 | 6 | 15 | 7 | en/zh | 120 |
+| Shoe Size/鞋码 | 6 | 15 | 0 | en/zh | 32 |
+| **合计** | **123** | **433** | — | — | **~8,037** |
 
-加上首页、分类页、sitemap 等: **6,419 页**
+加上首页、分类页、sitemap 等: **8,041 页**
 
 ### SEO 功能清单
 
@@ -163,7 +176,55 @@ Volume 单位: ml, cl, dl, l, m3, gal, gal_uk, qt, pt, cup, floz, tbsp, tsp
 
 ---
 
-## Phase 5: AdSense 优化 ⬜ (待开始)
+## Phase 4.5: Neo-Brutalist 视觉重设计 ✅ (已完成)
+
+- Space Grotesk 字体（几何感、粗犷、有辨识度）
+- 3px 实线黑色边框 (`--b: 3px solid #000`)
+- 4px 硬偏移阴影 (`--shadow-hard: 4px 4px 0 #000`)
+- 黄色强调色 `#ffe033`
+- 零圆角 (`--r: 0px`)
+- 暗色模式完整支持（白色边框/阴影）
+- 8个文件全部更新: BaseLayout, Converter, Homepage, Category, Detail, ConversionTable, CrossLinks, UnitDescription, AdSense
+- 交互效果: hover时阴影上移, active时阴影消失（按下感）
+
+## Phase 4.6: 对比度修复 ✅ (已完成)
+
+用户反馈: 灰色配黑色看不清
+
+**亮色模式修复**:
+- `--c-text-secondary`: `#333` → `#222`
+- `--c-text-tertiary`: `#666` → `#555` (WCAG AA 4.5:1 on #f5f5f0)
+- `--c-border-light`: `#ccc` → `#bbb`
+
+**暗色模式修复（重点）**:
+- `--c-text-secondary`: `#bbb` → `#d4d4d4` (7.5:1 on #0d0d0d)
+- `--c-text-tertiary`: `#777` → `#999` (4.7:1 on #0d0d0d)
+- `--c-border-light`: `#555` → `#666`
+- `--c-surface-hover`: `#222` → `#252525`
+- `--c-surface-active`: `#2a2a2a` → `#303030`
+- `--c-hero-border`: `#444` → `#666`
+- `--c-hero-surface`: `#222` → `#252525`
+- `--c-hero-input-bg`: `#222` → `#252525`
+
+**Converter 修复**:
+- 标签 `opacity: 0.6` → `color: var(--c-text-secondary)`（不再淡化文字）
+- 暗色模式下拉箭头 SVG `#999` → `#ccc`
+
+## Phase 4.7: 7新类别 ✅ (已完成)
+
+| 分类 | 单位数 | 转换方式 | 特点 |
+|------|--------|----------|------|
+| Power/功率 | 8 | 线性 (W基准) | W, kW, MW, hp, PS, BTU/h, ft·lbf/s, cal/s |
+| Fuel Efficiency/燃油效率 | 4 | 非线性 (km/L中转) | km/L ↔ L/100km ↔ mpg(US) ↔ mpg(UK) |
+| Frequency/频率 | 6 | 线性 (Hz基准) | Hz, kHz, MHz, GHz, rpm, rps |
+| Angle/角度 | 6 | 非线性 (度中转) | °, rad, gon, ′, ″, turn |
+| Force/力 | 6 | 线性 (N基准) | N, kN, lbf, kgf, dyn, ozf |
+| Torque/扭矩 | 6 | 线性 (N·m基准) | N·m, kN·m, lb·ft, lb·in, kgf·m, oz·in |
+| Shoe Size/鞋码 | 6 | 非线性 (cm脚长中转) | cm, US Men, US Women, UK, EU, JP |
+
+页面数: 6,419 → 8,041 (+25%)
+单位数: 81 → 123 (+52%)
+分类数: 10 → 17 (+70%)
 
 ### 广告位布局
 
@@ -269,10 +330,10 @@ PUBLIC_SITE_URL=https://unitconvert.example.com  ← 需替换为实际域名
 
 | 语言 | 页面倍增 | 翻译量 | CPM | 搜索量 |
 |------|----------|--------|-----|--------|
-| 西班牙语 (es) | ×1.5 → ~9,600 | ~130单位名 + ~80描述 | 中高 | 极高 (拉美+西班牙) |
-| 日语 (ja) | ×2 → ~12,800 | ~130单位名 + ~80描述 | 高 | 高 |
-| 法语 (fr) | ×2.5 → ~16,000 | ~130单位名 + ~80描述 | 中高 | 高 |
-| 韩语 (ko) | ×3 → ~19,200 | ~130单位名 + ~80描述 | 中 | 中 |
+| 西班牙语 (es) | ×1.5 → ~12,000 | ~170单位名 + ~120描述 | 中高 | 极高 (拉美+西班牙) |
+| 日语 (ja) | ×2 → ~16,000 | ~170单位名 + ~120描述 | 高 | 高 |
+| 法语 (fr) | ×2.5 → ~20,000 | ~170单位名 + ~120描述 | 中高 | 高 |
+| 韩语 (ko) | ×3 → ~24,000 | ~170单位名 + ~120描述 | 中 | 中 |
 
 ### 加语言步骤 (每门语言)
 
@@ -284,7 +345,7 @@ PUBLIC_SITE_URL=https://unitconvert.example.com  ← 需替换为实际域名
 
 ### 优先级: es > ja > fr > ko
 
-西班牙语搜索量最大，ROI 最高。加2门语言即可破万页。
+西班牙语搜索量最大，ROI 最高。加1门语言(es)即可破万页(~12,000)。
 
 ---
 
@@ -296,11 +357,14 @@ Phase 1  P0分类 ✅
 Phase 2  P1分类 ✅
 Phase 3  P2分类 ✅
 Phase 4  SEO+内容 ✅
+Phase 4.5 Neo-Brutalist 重设计 ✅
+Phase 4.6 对比度修复 ✅
+Phase 4.7 7新类别 ✅ (6,419→8,041页)
     ↓
 Phase 5  AdSense优化  → 开始赚钱
 Phase 7  部署+监控    → 上线 Cloudflare Pages
     ↓
-Phase 8  语言扩展 (es→ja→fr→ko)  → 万页目标
+Phase 8  语言扩展 (es→万页目标)  → es 即可破万
     ↓
 Phase 6  多站群架构  → 多站点矩阵
 ```
