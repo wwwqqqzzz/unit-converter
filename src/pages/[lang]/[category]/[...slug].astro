@@ -7,9 +7,11 @@ import Converter from '../../../components/Converter.astro';
 import ConversionTable from '../../../components/ConversionTable.astro';
 import CrossLinks from '../../../components/CrossLinks.astro';
 import AdSense from '../../../components/AdSense.astro';
+import UnitDescription from '../../../components/UnitDescription.astro';
 import { t, type Lang, LANGUAGES } from '../../../utils/i18n';
 import { getCategory, getUnit, convert, formatResult, getUnitPairs, pairSlug, valueSlug, getCommonValues } from '../../../lib/units';
 import { categories } from '../../../data/units';
+import { unitDescriptions } from '../../../data/descriptions';
 
 export interface Props {
   lang: Lang;
@@ -136,15 +138,16 @@ const pageSlug = isConverterPage ? pairSlug(u1, u2, lang) : rawSlug;
 
 // Page metadata
 const pageTitle = isConverterPage
-  ? t(lang, 'converter.pageTitleConverter', { unit1: u1Name, unit2: u2Name })
-  : t(lang, 'converter.pageTitle', { value: String(displayValue), unit1: u1Name, unit2: u2Name });
+  ? t(lang, 'converter.pageTitleConverter', { unit1: u1Name, unit2: u2Name, name: catName })
+  : t(lang, 'converter.pageTitle', { value: String(displayValue), unit1: u1Name, unit2: u2Name, result: formattedResult });
 
 const pageDesc = isConverterPage
-  ? t(lang, 'converter.pageDescriptionConverter', { unit1: u1Name, unit2: u2Name })
+  ? t(lang, 'converter.pageDescriptionConverter', { unit1: u1Name, unit2: u2Name, name: catName })
   : t(lang, 'converter.pageDescription', {
       value: String(displayValue),
       unit1: u1Name,
       unit2: u2Name,
+      result: formattedResult,
       name: catName,
     });
 
@@ -169,30 +172,99 @@ const breadcrumbJsonld = {
 };
 
 // FAQ structured data
+const faqQuestions: Array<Record<string, any>> = [
+  {
+    '@type': 'Question',
+    name: `${lang === 'zh' ? '如何将' : 'How do I convert '}${displayValue} ${u1Name}${lang === 'zh' ? '换算成' : ' to '}${u2Name}？`,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: `${displayValue} ${u1Name} = ${formattedResult} ${u2Name}。${lang === 'zh' ? '换算公式' : 'Formula'}: 1 ${u1Name} = ${formatResult(rate)} ${u2Name}。`,
+    },
+  },
+  {
+    '@type': 'Question',
+    name: `${lang === 'zh' ? '1' : 'What is '}${u1Name}${lang === 'zh' ? '等于多少' : ' in '}${u2Name}？`,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: `1 ${u1Name} = ${formatResult(rate)} ${u2Name}。`,
+    },
+  },
+];
+
+// Add "What is X?" questions from descriptions
+const desc1 = unitDescriptions[catId]?.[unit1Id];
+const desc2 = unitDescriptions[catId]?.[unit2Id];
+if (desc1) {
+  faqQuestions.push({
+    '@type': 'Question',
+    name: `${lang === 'zh' ? '什么是' : 'What is '}${u1Name}${lang === 'zh' ? '？' : '?'}`,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: desc1[lang],
+    },
+  });
+}
+if (desc2) {
+  faqQuestions.push({
+    '@type': 'Question',
+    name: `${lang === 'zh' ? '什么是' : 'What is '}${u2Name}${lang === 'zh' ? '？' : '?'}`,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: desc2[lang],
+    },
+  });
+}
+
 const faqJsonld = {
   '@context': 'https://schema.org',
   '@type': 'FAQPage',
-  mainEntity: [
-    {
-      '@type': 'Question',
-      name: `${lang === 'zh' ? '如何将' : 'How do I convert '}${displayValue} ${u1Name}${lang === 'zh' ? '换算成' : ' to '}${u2Name}？`,
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: `${displayValue} ${u1Name} = ${formattedResult} ${u2Name}。${lang === 'zh' ? '换算公式' : 'Formula'}: 1 ${u1Name} = ${formatResult(rate)} ${u2Name}。`,
-      },
-    },
-    {
-      '@type': 'Question',
-      name: `${lang === 'zh' ? '1' : 'What is '}${u1Name}${lang === 'zh' ? '等于多少' : ' in '}${u2Name}？`,
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: `1 ${u1Name} = ${formatResult(rate)} ${u2Name}。`,
-      },
-    },
-  ],
+  mainEntity: faqQuestions,
 };
 
-const jsonld = JSON.stringify([breadcrumbJsonld, faqJsonld]);
+// HowTo structured data for conversion steps
+const howToName = lang === 'zh'
+  ? `如何将${u1Name}换算为${u2Name}`
+  : `How to convert ${u1Name} to ${u2Name}`;
+
+let howToSteps: Array<Record<string, any>>;
+if (category.convertFn) {
+  // Temperature: formula-specific steps
+  if (unit1Id === 'f' && unit2Id === 'c') {
+    howToSteps = [
+      { '@type': 'HowToStep', position: 1, text: lang === 'zh' ? '从华氏度值中减去32' : 'Subtract 32 from the Fahrenheit value' },
+      { '@type': 'HowToStep', position: 2, text: lang === 'zh' ? '将结果乘以5/9' : 'Multiply the result by 5/9' },
+      { '@type': 'HowToStep', position: 3, text: lang === 'zh' ? '得到的结果就是摄氏度' : 'The result is the temperature in Celsius' },
+    ];
+  } else if (unit1Id === 'c' && unit2Id === 'f') {
+    howToSteps = [
+      { '@type': 'HowToStep', position: 1, text: lang === 'zh' ? '将摄氏度值乘以9/5' : 'Multiply the Celsius value by 9/5' },
+      { '@type': 'HowToStep', position: 2, text: lang === 'zh' ? '再加上32' : 'Add 32 to the result' },
+      { '@type': 'HowToStep', position: 3, text: lang === 'zh' ? '得到的结果就是华氏度' : 'The result is the temperature in Fahrenheit' },
+    ];
+  } else {
+    // Generic temperature conversion: convert via Celsius
+    howToSteps = [
+      { '@type': 'HowToStep', position: 1, text: lang === 'zh' ? `先将${u1Name}转换为摄氏度` : `First convert ${u1Name} to Celsius` },
+      { '@type': 'HowToStep', position: 2, text: lang === 'zh' ? `再将摄氏度转换为${u2Name}` : `Then convert Celsius to ${u2Name}` },
+    ];
+  }
+} else {
+  // Linear conversion: multiply by rate
+  howToSteps = [
+    { '@type': 'HowToStep', position: 1, text: lang === 'zh' ? `取${u1Name}的数值` : `Take the value in ${u1Name}` },
+    { '@type': 'HowToStep', position: 2, text: lang === 'zh' ? `乘以换算系数 ${formatResult(rate)}` : `Multiply by the conversion factor ${formatResult(rate)}` },
+    { '@type': 'HowToStep', position: 3, text: lang === 'zh' ? `得到的结果就是${u2Name}` : `The result is your value in ${u2Name}` },
+  ];
+}
+
+const howToJsonld = {
+  '@context': 'https://schema.org',
+  '@type': 'HowTo',
+  name: howToName,
+  step: howToSteps,
+};
+
+const jsonld = JSON.stringify([breadcrumbJsonld, faqJsonld, howToJsonld]);
 const pagePath = `${catId}/${pageSlug}`;
 
 // Build all units data for the Converter component
@@ -277,6 +349,9 @@ const commonValuesForTable = getCommonValues(catId);
     rate={rate}
     values={commonValuesForTable}
   />
+
+  <UnitDescription lang={lang} unit={u1} categoryId={catId} />
+  <UnitDescription lang={lang} unit={u2} categoryId={catId} />
 
   <AdSense position="bottom" />
 

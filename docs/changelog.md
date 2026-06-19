@@ -1,5 +1,128 @@
 # 实施日志
 
+## 2026-06-19 (晚间) — Phase 2 & Phase 3 & Phase 4 完成 + 多语言修复
+
+### Phase 2: P1 分类 (Area, Volume) ✅
+
+**新增分类**:
+
+| 分类 | 单位数 | 对数 | 常用值 | 语言 |
+|------|--------|------|--------|------|
+| Area/面积 | 10 (sqmm, sqcm, sqm, sqkm, ha, acre, sqft, sqin, sqmi, mu) | 45 | 10 | en/zh |
+| Volume/体积 | 13 (ml, cl, dl, l, m3, gal, gal_uk, qt, pt, cup, floz, tbsp, tsp) | 78 | 9 | en/zh |
+
+Area 包含中式单位 `mu` (亩)，Volume 包含美制和英制加仑。
+
+### Phase 3: P2 分类 (Speed, Time, Pressure, Energy) ✅
+
+**新增分类**:
+
+| 分类 | 单位数 | 对数 | 常用值 | 语言 |
+|------|--------|------|--------|------|
+| Speed/速度 | 6 (m/s, km/h, mph, kn, ft/s, mach) | 15 | 8 | en/zh |
+| Time/时间 | 8 (ms, s, min, h, d, wk, mo, yr) | 28 | 8 | en/zh |
+| Pressure/压力 | 8 (Pa, kPa, MPa, bar, atm, psi, mmHg, Torr) | 28 | 7 | en/zh |
+| Energy/能量 | 7 (J, kJ, cal, kcal, kWh, BTU, Wh) | 21 | 7 | en/zh |
+
+注意: Time 单位 `ms_time` 用了下划线后缀避免与 Speed 的 `ms` 冲突。
+
+### Phase 4: SEO 优化 + 内容充实 ✅
+
+**4.1 增强页面标题**
+- 值页面: `{value} {unit1} = {result} {unit2} — Convert {unit1} to {unit2}`
+- 对页面: `{unit1} to {unit2} — Free {category} Converter`
+- 中文格式同理
+
+**4.2 单位描述数据**
+- `src/data/descriptions.ts` — 81单位 × 2语言 = 162段描述
+- 每段2-3句，SEO友好，包含单位符号和常见用途
+
+**4.3 UnitDescription 组件**
+- `src/components/UnitDescription.astro`
+- 使用原生 `<details>` 元素（SEO可索引）
+- 折叠/展开动画
+
+**4.4 FAQ 结构化数据增强**
+- 从2题增加到4题
+- 新增 "What is {unit}?" 问题，答案来自 descriptions 数据
+- 中英双语自动适配
+
+**4.5 HowTo 结构化数据**
+- 每页添加 HowTo JSON-LD schema
+- 线性转换: 3步 (取值 → 乘以系数 → 得结果)
+- 温度转换: 3步特殊公式 (°C→°F: 乘9/5加32, °F→°C: 减32乘5/9)
+- 中英双语步骤描述
+
+**4.6 跨分类链接**
+- 每个对页面底部显示9个其他分类的链接卡片
+- 使用 CATEGORY_ICONS 图标
+
+**4.7 sitemap.xml 修复**
+- 使用 `getCommonValues(catId)` 替代 `COMMON_VALUES`
+- 温度页面包含 -40°C、37°C 等语义值
+
+**4.8 分类页增强**
+- BreadcrumbList JSON-LD 结构化数据
+- "Popular Conversions" 区域（热门值页面链接）
+- "Other Conversion Categories" 跨分类链接
+
+**4.9 i18n 新增字符串**
+- `converter.aboutUnit`, `converter.whatIsUnit`
+- `converter.otherCategories`, `category.otherCategories`
+- `category.popularConversions`
+
+### 多语言问题修复 ✅
+
+**修复: PSI 中文名含 `/` 导致URL损坏**
+- `磅力/平方英寸` → `磅力每平方英寸`
+- 修复前: 48个中文页面缺失（pressure分类中涉及PSI的所有页面对）
+- 修复后: 0个缺失页面
+
+**修复: Hreflang 重复**
+- BaseLayout.astro 中 hreflangTags() 和 langLinks 重复生成了 en/zh 的 alternate 链接
+- 移除 langLinks 的重复 alternate links，现在只有3个 hreflang (en, zh, x-default)
+
+**多语言审计结果**:
+- ✅ i18n 键同步: en.json 和 zh.json 完全同步
+- ✅ 单位描述覆盖: 81/81 单位 × 2语言
+- ✅ 缺失页面: 0
+- ✅ URL特殊字符: 无 `/` 或可能导致slug冲突的字符
+- ✅ Hreflang: 3标签/页 (en, zh, x-default)
+- ✅ Canonical URL: 每页有（但域名是 placeholder）
+- ✅ 语言切换: 双向链接存在
+- ⚠️ Canonical 域名: `unitconvert.example.com` 需部署时替换
+- ⚠️ 加新语言需要: i18n json + units name + descriptions 三处改动
+
+### 开源项目评估
+
+**结论: 借数据不借库**
+
+| 方案 | 推荐？ | 理由 |
+|------|--------|------|
+| 用 `convert` 包数据作参考 | ✅ | MIT, 16类, NIST精确值 |
+| 用 `convert` 作运行时依赖 | ❌ | 转换逻辑就是 `value * ratio` |
+| 用 `convert-units` | ⚠️ | 覆盖广但格式复杂, beta版 |
+| 用 `js-quantities` | ❌ | 科学计算导向, 数据嵌在解析器里 |
+
+关键事实:
+1. 没有库提供中文单位名 — i18n 完全要自己做
+2. 没有库提供 SEO 元数据 — 内容层是自己的 IP
+3. toBase 单值比 ratio 更直观, convertFn 处理非线性比 difference 更灵活
+
+### 当前项目状态
+
+- **构建**: 6,419 页面, 74 测试通过
+- **分类**: 9 个 (Length, Weight, Temperature, Data, Area, Volume, Speed, Time, Pressure, Energy)
+- **单位**: 81 个
+- **语言**: 2 (en, zh)
+- **每页内链**: ~22 个 (1 reverse + 12 same-category + 9 cross-category)
+- **结构化数据**: BreadcrumbList + FAQPage + HowTo
+- **已知限制**: 
+  - Canonical URL 域名为占位符
+  - 温度客户端JS与服务端convertFn有轻微重复
+
+---
+
 ## 2026-06-19 (下午) — Phase 0 架构重构 + Phase 1 P0 分类
 
 ### Phase 0: 架构重构 ✅
@@ -65,28 +188,3 @@
 - **语言**: 暂不加新语言，保持中英双语
 - **变现**: 多站群策略 — 同架构复制到汇率、BMI 等新站
 - **规模目标**: 万页级别
-
-### 下一步
-- Phase 2: P1 分类 (Area, Volume)
-
-## 2026-06-19 — 开源项目评估
-
-### 评估结论: 借数据不借库
-
-| 方案 | 推荐？ | 理由 |
-|------|--------|------|
-| 用 `convert` 包数据作参考 | ✅ | MIT, 16类, NIST精确值, 干净格式 |
-| 用 `convert` 作运行时依赖 | ❌ | 转换逻辑就是 `value * ratio`，50行自己写 |
-| 用 `convert-units` | ⚠️ | 覆盖最广(27类含Speed), 但数据格式复杂, beta版 |
-| 用 `js-quantities` | ❌ | 科学计算导向, 数据嵌在解析器里 |
-
-### 关键事实
-1. **没有库提供中文单位名** — i18n 完全要自己做
-2. **没有库提供 SEO 元数据** — 内容层完全是自己的 IP
-3. **`convert` 包缺 Speed 分类** — 但只有 6 个单位，手动加 5 分钟
-4. **OmniConvert** (tools.sagasu.art) 是最接近竞品(Astro, 4000+页, 8语言), 但源码已下架
-5. **当前方案已经够好** — toBase 单值比 ratio 更直观, 中文已有, convertFn 处理非线性比 difference 更灵活
-
-### 小瑕疵（非阻塞）
-- Converter 客户端 JS 里温度公式是重新实现的，没有复用服务端 convertFn
-- 添加更多非线性分类时需要每个都在客户端单独写转换逻辑

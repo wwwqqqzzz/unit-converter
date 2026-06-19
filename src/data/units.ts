@@ -198,7 +198,7 @@ export const categories: Category[] = [
       { id: 'mpa',  name: { en: 'Megapascals',   zh: '兆帕' },      symbol: 'MPa',   toBase: 1000000 },
       { id: 'bar',  name: { en: 'Bar',            zh: '巴' },        symbol: 'bar',   toBase: 100000 },
       { id: 'atm',  name: { en: 'Atmospheres',   zh: '标准大气压' }, symbol: 'atm',   toBase: 101325 },
-      { id: 'psi',  name: { en: 'PSI',            zh: '磅力/平方英寸' }, symbol: 'psi', toBase: 6894.76 },
+      { id: 'psi',  name: { en: 'PSI',            zh: '磅力每平方英寸' }, symbol: 'psi', toBase: 6894.76 },
       { id: 'mmhg', name: { en: 'mmHg',           zh: '毫米汞柱' },  symbol: 'mmHg',  toBase: 133.322 },
       { id: 'torr', name: { en: 'Torr',           zh: '托' },        symbol: 'Torr',  toBase: 133.322 },
     ],

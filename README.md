@@ -1,13 +1,26 @@
 # Unit Converter — Multilingual pSEO Tool Site
 
-A programmatic SEO (pSEO) unit conversion website built with **Astro + TypeScript**, statically generated for maximum speed and SEO performance. Currently supports **English and Chinese**, with the **Length** category.
+A programmatic SEO (pSEO) unit conversion website built with **Astro + TypeScript**, statically generating **6,419 pages** across **10 categories**, **81 units**, and **2 languages** (English + Chinese). Designed for passive income through AdSense.
 
 ## Tech Stack
 
 - **Astro 5** — static site generation (SSG)
 - **TypeScript** — type-safe unit configuration
+- **Vitest** — 74 unit tests
 - **No backend** — all conversion logic runs in the browser via vanilla JS
 - **Deploy target** — Cloudflare Pages or Netlify (free tier)
+
+## Stats
+
+| Metric | Value |
+|--------|-------|
+| Total pages | 6,419 |
+| Categories | 10 (Length, Weight, Temperature, Data, Area, Volume, Speed, Time, Pressure, Energy) |
+| Units | 81 |
+| Languages | 2 (English, Chinese) |
+| Internal links/page | ~22 |
+| Structured data | BreadcrumbList + FAQPage + HowTo |
+| Tests | 74 passing |
 
 ## Quick Start
 
@@ -16,6 +29,7 @@ npm install
 npm run dev      # local dev server at http://localhost:4321
 npm run build    # static output → dist/
 npm run preview  # preview the build locally
+npm test         # run 74 vitest tests
 ```
 
 ## Project Structure
@@ -23,95 +37,110 @@ npm run preview  # preview the build locally
 ```
 src/
 ├── data/
-│   └── units.ts          ← **Unit definitions** (edit this to add categories/units)
+│   ├── units.ts          ← Unit definitions (edit this to add categories/units)
+│   └── descriptions.ts   ← SEO descriptions for all 81 units × 2 languages
 ├── i18n/
 │   ├── en.json           ← English UI strings
 │   └── zh.json           ← Chinese UI strings
 ├── lib/
-│   ├── units.ts          ← Conversion logic (pure functions)
-│   └── seo.ts            ← Hreflang, canonical helpers
+│   ├── units.ts          ← Conversion logic (pure functions + convertFn)
+│   ├── seo.ts            ← Hreflang, canonical helpers
+│   └── __tests__/        ← Vitest test suite
 ├── utils/
-│   └── i18n.ts           ← Translation loader
+│   └── i18n.ts           ← Translation loader + LANGUAGES config
 ├── components/
 │   ├── Converter.astro   ← Interactive conversion tool (client-side JS)
 │   ├── ConversionTable.astro  ← Common values table
-│   ├── CrossLinks.astro  ← Cross-linking navigation
+│   ├── CrossLinks.astro  ← Cross-linking navigation (12 same-cat + 9 cross-cat)
+│   ├── UnitDescription.astro ← Collapsible unit descriptions (native <details>)
 │   └── AdSense.astro     ← AdSense placeholder
 ├── layouts/
-│   └── BaseLayout.astro  ← HTML shell with SEO meta
+│   └── BaseLayout.astro  ← HTML shell with SEO meta + JSON-LD
 ├── pages/
 │   ├── index.astro              ← Root redirect → /en/
 │   ├── [lang]/index.astro       ← Language homepage
-│   ├── [lang]/length/index.astro ← Category overview
-│   ├── [lang]/length/[...slug].astro ← **Dynamic converter/value pages**
+│   ├── [lang]/[category]/index.astro ← Category overview
+│   ├── [lang]/[category]/[...slug].astro ← Dynamic converter/value pages
 │   ├── sitemap.xml.ts           ← Auto-generated sitemap
 │   └── robots.txt.ts            ← Robots config
 ```
 
+## Categories
+
+| Category | Units | Pairs | Common Values | Pages |
+|-----------|-------|-------|---------------|-------|
+| Length | 8 | 28 | 10 | 616 |
+| Weight | 8 | 28 | 10 | 616 |
+| Temperature | 3 | 3 | 10 | 66 |
+| Data Storage | 10 | 45 | 10 | 990 |
+| Area | 10 | 45 | 10 | 990 |
+| Volume | 13 | 78 | 9 | 1,404 |
+| Speed | 6 | 15 | 8 | 240 |
+| Time | 8 | 28 | 8 | 448 |
+| Pressure | 8 | 28 | 7 | 392 |
+| Energy | 7 | 21 | 7 | 294 |
+
+**Total**: 81 units, 297 pairs, ~6,056 content pages + category/home/sitemap = **6,419 pages**
+
 ## How to Add a New Category
 
 Only one file to edit: `src/data/units.ts`.
-
-Example — adding `weight`:
 
 ```typescript
 // Add to the categories array:
 {
   id: 'weight',
   name: { en: 'Weight', zh: '重量' },
-  baseUnitId: 'kg',
+  baseUnitId: 'g',
   units: [
-    { id: 'mg',   name: { en: 'Milligrams', zh: '毫克' },   symbol: 'mg', toBase: 0.000001 },
-    { id: 'g',    name: { en: 'Grams',      zh: '克' },     symbol: 'g',  toBase: 0.001 },
-    { id: 'kg',   name: { en: 'Kilograms',  zh: '千克' },   symbol: 'kg', toBase: 1 },
-    { id: 'lb',   name: { en: 'Pounds',     zh: '磅' },     symbol: 'lb', toBase: 0.453592 },
-    { id: 'oz',   name: { en: 'Ounces',     zh: '盎司' },   symbol: 'oz', toBase: 0.0283495 },
+    { id: 'mg',   name: { en: 'Milligrams', zh: '毫克' }, symbol: 'mg', toBase: 0.001 },
+    { id: 'g',    name: { en: 'Grams', zh: '克' }, symbol: 'g', toBase: 1 },
+    { id: 'kg',   name: { en: 'Kilograms', zh: '千克' }, symbol: 'kg', toBase: 1000 },
+    { id: 'lb',   name: { en: 'Pounds', zh: '磅' }, symbol: 'lb', toBase: 453.592 },
   ],
+  // Add CATEGORY_VALUES and CATEGORY_ICONS entries
 },
 ```
 
-Then `npm run build` — all pages auto-generate:
-- Weight category page at `/en/weight/` and `/zh/weight/`
-- All unit pair pages: `/en/weight/kg-to-lb/`, `/zh/weight/千克-磅/`
-- All value pages: `/en/weight/5-kg-to-lb/`, `/zh/weight/5-千克-磅/`
+Then add descriptions in `src/data/descriptions.ts`, update `en.json`/`zh.json` nav, and run `npm run build`.
 
-No other files need changes.
+For non-linear conversions (e.g. temperature), add a `convertFn`:
+
+```typescript
+{
+  id: 'temperature',
+  name: { en: 'Temperature', zh: '温度' },
+  baseUnitId: 'c',
+  units: [...],
+  convertFn: (value, fromId, toId) => { /* Celsius-based conversion */ },
+},
+```
 
 ## How to Add a New Language
 
-1. Create `src/i18n/{code}.json` — translate all strings. Use the same keys as `en.json`.
-2. Add the language code to the `LANGUAGES` array in `src/utils/i18n.ts`.
-3. Add translated unit names in `src/data/units.ts` (the `name` field on each unit supports `Record<string, string>`).
-4. If the language uses a different URL slug pattern, update the slug parsing logic in `[...slug].astro`.
-5. `npm run build` — all pages generate for the new language.
+1. Create `src/i18n/{code}.json` — translate all ~50 UI strings
+2. Add the language code to `LANGUAGES` in `src/utils/i18n.ts`
+3. Add translated unit names in `src/data/units.ts` (each unit's `name` field)
+4. Add descriptions in `src/data/descriptions.ts`
+5. `npm run build` — all pages generate for the new language
 
-## How to Configure AdSense
-
-1. Get your AdSense publisher ID (e.g. `ca-pub-123456789`).
-2. Set the environment variable before building:
-
-```bash
-PUBLIC_ADSENSE_ID=ca-pub-123456789 npm run build
-```
-
-Or edit the default in `src/components/AdSense.astro`:
-
-```typescript
-const PUBLISHER_ID = import.meta.env.PUBLIC_ADSENSE_ID || 'ca-pub-XXXXXXXX';
-```
-
-3. Replace the `AD_SLOT` constant in the same file with your actual ad slot ID.
-
-Until you set a valid publisher ID, all ad slots render as labeled placeholders (visible during development).
+Each new language multiplies page count by ~1.5x. Adding Spanish (es) brings total to ~9,600 pages.
 
 ## SEO Features
 
-- **Unique titles + meta descriptions** per page (dynamically includes value/unit/language)
-- **Hreflang tags** — correct alternate links for both language versions + `x-default`
+- **Value-in-title** — pages include the answer in the title (e.g. "5 cm = 1.97 inches")
+- **Unique meta descriptions** per page
+- **Hreflang tags** — en, zh, x-default (3 per page, no duplicates)
 - **Canonical URLs** — every page points to itself
 - **Semantic HTML** — H1, breadcrumbs, proper heading hierarchy
-- **Structured data** — BreadcrumbList + FAQ (JSON-LD)
-- **Auto-generated sitemap.xml** — all 504+ pages indexed
+- **JSON-LD structured data**:
+  - BreadcrumbList on all pages
+  - FAQPage (2-4 questions per page)
+  - HowTo (3-step conversion guide per page)
+- **Unit descriptions** — collapsible `<details>` elements with unique content per unit
+- **Cross-category links** — 9 other category links per page
+- **Same-category links** — 12 pair links per page + 1 reverse link
+- **Auto-generated sitemap.xml** — category-specific common values
 - **Mobile-first responsive** design
 - **Core Web Vitals friendly** — minimal JS, no frameworks in client bundle
 
@@ -123,7 +152,9 @@ Until you set a valid publisher ID, all ad slots render as labeled placeholders 
 2. In Cloudflare Dashboard → Pages → Connect Git repo.
 3. Build command: `npm run build`
 4. Build output directory: `dist`
-5. (Optional) Set `PUBLIC_ADSENSE_ID` as an environment variable.
+5. Set environment variables:
+   - `PUBLIC_ADSENSE_ID=ca-pub-XXXXXXXXX`
+   - `PUBLIC_SITE_URL=https://your-domain.com`
 
 ### Netlify
 
@@ -131,18 +162,18 @@ Until you set a valid publisher ID, all ad slots render as labeled placeholders 
 2. In Netlify → Import Git repo.
 3. Build command: `npm run build`
 4. Publish directory: `dist`
-5. (Optional) Set `PUBLIC_ADSENSE_ID` as an environment variable.
+5. Set the same environment variables.
 
-## Monitization
+## Documentation
 
-This site uses Google AdSense. The approach:
-- **Tool-first design** — the converter is always the most prominent element
-- **3 ad slots per page** — top, middle, bottom — never between the tool and the answer
-- **Ad component is configurable** — can adjust density or disable per page
+- `docs/roadmap.md` — Full implementation roadmap (8 phases)
+- `docs/changelog.md` — Implementation log
+- `docs/phase0-1-report.md` — Phase 0 & 1 detailed report
+- `docs/phase2-4-report.md` — Phase 2, 3, 4 detailed report
 
-## What's Not Included (First Phase Scope)
+## What's Next
 
-- ❌ No other categories beyond Length (add them in `units.ts`)
-- ❌ No other languages beyond English/Chinese
-- ❌ No backend or API
-- ❌ No user accounts or saved conversions
+- **Phase 5**: AdSense optimization (sidebar, sticky bottom, responsive ads)
+- **Phase 7**: Deploy to Cloudflare Pages + Search Console + Analytics
+- **Phase 8**: Add Spanish (es) → ~9,600 pages, then Japanese (ja) → ~12,800 pages
+- **Phase 6**: Multi-site architecture (currency, BMI, percentage calculators)

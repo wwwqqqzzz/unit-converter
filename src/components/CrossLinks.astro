@@ -1,11 +1,10 @@
 ---
-// ============================================================
-// Cross-linking section — reverse link + more conversions in category
-// ============================================================
+// Cross-linking section — reverse link + more conversions in category + cross-category links
 
 import type { Unit } from '../data/units';
 import { getUnitPairs, pairSlug } from '../lib/units';
-import { getCategory } from '../lib/units';
+import { getCategory, getCategories } from '../lib/units';
+import { CATEGORY_ICONS } from '../data/units';
 import { t, type Lang } from '../utils/i18n';
 
 export interface Props {
@@ -34,6 +33,9 @@ const reverseSlug = pairSlug(
 const reverseLabel = t(l, 'converter.reverseLink', { unit1: unit2Name, unit2: unit1Name });
 const categoryName = category?.name[l] ?? categoryId;
 const seeAlsoLabel = t(l, 'converter.moreConversions', { name: categoryName });
+
+const otherCategories = getCategories().filter(c => c.id !== categoryId);
+const otherCatsLabel = l === 'zh' ? '其他换算类别' : 'Other Conversion Categories';
 ---
 
 <div class="cross-links">
@@ -61,6 +63,18 @@ const seeAlsoLabel = t(l, 'converter.moreConversions', { name: categoryName });
         })
     }
   </ul>
+
+  <h3>{otherCatsLabel}</h3>
+  <div class="category-links">
+    {
+      otherCategories.map(cat => (
+        <a href={"/" + l + "/" + cat.id + "/"} class="category-link">
+          <span class="cat-icon">{CATEGORY_ICONS[cat.id] ?? '📐'}</span>
+          <span>{cat.name[l]}</span>
+        </a>
+      ))
+    }
+  </div>
 </div>
 
 <style>
@@ -92,5 +106,32 @@ const seeAlsoLabel = t(l, 'converter.moreConversions', { name: categoryName });
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
     gap: 0.3rem 1rem;
+  }
+  .category-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+  }
+  .category-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.4rem 0.75rem;
+    background: #f5f5ff;
+    border: 1px solid #e0e0f0;
+    border-radius: 6px;
+    color: #333;
+    text-decoration: none;
+    font-size: 0.85rem;
+    transition: background 0.15s, border-color 0.15s;
+  }
+  .category-link:hover {
+    background: #e8e8ff;
+    border-color: #667eea;
+    text-decoration: none;
+  }
+  .cat-icon {
+    font-size: 1rem;
   }
 </style>

@@ -25,12 +25,14 @@
   "category": {
     "title": "%name%换算",
     "description": "免费在线%name%换算器。支持所有%name%单位之间的即时换算，附带换算公式和常用数值对照表。",
-    "choosePair": "选择两个单位进行换算："
+    "choosePair": "选择两个单位进行换算：",
+    "otherCategories": "其他换算类别",
+    "popularConversions": "常用%name%换算"
   },
   "converter": {
-    "pageTitle": "%value% %unit1% 等于 %unit2%",
-    "pageDescription": "将 %value%%unit1% 换算为 %unit2%，结果即时显示。免费在线%name%换算器，附带换算公式、对照表和双向计算功能。",
-    "pageTitleConverter": "%unit1% 换算 %unit2%",
+    "pageTitle": "%value%%unit1% = %result%%unit2%",
+    "pageDescription": "将 %value%%unit1% 换算为 %unit2%，结果即时显示。免费在线%name%换算器，附带换算公式、对照表和双向计算功能。%value%%unit1%等于%result%%unit2%。",
+    "pageTitleConverter": "%unit1%换算%unit2% — 免费%name%换算器",
     "pageDescriptionConverter": "免费在线%unit1%换算%unit2%工具。即时结果、双向换算、换算公式和常用数值对照表。",
     "heading": "%value%%unit1% = %result%%unit2%",
     "headingConverter": "%unit1% 换算 %unit2% 换算器",
@@ -48,7 +50,10 @@
     "tableUnit2": "%unit%",
     "seeAlso": "相关换算",
     "reverseLink": "%unit1%换算%unit2%",
-    "moreConversions": "更多%name%换算"
+    "moreConversions": "更多%name%换算",
+    "aboutUnit": "关于%unit%",
+    "whatIsUnit": "什么是%unit%？",
+    "otherCategories": "其他换算类别"
   },
   "common": {
     "loading": "加载中...",

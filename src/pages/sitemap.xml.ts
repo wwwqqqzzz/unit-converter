@@ -1,6 +1,6 @@
 import { LANGUAGES } from '../utils/i18n';
-import { categories, COMMON_VALUES } from '../data/units';
-import { getUnitPairs, pairSlug, valueSlug } from '../lib/units';
+import { categories } from '../data/units';
+import { getUnitPairs, pairSlug, valueSlug, getCommonValues } from '../lib/units';
 
 export const prerender = true;
 
@@ -20,13 +20,14 @@ export async function GET() {
       urls.push(`${site}/${lang}/${cat.id}/`);
 
       const pairs = getUnitPairs(cat);
+      const commonValues = getCommonValues(cat.id);
 
       for (const [u1, u2] of pairs) {
         // Converter page
         urls.push(`${site}/${lang}/${cat.id}/${pairSlug(u1, u2, lang)}/`);
 
-        // Value pages
-        for (const val of COMMON_VALUES) {
+        // Value pages (per-category common values)
+        for (const val of commonValues) {
           urls.push(`${site}/${lang}/${cat.id}/${valueSlug(val, u1, u2, lang)}/`);
         }
       }

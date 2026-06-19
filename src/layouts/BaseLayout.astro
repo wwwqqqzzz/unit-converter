@@ -50,15 +50,8 @@ const canonicalHref = canonical ?? canonicalUrl(lang, pagePath, siteUrl.replace(
     <!-- Canonical -->
     <link rel="canonical" href={canonicalHref} />
 
-    <!-- Hreflang — rendered as raw HTML -->
+    <!-- Hreflang (includes en, zh, x-default) -->
     <Fragment set:html={hreflangTags(pagePath)} />
-
-    <!-- Language switcher alternate links -->
-    {
-      langLinks.map(l => (
-        <link rel="alternate" hreflang={l.code} href={l.url} />
-      ))
-    }
 
     <!-- Preconnect for performance -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />

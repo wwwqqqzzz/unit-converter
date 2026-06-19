@@ -25,12 +25,14 @@
   "category": {
     "title": "%name% Converter",
     "description": "Free online %name% converter. Convert between all %name% units with instant results and a handy conversion table.",
-    "choosePair": "Choose two units to convert:"
+    "choosePair": "Choose two units to convert:",
+    "otherCategories": "Other Conversion Categories",
+    "popularConversions": "Popular %name% Conversions"
   },
   "converter": {
-    "pageTitle": "%value% %unit1% to %unit2%",
-    "pageDescription": "Convert %value% %unit1% to %unit2% instantly. Free online %name% converter with formula, conversion table, and bidirectional calculator.",
-    "pageTitleConverter": "%unit1% to %unit2% Converter",
+    "pageTitle": "%value% %unit1% = %result% %unit2%",
+    "pageDescription": "Convert %value% %unit1% to %unit2% instantly. Free online %name% converter with formula, conversion table, and bidirectional calculator. %value% %unit1% equals %result% %unit2%.",
+    "pageTitleConverter": "%unit1% to %unit2% — Free %name% Converter",
     "pageDescriptionConverter": "Free online %unit1% to %unit2% converter. Instant results, bidirectional conversion, formula and common values table.",
     "heading": "%value% %unit1% = %result% %unit2%",
     "headingConverter": "%unit1% to %unit2% Converter",
@@ -48,7 +50,10 @@
     "tableUnit2": "%unit%",
     "seeAlso": "See Also",
     "reverseLink": "%unit1% to %unit2%",
-    "moreConversions": "More %name% Conversions"
+    "moreConversions": "More %name% Conversions",
+    "aboutUnit": "About %unit%",
+    "whatIsUnit": "What is %unit%?",
+    "otherCategories": "Other Conversion Categories"
   },
   "common": {
     "loading": "Loading...",

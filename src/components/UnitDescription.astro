@@ -1,0 +1,66 @@
+---
+// Collapsible unit description for SEO content enrichment
+// Uses native <details> element so content stays in DOM for crawlers
+
+import type { Unit } from '../data/units';
+import type { Lang } from '../utils/i18n';
+import { t } from '../utils/i18n';
+import { unitDescriptions } from '../data/descriptions';
+
+export interface Props {
+  lang: Lang;
+  unit: Unit;
+  categoryId: string;
+}
+
+const { lang, unit, categoryId } = Astro.props;
+const desc = unitDescriptions[categoryId]?.[unit.id];
+if (!desc) return;
+const text = desc[lang];
+if (!text) return;
+const label = t(lang, 'converter.aboutUnit', { unit: unit.name[lang] });
+---
+
+<details class="unit-description">
+  <summary>{label}</summary>
+  <p>{text}</p>
+</details>
+
+<style>
+  .unit-description {
+    margin: 0.75rem 0;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .unit-description summary {
+    padding: 0.6rem 1rem;
+    background: #f9f9ff;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: #444;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .unit-description summary::before {
+    content: '▸';
+    font-size: 0.8rem;
+    transition: transform 0.2s;
+  }
+  .unit-description[open] summary::before {
+    transform: rotate(90deg);
+  }
+  .unit-description summary:hover {
+    background: #f0f0ff;
+  }
+  .unit-description p {
+    padding: 0.75rem 1rem;
+    margin: 0;
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: #555;
+  }
+</style>
