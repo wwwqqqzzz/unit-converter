@@ -1,0 +1,96 @@
+---
+// ============================================================
+// Cross-linking section — reverse link + more conversions in category
+// ============================================================
+
+import type { Unit } from '../data/units';
+import { getUnitPairs, pairSlug } from '../lib/units';
+import { getCategory } from '../lib/units';
+import { t, type Lang } from '../utils/i18n';
+
+export interface Props {
+  lang: Lang;
+  /** Category ID (e.g. "length") */
+  categoryId: string;
+  /** Unit 1 ID */
+  unit1Id: string;
+  /** Unit 2 ID */
+  unit2Id: string;
+  /** Unit 1 display name */
+  unit1Name: string;
+  /** Unit 2 display name */
+  unit2Name: string;
+}
+
+const { lang: l, categoryId, unit1Id, unit2Id, unit1Name, unit2Name } = Astro.props;
+
+const category = getCategory(categoryId);
+const allPairs = category ? getUnitPairs(category) : [];
+const reverseSlug = pairSlug(
+  category?.units.find(u => u.id === unit2Id)!,
+  category?.units.find(u => u.id === unit1Id)!,
+  l
+);
+const reverseLabel = t(l, 'converter.reverseLink', { unit1: unit2Name, unit2: unit1Name });
+const categoryName = category?.name[l] ?? categoryId;
+const seeAlsoLabel = t(l, 'converter.moreConversions', { name: categoryName });
+---
+
+<div class="cross-links">
+  <h3>{t(l, 'converter.seeAlso')}</h3>
+  <ul>
+    <li>
+      <a href={"/" + l + "/" + categoryId + "/" + reverseSlug + "/"}>{reverseLabel}</a>
+    </li>
+  </ul>
+
+  <h3>{seeAlsoLabel}</h3>
+  <ul class="more-links">
+    {
+      allPairs
+        .filter(([a, b]) => !(a.id === unit1Id && b.id === unit2Id) && !(a.id === unit2Id && b.id === unit1Id))
+        .slice(0, 12)
+        .map(([a, b]) => {
+          const slug = pairSlug(a, b, l);
+          const label = l === 'zh'
+            ? `${a.name.zh} 换算 ${b.name.zh}`
+            : `${a.name.en} to ${b.name.en}`;
+          return (
+            <li><a href={"/" + l + "/" + categoryId + "/" + slug + "/"}>{label}</a></li>
+          );
+        })
+    }
+  </ul>
+</div>
+
+<style>
+  .cross-links {
+    margin: 2rem 0;
+    padding: 1rem 0;
+    border-top: 1px solid #eee;
+  }
+  .cross-links h3 {
+    font-size: 1.1rem;
+    margin: 1rem 0 0.5rem;
+  }
+  .cross-links ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .cross-links li {
+    margin: 0.3rem 0;
+  }
+  .cross-links a {
+    color: #667eea;
+    text-decoration: none;
+  }
+  .cross-links a:hover {
+    text-decoration: underline;
+  }
+  .more-links {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 0.3rem 1rem;
+  }
+</style>

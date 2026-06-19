@@ -1,0 +1,52 @@
+{
+  "site": {
+    "title": "Unit Converter — Fast, Free Online Conversion Tools",
+    "description": "Free online unit converter. Convert between length, weight, temperature, data storage and more. Instant results, bidirectional conversion, no ads blocking the tool."
+  },
+  "nav": {
+    "home": "Home",
+    "categories": "Categories",
+    "length": "Length",
+    "weight": "Weight",
+    "temperature": "Temperature",
+    "data": "Data Storage"
+  },
+  "home": {
+    "title": "Unit Converter",
+    "subtitle": "Fast, accurate, free — convert any unit instantly",
+    "chooseCategory": "Choose a category to get started:"
+  },
+  "category": {
+    "title": "%name% Converter",
+    "description": "Free online %name% converter. Convert between all %name% units with instant results and a handy conversion table.",
+    "choosePair": "Choose two units to convert:"
+  },
+  "converter": {
+    "pageTitle": "%value% %unit1% to %unit2%",
+    "pageDescription": "Convert %value% %unit1% to %unit2% instantly. Free online %name% converter with formula, conversion table, and bidirectional calculator.",
+    "pageTitleConverter": "%unit1% to %unit2% Converter",
+    "pageDescriptionConverter": "Free online %unit1% to %unit2% converter. Instant results, bidirectional conversion, formula and common values table.",
+    "heading": "%value% %unit1% = %result% %unit2%",
+    "headingConverter": "%unit1% to %unit2% Converter",
+    "result": "%result% %unit2%",
+    "enterValue": "Enter value",
+    "from": "From",
+    "to": "To",
+    "swap": "Swap",
+    "convert": "Convert",
+    "formula": "Conversion Formula",
+    "formulaText": "1 %unit1% = %rate% %unit2%",
+    "reverseFormulaText": "1 %unit2% = %reverseRate% %unit1%",
+    "table": "Quick Conversion Table",
+    "tableUnit1": "%unit%",
+    "tableUnit2": "%unit%",
+    "seeAlso": "See Also",
+    "reverseLink": "%unit1% to %unit2%",
+    "moreConversions": "More %name% Conversions"
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "Something went wrong",
+    "adLabel": "Advertisement"
+  }
+}

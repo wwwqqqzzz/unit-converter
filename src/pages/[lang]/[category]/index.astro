@@ -1,0 +1,140 @@
+---
+// Category overview page: /[lang]/[category]/
+// Lists all available unit pairs for this category
+
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import AdSense from '../../../components/AdSense.astro';
+import { t, type Lang, LANGUAGES } from '../../../utils/i18n';
+import { getCategory, getUnitPairs, pairSlug, getCommonValues } from '../../../lib/units';
+import { categories } from '../../../data/units';
+
+export interface Props {
+  lang: Lang;
+  category: string;
+}
+
+export function getStaticPaths() {
+  const paths: Array<{ params: Props }> = [];
+  for (const lang of LANGUAGES) {
+    for (const cat of categories) {
+      paths.push({ params: { lang, category: cat.id } });
+    }
+  }
+  return paths;
+}
+
+const { lang, category: catId } = Astro.params as Props;
+const category = getCategory(catId);
+if (!category) return Astro.redirect('/404');
+
+const pairs = getUnitPairs(category);
+const catName = category.name[lang];
+const catPath = `${catId}/`;
+const commonValues = getCommonValues(catId);
+---
+
+<BaseLayout
+  lang={lang}
+  title={t(lang, 'category.title', { name: catName })}
+  description={t(lang, 'category.description', { name: catName })}
+  pagePath={catPath}
+>
+  <nav class="breadcrumbs" aria-label="Breadcrumb">
+    <a href={"/" + lang + "/"}>{t(lang, 'nav.home')}</a>
+    <span class="sep">›</span>
+    <span>{catName}</span>
+  </nav>
+
+  <h1>{t(lang, 'converter.moreConversions', { name: catName })}</h1>
+
+  <AdSense position="top" />
+
+  <p class="category-desc">{t(lang, 'category.description', { name: catName })}</p>
+
+  <h2>{t(lang, 'category.choosePair')}</h2>
+
+  <div class="pair-grid">
+    {
+      pairs.map(([a, b]) => {
+        const slug = pairSlug(a, b, lang);
+        const label = lang === 'zh'
+          ? `${a.name.zh} 换算 ${b.name.zh}`
+          : `${a.name.en} to ${b.name.en}`;
+        return (
+          <a href={"/" + lang + "/" + catId + "/" + slug + "/"} class="pair-card">
+            <span class="pair-label">{label}</span>
+            <span class="pair-arrow">→</span>
+          </a>
+        );
+      })
+    }
+  </div>
+
+  <AdSense position="middle" />
+
+  {
+    pairs.length > 0 && (
+      <>
+        <h2>{lang === 'zh' ? '常用数值换算' : 'Common Value Conversions'}</h2>
+        <div class="pair-grid">
+          {
+            pairs.slice(0, 6).map(([a, b]) => {
+              const slug = pairSlug(a, b, lang);
+              const val = commonValues[0];
+              const vs = `${val}-${lang === 'zh' ? a.name.zh : a.id}-${lang === 'zh' ? b.name.zh : b.id}`;
+              const label = lang === 'zh'
+                ? `${val}${a.name.zh} 换算 ${b.name.zh}`
+                : `${val} ${a.name.en} to ${b.name.en}`;
+              return (
+                <a href={"/" + lang + "/" + catId + "/" + vs + "/"} class="pair-card small">
+                  <span class="pair-label">{label}</span>
+                  <span class="pair-arrow">→</span>
+                </a>
+              );
+            })
+          }
+        </div>
+      </>
+    )
+  }
+
+  <AdSense position="bottom" />
+</BaseLayout>
+
+<style>
+  .breadcrumbs {
+    font-size: 0.85rem;
+    margin-bottom: 1rem;
+    color: #888;
+  }
+  .breadcrumbs a { color: #667eea; text-decoration: none; }
+  .breadcrumbs a:hover { text-decoration: underline; }
+  .sep { margin: 0 0.4rem; }
+  h1 { font-size: 1.8rem; margin-bottom: 0.5rem; }
+  .category-desc { color: #666; margin-bottom: 1.5rem; }
+  h2 { font-size: 1.2rem; margin: 1.5rem 0 0.75rem; }
+  .pair-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 0.6rem;
+  }
+  .pair-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.6rem 0.8rem;
+    background: #fafafa;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    text-decoration: none;
+    color: #333;
+    transition: background 0.15s;
+    font-size: 0.9rem;
+  }
+  .pair-card:hover {
+    background: #f0f0ff;
+    text-decoration: none;
+  }
+  .pair-card.small { font-size: 0.85rem; }
+  .pair-arrow { color: #667eea; font-weight: 600; }
+</style>

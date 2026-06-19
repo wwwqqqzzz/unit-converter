@@ -1,0 +1,122 @@
+---
+// ============================================================
+// Language homepage: /en/ and /zh/
+// ============================================================
+
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import AdSense from '../../components/AdSense.astro';
+import { t, type Lang } from '../../utils/i18n';
+import { getCategories } from '../../lib/units';
+import { CATEGORY_ICONS } from '../../data/units';
+
+export interface Props {
+  lang: Lang;
+}
+export function getStaticPaths() {
+  return [
+    { params: { lang: 'en' } },
+    { params: { lang: 'zh' } },
+  ];
+}
+
+const { lang } = Astro.params as Props;
+const categories = getCategories();
+---
+
+<BaseLayout
+  lang={lang}
+  title={t(lang, 'home.title')}
+  description={t(lang, 'home.description')}
+  pagePath=""
+  isHome={true}
+>
+  <div class="home-hero">
+    <h1>{t(lang, 'home.title')}</h1>
+    <p class="home-subtitle">{t(lang, 'home.subtitle')}</p>
+  </div>
+
+  <AdSense position="top" />
+
+  <section class="category-list">
+    <h2>{t(lang, 'home.chooseCategory')}</h2>
+    <div class="category-grid">
+      {
+        categories.map(cat => (
+          <a href={"/" + lang + "/" + cat.id + "/"} class="category-card">
+            <span class="category-icon">
+              {CATEGORY_ICONS[cat.id] ?? '📐'}
+            </span>
+            <span class="category-name">{cat.name[lang]}</span>
+            <span class="category-count">{cat.units.length} {lang === 'zh' ? '个单位' : 'units'}</span>
+          </a>
+        ))
+      }
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .home-hero {
+    text-align: center;
+    padding: 2rem 0 1rem;
+  }
+  .home-hero h1 {
+    font-size: 2.2rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .home-subtitle {
+    color: #666;
+    font-size: 1.1rem;
+    margin-top: 0.5rem;
+  }
+  .category-list {
+    margin: 2rem 0;
+  }
+  .category-list h2 {
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+  }
+  .category-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+  }
+  .category-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 1.5rem 1rem;
+    background: #fafafa;
+    border: 1px solid #eee;
+    border-radius: 12px;
+    text-decoration: none;
+    color: #333;
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+  .category-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    text-decoration: none;
+  }
+  .category-icon {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+  }
+  .category-name {
+    font-weight: 600;
+    font-size: 1rem;
+  }
+  .category-count {
+    font-size: 0.8rem;
+    color: #888;
+    margin-top: 0.25rem;
+  }
+  @media (max-width: 600px) {
+    .home-hero h1 { font-size: 1.6rem; }
+  }
+</style>

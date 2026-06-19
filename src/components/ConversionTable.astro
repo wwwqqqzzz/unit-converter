@@ -1,0 +1,83 @@
+---
+// ============================================================
+// Quick conversion table for a unit pair
+// ============================================================
+
+import { formatResult } from '../lib/units';
+
+export interface Props {
+  lang: string;
+  /** Display name for unit 1 */
+  unit1Name: string;
+  /** Display name for unit 2 */
+  unit2Name: string;
+  /** Conversion rate: 1 unit1 = rate unit2 */
+  rate: number;
+  /** Common values to display */
+  values: number[];
+}
+
+const { lang, unit1Name, unit2Name, rate, values } = Astro.props;
+
+const headLabel1 = lang === 'zh' ? unit1Name : unit1Name;
+const headLabel2 = lang === 'zh' ? unit2Name : unit2Name;
+const caption    = lang === 'zh' ? `常用${unit1Name}换算表` : `Quick ${unit1Name} to ${unit2Name} Conversion Table`;
+---
+
+<table class="conv-table">
+  <caption>{caption}</caption>
+  <thead>
+    <tr>
+      <th scope="col">{headLabel1}</th>
+      <th scope="col">{headLabel2}</th>
+    </tr>
+  </thead>
+  <tbody>
+    {
+      values.map(v => (
+        <tr>
+          <td>{v} {unit1Name}</td>
+          <td>{formatResult(v * rate)} {unit2Name}</td>
+        </tr>
+      ))
+    }
+  </tbody>
+</table>
+
+<style>
+  .conv-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1rem 0;
+    font-size: 0.95rem;
+  }
+  .conv-table caption {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    text-align: left;
+    font-size: 1.1rem;
+  }
+  .conv-table th {
+    background: #f0f0f0;
+    padding: 0.5rem 0.75rem;
+    text-align: left;
+    font-weight: 600;
+    border-bottom: 2px solid #ddd;
+  }
+  .conv-table td {
+    padding: 0.5rem 0.75rem;
+    border-bottom: 1px solid #eee;
+  }
+  .conv-table tbody tr:hover {
+    background: #fafafa;
+  }
+  @media (max-width: 600px) {
+    .conv-table {
+      font-size: 0.85rem;
+    }
+    .conv-table th,
+    .conv-table td {
+      padding: 0.4rem 0.5rem;
+    }
+  }
+</style>

@@ -1,0 +1,293 @@
+---
+// ============================================================
+// Server-rendered converter — embedded as interactive client component
+// via an inline script block that reads the SSR-rendered initial values.
+// ============================================================
+
+export interface Props {
+  lang: string;
+  /** Display name of the category (e.g. "Length") */
+  categoryName: string;
+  /** Unit 1 ID */
+  unit1Id: string;
+  /** Unit 1 display name */
+  unit1Name: string;
+  /** Unit 1 symbol */
+  unit1Symbol: string;
+  /** Unit 2 ID */
+  unit2Id: string;
+  /** Unit 2 display name */
+  unit2Name: string;
+  /** Unit 2 symbol */
+  unit2Symbol: string;
+  /** Pre-filled value (for specific-value pages) */
+  initialValue?: number;
+  /** Conversion rate: 1 unit1 = ? unit2 */
+  rate: number;
+  /** Reverse rate: 1 unit2 = ? unit1 */
+  reverseRate: number;
+  /** Result for the initial value */
+  initialResult?: string;
+  /** All units in this category for the dropdowns */
+  allUnits?: Array<{ id: string; name: string; symbol: string }>;
+  /** Map of unitId → toBase conversion rate */
+  ratesMap?: Record<string, number>;
+  /** Whether this category uses a custom conversion function (e.g. temperature) */
+  hasCustomConvert?: boolean;
+}
+
+const {
+  lang,
+  categoryName,
+  unit1Id, unit1Name, unit1Symbol,
+  unit2Id, unit2Name, unit2Symbol,
+  initialValue,
+  rate, reverseRate,
+  initialResult,
+  allUnits: allUnitsRaw,
+  ratesMap: ratesMapRaw,
+  hasCustomConvert: hasCustomConvertRaw,
+} = Astro.props;
+
+// Provide defaults so the component works even without the new props
+const allUnits = allUnitsRaw ?? [
+  { id: unit1Id, name: unit1Name, symbol: unit1Symbol },
+  { id: unit2Id, name: unit2Name, symbol: unit2Symbol },
+];
+const ratesMap = ratesMapRaw ?? {};
+const hasCustomConvert = hasCustomConvertRaw ?? false;
+
+const labelFrom  = lang === 'zh' ? '从' : 'From';
+const labelTo    = lang === 'zh' ? '到' : 'To';
+const labelSwap  = lang === 'zh' ? '互换' : 'Swap';
+const placeholder = lang === 'zh' ? '输入数值' : 'Enter value';
+const resultLabel = lang === 'zh' ? '结果' : 'Result';
+---
+
+<div class="converter-card" id="converter-root"
+  data-rates={JSON.stringify(ratesMap)}
+  data-all-units={JSON.stringify(allUnits)}
+  data-custom-convert={hasCustomConvert ? 'true' : 'false'}
+>
+  <div class="converter-row">
+    <div class="converter-field">
+      <label for="conv-from" class="conv-label">{labelFrom}</label>
+      <select id="conv-from-unit" class="conv-select">
+        {allUnits.map(u => (
+          <option value={u.id} selected={u.id === unit1Id}>{u.name} ({u.symbol})</option>
+        ))}
+      </select>
+      <input
+        id="conv-value"
+        type="number"
+        class="conv-input"
+        value={initialValue ?? 1}
+        placeholder={placeholder}
+        step="any"
+        min="0"
+        autofocus
+      />
+    </div>
+    <button id="conv-swap" class="conv-swap" title={labelSwap} aria-label={labelSwap}>
+      ⇄
+    </button>
+    <div class="converter-field">
+      <label for="conv-to" class="conv-label">{labelTo}</label>
+      <select id="conv-to-unit" class="conv-select">
+        {allUnits.map(u => (
+          <option value={u.id} selected={u.id === unit2Id}>{u.name} ({u.symbol})</option>
+        ))}
+      </select>
+      <output id="conv-result" class="conv-result">{initialResult ?? '—'}</output>
+    </div>
+  </div>
+</div>
+
+<script>
+  (function() {
+    const root = document.getElementById('converter-root');
+    if (!root) return;
+
+    const fromUnit = document.getElementById('conv-from-unit') as HTMLSelectElement;
+    const toUnit = document.getElementById('conv-to-unit') as HTMLSelectElement;
+    const valueInput = document.getElementById('conv-value') as HTMLInputElement;
+    const resultOutput = document.getElementById('conv-result') as HTMLElement;
+    const swapBtn = document.getElementById('conv-swap');
+
+    // Read dynamic rates and conversion type from server-rendered data attributes
+    const rates = JSON.parse(root.dataset.rates || '{}');
+    const hasCustomConvert = root.dataset.customConvert === 'true';
+
+    function doConvert() {
+      const from = fromUnit.value;
+      const to = toUnit.value;
+      const val = parseFloat(valueInput.value);
+      if (isNaN(val)) {
+        resultOutput.textContent = '—';
+        return;
+      }
+
+      let result: number;
+
+      if (hasCustomConvert) {
+        // Temperature: convert to Celsius first, then to target
+        const celsiusFrom: Record<string, (v: number) => number> = {
+          'c': (v) => v,
+          'f': (v) => (v - 32) * 5 / 9,
+          'k': (v) => v - 273.15,
+        };
+        const fromCelsius: Record<string, (v: number) => number> = {
+          'c': (v) => v,
+          'f': (v) => v * 9 / 5 + 32,
+          'k': (v) => v + 273.15,
+        };
+        const inCelsius = (celsiusFrom[from] || ((v) => v))(val);
+        result = (fromCelsius[to] || ((v) => v))(inCelsius);
+      } else {
+        // Linear conversion
+        if (!rates[from] || !rates[to]) {
+          resultOutput.textContent = '—';
+          return;
+        }
+        const base = val * rates[from];
+        result = base / rates[to];
+      }
+
+      resultOutput.textContent = formatNum(result);
+    }
+
+    function formatNum(n: number): string {
+      if (!isFinite(n)) return '—';
+      if (n === 0) return '0';
+      const abs = Math.abs(n);
+      if (abs < 0.001 || abs >= 1_000_000) {
+        return n.toExponential(6);
+      }
+      const fixed = n.toFixed(10);
+      return fixed.replace(/\.?0+$/, '');
+    }
+
+    function swap() {
+      const tmp = fromUnit.value;
+      fromUnit.value = toUnit.value;
+      toUnit.value = tmp;
+      doConvert();
+    }
+
+    valueInput.addEventListener('input', doConvert);
+    fromUnit.addEventListener('change', doConvert);
+    toUnit.addEventListener('change', doConvert);
+    if (swapBtn) swapBtn.addEventListener('click', swap);
+
+    // Initial conversion
+    doConvert();
+  })();
+</script>
+
+<style>
+  .converter-card {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 16px;
+    padding: 1.5rem;
+    color: white;
+    margin: 1.5rem 0;
+  }
+  .converter-row {
+    display: flex;
+    align-items: flex-end;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+  .converter-field {
+    flex: 1;
+    min-width: 180px;
+  }
+  .conv-label {
+    display: block;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    opacity: 0.85;
+    margin-bottom: 0.3rem;
+  }
+  .conv-select {
+    width: 100%;
+    padding: 0.5rem 0.6rem;
+    border-radius: 8px;
+    border: none;
+    font-size: 0.9rem;
+    background: rgba(255,255,255,0.2);
+    color: white;
+    margin-bottom: 0.4rem;
+    cursor: pointer;
+  }
+  .conv-select option {
+    color: #333;
+    background: #fff;
+  }
+  .conv-input {
+    width: 100%;
+    padding: 0.7rem 0.8rem;
+    border-radius: 8px;
+    border: none;
+    font-size: 1.2rem;
+    font-weight: 600;
+    background: rgba(255,255,255,0.95);
+    color: #333;
+    box-sizing: border-box;
+  }
+  .conv-input:focus {
+    outline: 2px solid #fff;
+    outline-offset: 2px;
+  }
+  .conv-swap {
+    background: rgba(255,255,255,0.25);
+    border: 2px solid rgba(255,255,255,0.5);
+    border-radius: 50%;
+    width: 44px;
+    height: 44px;
+    font-size: 1.3rem;
+    cursor: pointer;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: transform 0.2s;
+    margin-bottom: 0;
+  }
+  .conv-swap:hover {
+    transform: rotate(180deg);
+    background: rgba(255,255,255,0.4);
+  }
+  .conv-result {
+    display: block;
+    width: 100%;
+    padding: 0.7rem 0.8rem;
+    border-radius: 8px;
+    font-size: 1.3rem;
+    font-weight: 700;
+    background: rgba(255,255,255,0.2);
+    color: white;
+    min-height: 1.5em;
+    box-sizing: border-box;
+    word-break: break-all;
+  }
+  @media (max-width: 600px) {
+    .converter-row {
+      flex-direction: column;
+    }
+    .converter-field {
+      min-width: 100%;
+    }
+    .conv-swap {
+      align-self: center;
+      transform: rotate(90deg);
+      margin: 0.25rem 0;
+    }
+    .conv-swap:hover {
+      transform: rotate(270deg);
+    }
+  }
+</style>

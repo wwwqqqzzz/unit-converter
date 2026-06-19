@@ -1,0 +1,183 @@
+---
+// ============================================================
+// Base HTML layout — SEO meta, hreflang, canonical, analytics, fonts
+// ============================================================
+
+import type { Lang } from '../utils/i18n';
+import { LANGUAGES, t } from '../utils/i18n';
+import { hreflangTags, canonicalUrl } from '../lib/seo';
+
+export interface Props {
+  lang: Lang;
+  /** Title (without site name suffix) */
+  title: string;
+  /** Meta description */
+  description: string;
+  /** Page path relative to /{lang}/ (e.g. "length/cm-to-inch") */
+  pagePath: string;
+  /** Whether this is the root /{lang}/ page */
+  isHome?: boolean;
+  /** Optional canonical override */
+  canonical?: string;
+  /** Optional JSON-LD structured data */
+  jsonld?: string;
+}
+
+const { lang, title, description, pagePath, isHome, canonical, jsonld } = Astro.props;
+const siteUrl = Astro.site?.href ?? 'https://unitconvert.example.com/';
+const fullTitle = isHome ? title : `${title} — Unit Converter`;
+
+// Build language switcher links
+const langLinks = LANGUAGES
+  .filter(l => l !== lang)
+  .map(l => ({
+    code: l,
+    url: `/${l}/${pagePath}`,
+    label: l === 'en' ? 'English' : '中文',
+  }));
+
+const canonicalHref = canonical ?? canonicalUrl(lang, pagePath, siteUrl.replace(/\/$/, ''));
+---
+
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+
+    <!-- Canonical -->
+    <link rel="canonical" href={canonicalHref} />
+
+    <!-- Hreflang — rendered as raw HTML -->
+    <Fragment set:html={hreflangTags(pagePath)} />
+
+    <!-- Language switcher alternate links -->
+    {
+      langLinks.map(l => (
+        <link rel="alternate" hreflang={l.code} href={l.url} />
+      ))
+    }
+
+    <!-- Preconnect for performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+    <!-- JSON-LD structured data -->
+    {jsonld && <script type="application/ld+json" set:html={jsonld}></script>}
+
+    <style>
+      *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+      html { font-size: 16px; scroll-behavior: smooth; }
+      body {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        color: #333;
+        background: #fff;
+        line-height: 1.6;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+      a { color: #667eea; }
+      a:hover { text-decoration: underline; }
+      img { max-width: 100%; height: auto; }
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a href={"/" + lang + "/"} class="logo">{t(lang, 'home.title')}</a>
+        <nav class="lang-switcher">
+          {
+            LANGUAGES.filter(l => l !== lang).map(l => (
+              <a href={"/" + l + "/" + pagePath} class="lang-link">
+                {l === 'en' ? 'English' : '中文'}
+              </a>
+            ))
+          }
+        </nav>
+      </div>
+    </header>
+
+    <main class="container main-content">
+      <slot />
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <p>&copy; {new Date().getFullYear()} Unit Converter. All rights reserved.</p>
+        <nav>
+          <a href={"/" + lang + "/"}>{t(lang, 'nav.home')}</a>
+        </nav>
+      </div>
+    </footer>
+  </body>
+</html>
+
+<style>
+  .site-header {
+    background: #fff;
+    border-bottom: 1px solid #eee;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 1rem;
+  }
+  .logo {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #667eea;
+    text-decoration: none;
+  }
+  .logo:hover { opacity: 0.8; }
+  .lang-switcher {
+    display: flex;
+    gap: 0.5rem;
+  }
+  .lang-link {
+    padding: 0.3rem 0.6rem;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: #666;
+    text-decoration: none;
+    border: 1px solid #ddd;
+  }
+  .lang-link:hover {
+    background: #f5f5f5;
+    border-color: #ccc;
+  }
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+    width: 100%;
+  }
+  .main-content {
+    flex: 1;
+    padding: 1.5rem 1rem 3rem;
+  }
+  .site-footer {
+    border-top: 1px solid #eee;
+    padding: 1.5rem 1rem;
+    color: #888;
+    font-size: 0.875rem;
+  }
+  .footer-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .footer-inner nav a {
+    color: #888;
+    text-decoration: none;
+    margin-left: 1rem;
+  }
+  .footer-inner nav a:hover { color: #333; }
+</style>

@@ -1,0 +1,52 @@
+{
+  "site": {
+    "title": "单位换算 — 快速、免费的在线换算工具",
+    "description": "免费在线单位换算。支持长度、重量、温度、数据存储等各类单位即时换算，双向转换，工具永远优先展示，广告不遮挡。"
+  },
+  "nav": {
+    "home": "首页",
+    "categories": "换算类别",
+    "length": "长度",
+    "weight": "重量",
+    "temperature": "温度",
+    "data": "数据存储"
+  },
+  "home": {
+    "title": "单位换算",
+    "subtitle": "快速、准确、免费——即时换算任何单位",
+    "chooseCategory": "选择一个类别开始换算："
+  },
+  "category": {
+    "title": "%name%换算",
+    "description": "免费在线%name%换算器。支持所有%name%单位之间的即时换算，附带换算公式和常用数值对照表。",
+    "choosePair": "选择两个单位进行换算："
+  },
+  "converter": {
+    "pageTitle": "%value% %unit1% 等于 %unit2%",
+    "pageDescription": "将 %value%%unit1% 换算为 %unit2%，结果即时显示。免费在线%name%换算器，附带换算公式、对照表和双向计算功能。",
+    "pageTitleConverter": "%unit1% 换算 %unit2%",
+    "pageDescriptionConverter": "免费在线%unit1%换算%unit2%工具。即时结果、双向换算、换算公式和常用数值对照表。",
+    "heading": "%value%%unit1% = %result%%unit2%",
+    "headingConverter": "%unit1% 换算 %unit2% 换算器",
+    "result": "%result%%unit2%",
+    "enterValue": "输入数值",
+    "from": "从",
+    "to": "到",
+    "swap": "互换",
+    "convert": "换算",
+    "formula": "换算公式",
+    "formulaText": "1 %unit1% = %rate% %unit2%",
+    "reverseFormulaText": "1 %unit2% = %reverseRate% %unit1%",
+    "table": "常用数值对照表",
+    "tableUnit1": "%unit%",
+    "tableUnit2": "%unit%",
+    "seeAlso": "相关换算",
+    "reverseLink": "%unit1%换算%unit2%",
+    "moreConversions": "更多%name%换算"
+  },
+  "common": {
+    "loading": "加载中...",
+    "error": "出错了",
+    "adLabel": "广告"
+  }
+}

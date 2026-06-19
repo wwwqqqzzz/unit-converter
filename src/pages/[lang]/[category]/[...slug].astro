@@ -1,0 +1,342 @@
+---
+// Generalized dynamic route: /[lang]/[category]/[...slug]
+// Generates unit pair pages and specific-value pages for ALL categories
+
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Converter from '../../../components/Converter.astro';
+import ConversionTable from '../../../components/ConversionTable.astro';
+import CrossLinks from '../../../components/CrossLinks.astro';
+import AdSense from '../../../components/AdSense.astro';
+import { t, type Lang, LANGUAGES } from '../../../utils/i18n';
+import { getCategory, getUnit, convert, formatResult, getUnitPairs, pairSlug, valueSlug, getCommonValues } from '../../../lib/units';
+import { categories } from '../../../data/units';
+
+export interface Props {
+  lang: Lang;
+  category: string;
+  slug: string[];
+}
+
+export function getStaticPaths() {
+  const paths: Array<{ params: Props }> = [];
+
+  for (const lang of LANGUAGES) {
+    for (const cat of categories) {
+      const pairs = getUnitPairs(cat);
+      const commonValues = getCommonValues(cat.id);
+
+      for (const [u1, u2] of pairs) {
+        // Converter page for the pair
+        paths.push({
+          params: {
+            lang,
+            category: cat.id,
+            slug: pairSlug(u1, u2, lang),
+          },
+        });
+
+        // Specific value pages
+        for (const val of commonValues) {
+          paths.push({
+            params: {
+              lang,
+              category: cat.id,
+              slug: valueSlug(val, u1, u2, lang),
+            },
+          });
+        }
+      }
+    }
+  }
+
+  return paths;
+}
+
+const { lang, slug } = Astro.params as { lang: Lang; slug: string | string[] };
+const catId = Astro.params.category as string;
+const category = getCategory(catId);
+if (!category || !slug) return Astro.redirect(`/${lang}/`);
+
+// slug is a rest parameter — Astro always gives it as string[] from the URL
+const rawSlug = Array.isArray(slug) ? slug.join('/') : slug;
+if (!rawSlug) return Astro.redirect(`/${lang}/${catId}/`);
+
+// ============================================================
+// Parse slug to figure out if it's a converter page or value page
+// ============================================================
+
+interface PageData {
+  unit1Id: string;
+  unit2Id: string;
+  value: number | null; // null = converter page (no specific value)
+}
+
+function parseSlug(slugStr: string, cat: typeof category, l: Lang): PageData | null {
+  if (!cat) return null;
+
+  if (l === 'zh') {
+    // Chinese slug format: "厘米-英寸" or "5-厘米-英寸"
+    const match = slugStr.match(/^(\d+)-(.*)$/);
+    if (match) {
+      const val = parseInt(match[1], 10);
+      const rest = match[2];
+      const parts = rest.split('-');
+      if (parts.length !== 2) return null;
+      const u1 = cat.units.find(u => u.name.zh === parts[0]);
+      const u2 = cat.units.find(u => u.name.zh === parts[1]);
+      if (u1 && u2) return { unit1Id: u1.id, unit2Id: u2.id, value: val };
+    } else {
+      const parts = slugStr.split('-');
+      if (parts.length !== 2) return null;
+      const u1 = cat.units.find(u => u.name.zh === parts[0]);
+      const u2 = cat.units.find(u => u.name.zh === parts[1]);
+      if (u1 && u2) return { unit1Id: u1.id, unit2Id: u2.id, value: null };
+    }
+  } else {
+    // English slug format: "cm-to-inches" or "5-cm-to-inches"
+    const match = slugStr.match(/^(\d+)-(.*)$/);
+    if (match) {
+      const val = parseInt(match[1], 10);
+      const rest = match[2];
+      const parts = rest.split('-to-');
+      if (parts.length !== 2) return null;
+      const u1 = cat.units.find(u => u.id === parts[0]);
+      const u2 = cat.units.find(u => u.id === parts[1]);
+      if (u1 && u2) return { unit1Id: u1.id, unit2Id: u2.id, value: val };
+    } else {
+      const parts = slugStr.split('-to-');
+      if (parts.length !== 2) return null;
+      const u1 = cat.units.find(u => u.id === parts[0]);
+      const u2 = cat.units.find(u => u.id === parts[1]);
+      if (u1 && u2) return { unit1Id: u1.id, unit2Id: u2.id, value: null };
+    }
+  }
+  return null;
+}
+
+const parsed = parseSlug(rawSlug, category, lang);
+if (!parsed) return Astro.redirect(`/${lang}/${catId}/`);
+
+const { unit1Id, unit2Id, value } = parsed;
+const u1 = getUnit(category, unit1Id);
+const u2 = getUnit(category, unit2Id);
+if (!u1 || !u2) return Astro.redirect(`/${lang}/${catId}/`);
+
+const isConverterPage = value === null;
+const displayValue = value ?? 1;
+const result = convert(category, displayValue, unit1Id, unit2Id);
+const formattedResult = formatResult(result);
+const rate = convert(category, 1, unit1Id, unit2Id);
+const reverseRate = convert(category, 1, unit2Id, unit1Id);
+
+const catName = category.name[lang];
+const u1Name = u1.name[lang];
+const u2Name = u2.name[lang];
+const pageSlug = isConverterPage ? pairSlug(u1, u2, lang) : rawSlug;
+
+// Page metadata
+const pageTitle = isConverterPage
+  ? t(lang, 'converter.pageTitleConverter', { unit1: u1Name, unit2: u2Name })
+  : t(lang, 'converter.pageTitle', { value: String(displayValue), unit1: u1Name, unit2: u2Name });
+
+const pageDesc = isConverterPage
+  ? t(lang, 'converter.pageDescriptionConverter', { unit1: u1Name, unit2: u2Name })
+  : t(lang, 'converter.pageDescription', {
+      value: String(displayValue),
+      unit1: u1Name,
+      unit2: u2Name,
+      name: catName,
+    });
+
+const heading = isConverterPage
+  ? t(lang, 'converter.headingConverter', { unit1: u1Name, unit2: u2Name })
+  : t(lang, 'converter.heading', {
+      value: String(displayValue),
+      unit1: u1Name,
+      unit2: u2Name,
+      result: formattedResult,
+    });
+
+// Breadcrumb JSON-LD
+const breadcrumbJsonld = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: lang === 'zh' ? '首页' : 'Home', item: `${Astro.site}${lang}/` },
+    { '@type': 'ListItem', position: 2, name: catName, item: `${Astro.site}${lang}/${catId}/` },
+    { '@type': 'ListItem', position: 3, name: `${u1Name} → ${u2Name}` },
+  ],
+};
+
+// FAQ structured data
+const faqJsonld = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    {
+      '@type': 'Question',
+      name: `${lang === 'zh' ? '如何将' : 'How do I convert '}${displayValue} ${u1Name}${lang === 'zh' ? '换算成' : ' to '}${u2Name}？`,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: `${displayValue} ${u1Name} = ${formattedResult} ${u2Name}。${lang === 'zh' ? '换算公式' : 'Formula'}: 1 ${u1Name} = ${formatResult(rate)} ${u2Name}。`,
+      },
+    },
+    {
+      '@type': 'Question',
+      name: `${lang === 'zh' ? '1' : 'What is '}${u1Name}${lang === 'zh' ? '等于多少' : ' in '}${u2Name}？`,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: `1 ${u1Name} = ${formatResult(rate)} ${u2Name}。`,
+      },
+    },
+  ],
+};
+
+const jsonld = JSON.stringify([breadcrumbJsonld, faqJsonld]);
+const pagePath = `${catId}/${pageSlug}`;
+
+// Build all units data for the Converter component
+const allUnits = category.units.map(u => ({
+  id: u.id,
+  name: u.name[lang],
+  symbol: u.symbol,
+}));
+
+const ratesMap: Record<string, number> = {};
+for (const u of category.units) {
+  ratesMap[u.id] = u.toBase;
+}
+
+const commonValuesForTable = getCommonValues(catId);
+---
+
+<BaseLayout
+  lang={lang}
+  title={pageTitle}
+  description={pageDesc}
+  pagePath={pagePath}
+  jsonld={jsonld}
+>
+  <nav class="breadcrumbs" aria-label="Breadcrumb">
+    <a href={"/" + lang + "/"}>{t(lang, 'nav.home')}</a>
+    <span class="sep">›</span>
+    <a href={"/" + lang + "/" + catId + "/"}>{catName}</a>
+    <span class="sep">›</span>
+    <span>{u1Name} → {u2Name}</span>
+  </nav>
+
+  {!isConverterPage && (
+    <h1>{heading}</h1>
+  )}
+
+  {!isConverterPage && (
+    <div class="direct-answer">
+      <strong>{displayValue} {u1.symbol} {u1Name} = {formattedResult} {u2.symbol} {u2Name}</strong>
+    </div>
+  )}
+
+  <AdSense position="top" />
+
+  <!-- Interactive converter tool — always at top visible area -->
+  <Converter
+    lang={lang}
+    categoryName={catName}
+    unit1Id={unit1Id}
+    unit1Name={u1Name}
+    unit1Symbol={u1.symbol}
+    unit2Id={unit2Id}
+    unit2Name={u2Name}
+    unit2Symbol={u2.symbol}
+    initialValue={isConverterPage ? 1 : displayValue}
+    rate={rate}
+    reverseRate={reverseRate}
+    initialResult={formattedResult}
+    allUnits={allUnits}
+    ratesMap={ratesMap}
+    hasCustomConvert={!!category.convertFn}
+  />
+
+  {isConverterPage && (
+    <h1>{heading}</h1>
+  )}
+
+  <!-- Conversion formula -->
+  <section class="formula-section">
+    <h2>{t(lang, 'converter.formula')}</h2>
+    <p class="formula"><strong>{t(lang, 'converter.formulaText', { unit1: u1Name, unit2: u2Name, rate: formatResult(rate) })}</strong></p>
+    <p class="formula">{t(lang, 'converter.reverseFormulaText', { unit2: u2Name, unit1: u1Name, reverseRate: formatResult(reverseRate) })}</p>
+  </section>
+
+  <AdSense position="middle" />
+
+  <!-- Quick conversion table -->
+  <ConversionTable
+    lang={lang}
+    unit1Name={u1Name}
+    unit2Name={u2Name}
+    rate={rate}
+    values={commonValuesForTable}
+  />
+
+  <AdSense position="bottom" />
+
+  <!-- Cross-links -->
+  <CrossLinks
+    lang={lang}
+    categoryId={catId}
+    unit1Id={unit1Id}
+    unit2Id={unit2Id}
+    unit1Name={u1Name}
+    unit2Name={u2Name}
+  />
+
+  <!-- Language hint for SEO -->
+  <p class="lang-hint">
+    {lang === 'zh'
+      ? `此页面还有 English 版本：`
+      : `This page is also available in `}
+    <a href={"/" + (lang === 'zh' ? 'en' : 'zh') + "/" + pagePath + "/"}>
+      {lang === 'zh' ? 'English' : '中文'}
+    </a>
+  </p>
+</BaseLayout>
+
+<style>
+  .breadcrumbs {
+    font-size: 0.85rem;
+    margin-bottom: 0.75rem;
+    color: #888;
+  }
+  .breadcrumbs a { color: #667eea; text-decoration: none; }
+  .breadcrumbs a:hover { text-decoration: underline; }
+  .sep { margin: 0 0.4rem; }
+  h1 { font-size: 1.6rem; margin: 1rem 0 0.5rem; }
+  .direct-answer {
+    background: #e8f5e9;
+    border-radius: 8px;
+    padding: 1rem 1.2rem;
+    font-size: 1.2rem;
+    margin: 0.5rem 0;
+    border-left: 4px solid #4caf50;
+  }
+  .formula-section {
+    margin: 1.5rem 0;
+  }
+  .formula-section h2 {
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+  }
+  .formula {
+    font-size: 1rem;
+    margin: 0.25rem 0;
+    background: #f9f9f9;
+    padding: 0.5rem 0.75rem;
+    border-radius: 6px;
+  }
+  .lang-hint {
+    font-size: 0.85rem;
+    color: #888;
+    margin-top: 2rem;
+    text-align: center;
+  }
+</style>
