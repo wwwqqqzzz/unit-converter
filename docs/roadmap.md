@@ -226,24 +226,28 @@ Volume 单位: ml, cl, dl, l, m3, gal, gal_uk, qt, pt, cup, floz, tbsp, tsp
 单位数: 81 → 123 (+52%)
 分类数: 10 → 17 (+70%)
 
-### 广告位布局
+### 广告位规划
 
-| 位置 | 类型 | 尺寸 | 说明 |
-|------|------|------|------|
-| 转换器上方 | Display | 响应式 | 最高可视率 |
-| 公式下方 | In-feed | 300×250 | 自然断点 |
-| 表格下方 | In-article | 响应式 | 值表后 |
-| 侧栏(desktop) | Display | 300×600 | 宽屏粘性 |
-| 交叉链接下方 | Anchor | 响应式 | 低优先级 |
+| 位置 | 类型 | 尺寸 | 优先级 | 说明 |
+|------|------|------|--------|------|
+| 转换器上方 | Display | 响应式 | P0 | 最高可视率，紧邻核心功能 |
+| 公式下方 | In-feed | 300×250 | P1 | 自然断点，公式阅读完后 |
+| 表格下方 | In-article | 响应式 | P1 | 值表后，内容尾声 |
+| 侧栏(desktop) | Display | 300×600 | P2 | 宽屏粘性，仅桌面端 |
 
-**原则**: 永远不在标题和转换结果之间放广告。
-
-### 性能保障
-
-- Core Web Vitals: 预留广告位 `min-height` 防止布局偏移
-- 使用 `data-ad-format="auto"` 响应式广告
+**原则**: 
+- 永远不在标题和转换结果之间放广告
+- 移动端不显示侧栏广告
+- Core Web Vitals: 预留 `min-height` 防止布局偏移
 - 下方广告懒加载 (IntersectionObserver)
 - `<link rel="preconnect">` 预连接广告域名
+
+### 实现步骤
+
+1. **上线前**: AdSense 组件已改为条件渲染 — 无 Publisher ID → 不输出任何内容
+2. **上线后**: 申请 Google AdSense 账号，获取 Publisher ID
+3. **审批通过后**: 设置环境变量 `PUBLIC_ADSENSE_ID` + `PUBLIC_ADSENSE_SLOT`，重新部署，广告自动出现
+4. **优化阶段**: 添加侧栏广告位、IntersectionObserver 懒加载
 
 ---
 

@@ -1,39 +1,20 @@
 ---
-// AdSense placeholder — Neo-Brutalist
+// AdSense — invisible until publisher ID is configured
+// When PUBLIC_ADSENSE_ID is set, real ads render; otherwise, nothing shows
 export interface Props { position?: 'top' | 'middle' | 'bottom'; class?: string; }
 const { position = 'middle' } = Astro.props;
-const PUBLISHER_ID = import.meta.env.PUBLIC_ADSENSE_ID || 'ca-pub-XXXXXXXX';
-const AD_SLOT = '1234567890';
+const PUBLISHER_ID = import.meta.env.PUBLIC_ADSENSE_ID;
+const AD_SLOT = import.meta.env.PUBLIC_ADSENSE_SLOT || '1234567890';
 ---
 
-{PUBLISHER_ID === 'ca-pub-XXXXXXXX' ? (
-  <div class={`ad-placeholder ad-${position}`} aria-label="Advertisement placeholder">
-    <span class="ad-label">AD</span>
-  </div>
-) : (
+{PUBLISHER_ID ? (
   <div class={`ad-container ad-${position}`}>
     <ins class="adsbygoogle" style="display:block" data-ad-client={PUBLISHER_ID} data-ad-slot={AD_SLOT} data-ad-format="auto" data-full-width-responsive="true"></ins>
     <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
   </div>
-)}
+) : null}
 
 <style>
-  .ad-placeholder {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: var(--c-surface);
-    border: 2px dashed var(--c-border-light);
-    min-height: 90px;
-    margin: var(--sp-6) 0;
-  }
-  .ad-label {
-    font-size: var(--text-xs);
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.15em;
-    color: var(--c-text-tertiary);
-  }
   .ad-container { margin: var(--sp-6) 0; text-align: center; min-height: 90px; }
   .ad-top { margin-top: 0; }
   .ad-bottom { margin-bottom: 0; }
