@@ -22,7 +22,7 @@ const reverseLabel = t(l, 'converter.reverseLink', { unit1: unit2Name, unit2: un
 const categoryName = category?.name[l] ?? categoryId;
 const seeAlsoLabel = t(l, 'converter.moreConversions', { name: categoryName });
 const otherCategories = getCategories().filter(c => c.id !== categoryId);
-const otherCatsLabel = l === 'zh' ? '其他换算类别' : 'Other Conversion Categories';
+const otherCatsLabel = t(l, 'converter.otherCategories');
 ---
 
 <aside class="cross-links">
@@ -36,7 +36,7 @@ const otherCatsLabel = l === 'zh' ? '其他换算类别' : 'Other Conversion Cat
     <div class="more-links">
       {allPairs.filter(([a, b]) => !(a.id === unit1Id && b.id === unit2Id) && !(a.id === unit2Id && b.id === unit1Id)).slice(0, 12).map(([a, b]) => {
         const slug = pairSlug(a, b, l);
-        const label = l === 'zh' ? `${a.name.zh} → ${b.name.zh}` : `${a.name.en} → ${b.name.en}`;
+        const label = `${a.name[l]} → ${b.name[l]}`;
         return <a href={"/" + l + "/" + categoryId + "/" + slug + "/"} class="link-pill">{label}</a>;
       })}
     </div>

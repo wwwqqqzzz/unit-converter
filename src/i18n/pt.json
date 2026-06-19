@@ -1,0 +1,71 @@
+{
+  "site": {
+    "title": "Conversor de Unidades — Ferramenta de Conversão Online Gratuita e Rápida",
+    "description": "Conversor de unidades online gratuito. Converta entre comprimento, peso, temperatura, armazenamento de dados e mais. Resultados instantâneos, conversão bidirecional, sem anícios bloqueando a ferramenta."
+  },
+  "nav": {
+    "home": "Início",
+    "categories": "Categorias",
+    "length": "Comprimento",
+    "weight": "Peso",
+    "temperature": "Temperatura",
+    "data": "Armazenamento",
+    "area": "Área",
+    "volume": "Volume",
+    "speed": "Velocidade",
+    "time": "Tempo",
+    "pressure": "Pressão",
+    "energy": "Energia",
+    "power": "Potência",
+    "fuel": "Consumo",
+    "frequency": "Frequência",
+    "angle": "Ângulo",
+    "force": "Força",
+    "torque": "Torque",
+    "shoe": "Tamanho de sapato"
+  },
+  "home": {
+    "title": "Conversor de Unidades",
+    "subtitle": "Rápido, preciso, gratuito — converta qualquer unidade instantaneamente",
+    "chooseCategory": "Escolha uma categoria para começar:",
+    "trust": "Grátis · Instantâneo · Sem cadastro"
+  },
+  "category": {
+    "title": "Conversor de %name%",
+    "description": "Conversor online gratuito de %name%. Converta entre todas as unidades de %name% com resultados instantâneos e tabela de conversão prática.",
+    "choosePair": "Escolha duas unidades para converter:",
+    "otherCategories": "Outras categorias de conversão",
+    "popularConversions": "Conversões populares de %name%"
+  },
+  "converter": {
+    "pageTitle": "%value% %unit1% = %result% %unit2%",
+    "pageDescription": "Converta %value% %unit1% para %unit2% instantaneamente. Conversor online gratuito de %name% com fórmula, tabela de conversão e calculadora bidirecional. %value% %unit1% equivale a %result% %unit2%.",
+    "pageTitleConverter": "%unit1% para %unit2% — Conversor gratuito de %name%",
+    "pageDescriptionConverter": "Conversor online gratuito de %unit1% para %unit2%. Resultados instantâneos, conversão bidirecional, fórmula e tabela de valores comuns.",
+    "heading": "%value% %unit1% = %result% %unit2%",
+    "headingConverter": "Conversor de %unit1% para %unit2%",
+    "result": "%result% %unit2%",
+    "enterValue": "Insira o valor",
+    "from": "De",
+    "to": "Para",
+    "swap": "Inverter",
+    "convert": "Converter",
+    "formula": "Fórmula de conversão",
+    "formulaText": "1 %unit1% = %rate% %unit2%",
+    "reverseFormulaText": "1 %unit2% = %reverseRate% %unit1%",
+    "table": "Tabela de conversão rápida",
+    "tableUnit1": "%unit%",
+    "tableUnit2": "%unit%",
+    "seeAlso": "Veja também",
+    "reverseLink": "%unit1% para %unit2%",
+    "moreConversions": "Mais conversões de %name%",
+    "aboutUnit": "Sobre %unit%",
+    "whatIsUnit": "O que é %unit%?",
+    "otherCategories": "Outras categorias de conversão"
+  },
+  "common": {
+    "loading": "Carregando...",
+    "error": "Algo deu errado",
+    "adLabel": "Anúncio"
+  }
+}

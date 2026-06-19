@@ -1,0 +1,71 @@
+{
+  "site": {
+    "title": "Birim Dönüştürücü — Hızlı, Ücretsiz Çevrimiçi Dönüşüm Aracı",
+    "description": "Ücretsiz çevrimiçi birim dönüştürücü. Uzunluk, ağırlık, sıcaklık, veri depolama ve daha fazlası arasında dönüştürün. Anında sonuçlar, çift yönlü dönüşüm, aracı engelleyen reklam yok."
+  },
+  "nav": {
+    "home": "Ana Sayfa",
+    "categories": "Kategoriler",
+    "length": "Uzunluk",
+    "weight": "Ağırlık",
+    "temperature": "Sıcaklık",
+    "data": "Veri Depolama",
+    "area": "Alan",
+    "volume": "Hacim",
+    "speed": "Hız",
+    "time": "Zaman",
+    "pressure": "Basınç",
+    "energy": "Enerji",
+    "power": "Güç",
+    "fuel": "Yakıt Tüketimi",
+    "frequency": "Frekans",
+    "angle": "Açı",
+    "force": "Kuvvet",
+    "torque": "Tork",
+    "shoe": "Ayakkabı Numarası"
+  },
+  "home": {
+    "title": "Birim Dönüştürücü",
+    "subtitle": "Hızlı, doğru, ücretsiz — herhangi bir birimi anında dönüştürün",
+    "chooseCategory": "Başlamak için bir kategori seçin:",
+    "trust": "Ücretsiz · Anında · Kayıtsız"
+  },
+  "category": {
+    "title": "%name% Dönüştürücü",
+    "description": "Ücretsiz çevrimiçi %name% dönüştürücü. Tüm %name% birimleri arasında anında sonuçlar ve kullanışlı dönüşüm tablosu ile dönüştürün.",
+    "choosePair": "Dönüştürmek için iki birim seçin:",
+    "otherCategories": "Diğer Dönüşüm Kategorileri",
+    "popularConversions": "Popüler %name% Dönüşümleri"
+  },
+  "converter": {
+    "pageTitle": "%value% %unit1% = %result% %unit2%",
+    "pageDescription": "%value% %unit1%'ı %unit2%'ya anında dönüştürün. Formül, dönüşüm tablosu ve çift yönlü hesap makinesi ile ücretsiz çevrimiçi %name% dönüştürücü. %value% %unit1%, %result% %unit2% eder.",
+    "pageTitleConverter": "%unit1% - %unit2% — Ücretsiz %name% Dönüştürücü",
+    "pageDescriptionConverter": "Ücretsiz çevrimiçi %unit1%'dan %unit2%'ya dönüştürücü. Anında sonuçlar, çift yönlü dönüşüm, formül ve yaygın değerler tablosu.",
+    "heading": "%value% %unit1% = %result% %unit2%",
+    "headingConverter": "%unit1% - %unit2% Dönüştürücü",
+    "result": "%result% %unit2%",
+    "enterValue": "Değer girin",
+    "from": "Kimden",
+    "to": "Kime",
+    "swap": "Değiştir",
+    "convert": "Dönüştür",
+    "formula": "Dönüşüm Formülü",
+    "formulaText": "1 %unit1% = %rate% %unit2%",
+    "reverseFormulaText": "1 %unit2% = %reverseRate% %unit1%",
+    "table": "Hızlı Dönüşüm Tablosu",
+    "tableUnit1": "%unit%",
+    "tableUnit2": "%unit%",
+    "seeAlso": "Ayrıca Bakınız",
+    "reverseLink": "%unit1% - %unit2%",
+    "moreConversions": "Daha Fazla %name% Dönüşümü",
+    "aboutUnit": "%unit% Hakkında",
+    "whatIsUnit": "%unit% Nedir?",
+    "otherCategories": "Diğer Dönüşüm Kategorileri"
+  },
+  "common": {
+    "loading": "Yükleniyor...",
+    "error": "Bir şeyler ters gitti",
+    "adLabel": "Reklam"
+  }
+}

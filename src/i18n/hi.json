@@ -1,0 +1,71 @@
+{
+  "site": {
+    "title": "यूनिट कनवर्टर — तेज़, मुफ्त ऑनलाइन रूपांतरण टूल",
+    "description": "मुफ्त ऑनलाइन यूनिट कनवर्टर। लंबाई, वजन, तापमान, डेटा स्टोरेज और बहुत कुछ के बीच रूपांतरित करें। तत्काल परिणाम, द्विदिशात्मक रूपांतरण, कोई विज्ञापन टूल को नहीं रोकता।"
+  },
+  "nav": {
+    "home": "होम",
+    "categories": "श्रेणियाँ",
+    "length": "लंबाई",
+    "weight": "वजन",
+    "temperature": "तापमान",
+    "data": "डेटा स्टोरेज",
+    "area": "क्षेत्रफल",
+    "volume": "आयतन",
+    "speed": "गति",
+    "time": "समय",
+    "pressure": "दबाव",
+    "energy": "ऊर्जा",
+    "power": "शक्ति",
+    "fuel": "ईंधन दक्षता",
+    "frequency": "आवृत्ति",
+    "angle": "कोण",
+    "force": "बल",
+    "torque": "टॉर्क",
+    "shoe": "जूते का साइज़"
+  },
+  "home": {
+    "title": "यूनिट कनवर्टर",
+    "subtitle": "तेज़, सटीक, मुफ्त — किसी भी यूनिट को तुरंत रूपांतरित करें",
+    "chooseCategory": "शुरू करने के लिए एक श्रेणी चुनें:",
+    "trust": "मुफ्त · तत्काल · बिना पंजीकरण"
+  },
+  "category": {
+    "title": "%name% कनवर्टर",
+    "description": "मुफ्त ऑनलाइन %name% कनवर्टर। सभी %name% यूनिट्स के बीच तत्काल परिणाम और आसान रूपांतरण तालिका के साथ रूपांतरित करें।",
+    "choosePair": "रूपांतरित करने के लिए दो यूनिट चुनें:",
+    "otherCategories": "अन्य रूपांतरण श्रेणियाँ",
+    "popularConversions": "लोकप्रिय %name% रूपांतरण"
+  },
+  "converter": {
+    "pageTitle": "%value% %unit1% = %result% %unit2%",
+    "pageDescription": "%value% %unit1% को %unit2% में तुरंत रूपांतरित करें। मुफ्त ऑनलाइन %name% कनवर्टर, फॉर्मूला, रूपांतरण तालिका और द्विदिशात्मक कैलकुलेटर के साथ। %value% %unit1%, %result% %unit2% के बराबर है।",
+    "pageTitleConverter": "%unit1% से %unit2% — मुफ्त %name% कनवर्टर",
+    "pageDescriptionConverter": "मुफ्त ऑनलाइन %unit1% से %unit2% कनवर्टर। तत्काल परिणाम, द्विदिशात्मक रूपांतरण, फॉर्मूला और सामान्य मान तालिका।",
+    "heading": "%value% %unit1% = %result% %unit2%",
+    "headingConverter": "%unit1% से %unit2% कनवर्टर",
+    "result": "%result% %unit2%",
+    "enterValue": "मान दर्ज करें",
+    "from": "से",
+    "to": "में",
+    "swap": "बदलें",
+    "convert": "रूपांतरित करें",
+    "formula": "रूपांतरण सूत्र",
+    "formulaText": "1 %unit1% = %rate% %unit2%",
+    "reverseFormulaText": "1 %unit2% = %reverseRate% %unit1%",
+    "table": "त्वरित रूपांतरण तालिका",
+    "tableUnit1": "%unit%",
+    "tableUnit2": "%unit%",
+    "seeAlso": "यह भी देखें",
+    "reverseLink": "%unit1% से %unit2%",
+    "moreConversions": "अधिक %name% रूपांतरण",
+    "aboutUnit": "%unit% के बारे में",
+    "whatIsUnit": "%unit% क्या है?",
+    "otherCategories": "अन्य रूपांतरण श्रेणियाँ"
+  },
+  "common": {
+    "loading": "लोड हो रहा है...",
+    "error": "कुछ गलत हो गया",
+    "adLabel": "विज्ञापन"
+  }
+}

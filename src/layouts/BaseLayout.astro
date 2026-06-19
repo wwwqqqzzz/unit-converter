@@ -5,7 +5,7 @@
 // ============================================================
 
 import type { Lang } from '../utils/i18n';
-import { LANGUAGES, t } from '../utils/i18n';
+import { LANGUAGES, t, LANG_LABELS } from '../utils/i18n';
 import { hreflangTags, canonicalUrl } from '../lib/seo';
 
 export interface Props {
@@ -24,7 +24,7 @@ const fullTitle = isHome ? title : `${title} — Unit Converter`;
 
 const langLinks = LANGUAGES
   .filter(l => l !== lang)
-  .map(l => ({ code: l, url: `/${l}/${pagePath}`, label: l === 'en' ? 'EN' : '中' }));
+  .map(l => ({ code: l, url: `/${l}/${pagePath}`, label: LANG_LABELS[l] ?? l.toUpperCase() }));
 
 const canonicalHref = canonical ?? canonicalUrl(lang, pagePath, siteUrl.replace(/\/$/, ''));
 ---
@@ -154,7 +154,7 @@ const canonicalHref = canonical ?? canonicalUrl(lang, pagePath, siteUrl.replace(
         <nav class="lang-switcher">
           {LANGUAGES.filter(l => l !== lang).map(l => (
             <a href={"/" + l + "/" + pagePath} class="lang-btn">
-              {l === 'en' ? 'EN' : '中'}
+              {LANG_LABELS[l] ?? l.toUpperCase()}
             </a>
           ))}
         </nav>

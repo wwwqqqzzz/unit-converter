@@ -28,7 +28,7 @@ const otherCategories = categories.filter(c => c.id !== catId);
 const breadcrumbJsonld = {
   '@context': 'https://schema.org', '@type': 'BreadcrumbList',
   itemListElement: [
-    { '@type': 'ListItem', position: 1, name: lang === 'zh' ? '首页' : 'Home', item: `${Astro.site}${lang}/` },
+    { '@type': 'ListItem', position: 1, name: t(lang, 'nav.home'), item: `${Astro.site}${lang}/` },
     { '@type': 'ListItem', position: 2, name: catName, item: `${Astro.site}${lang}/${catId}/` },
   ],
 };
@@ -51,7 +51,7 @@ const jsonld = JSON.stringify([breadcrumbJsonld]);
   <div class="pair-grid">
     {pairs.map(([a, b]) => {
       const slug = pairSlug(a, b, lang);
-      const label = lang === 'zh' ? `${a.name.zh} → ${b.name.zh}` : `${a.name.en} → ${b.name.en}`;
+      const label = `${a.name[lang]} → ${b.name[lang]}`;
       return (
         <a href={"/" + lang + "/" + catId + "/" + slug + "/"} class="pair-card">
           <span>{label}</span>
@@ -67,7 +67,7 @@ const jsonld = JSON.stringify([breadcrumbJsonld]);
     {pairs.slice(0, 6).map(([a, b]) => {
       const val = commonValues[0];
       const vs = valueSlug(val, a, b, lang);
-      const label = lang === 'zh' ? `${val}${a.name.zh} → ${b.name.zh}` : `${val} ${a.name.en} → ${a.name.en}`;
+      const label = `${val} ${a.name[lang]} → ${b.name[lang]}`;
       return (
         <a href={"/" + lang + "/" + catId + "/" + vs + "/"} class="pair-card small">
           <span>{label}</span>

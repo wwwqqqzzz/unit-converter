@@ -6,7 +6,7 @@ import ConversionTable from '../../../components/ConversionTable.astro';
 import CrossLinks from '../../../components/CrossLinks.astro';
 import AdSense from '../../../components/AdSense.astro';
 import UnitDescription from '../../../components/UnitDescription.astro';
-import { t, type Lang, LANGUAGES } from '../../../utils/i18n';
+import { t, type Lang, LANGUAGES, LANG_LABELS } from '../../../utils/i18n';
 import { getCategory, getUnit, convert, formatResult, getUnitPairs, pairSlug, valueSlug, getCommonValues } from '../../../lib/units';
 import { categories } from '../../../data/units';
 import { unitDescriptions } from '../../../data/descriptions';
@@ -73,17 +73,17 @@ const pageTitle = isConverterPage ? t(lang, 'converter.pageTitleConverter', { un
 const pageDesc = isConverterPage ? t(lang, 'converter.pageDescriptionConverter', { unit1: u1Name, unit2: u2Name, name: catName }) : t(lang, 'converter.pageDescription', { value: String(displayValue), unit1: u1Name, unit2: u2Name, result: formattedResult, name: catName });
 const heading = isConverterPage ? t(lang, 'converter.headingConverter', { unit1: u1Name, unit2: u2Name }) : t(lang, 'converter.heading', { value: String(displayValue), unit1: u1Name, unit2: u2Name, result: formattedResult });
 
-const breadcrumbJsonld = { '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [{ '@type': 'ListItem', position: 1, name: lang === 'zh' ? '首页' : 'Home', item: `${Astro.site}${lang}/` }, { '@type': 'ListItem', position: 2, name: catName, item: `${Astro.site}${lang}/${catId}/` }, { '@type': 'ListItem', position: 3, name: `${u1Name} → ${u2Name}` }] };
+const breadcrumbJsonld = { '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [{ '@type': 'ListItem', position: 1, name: t(lang, 'nav.home'), item: `${Astro.site}${lang}/` }, { '@type': 'ListItem', position: 2, name: catName, item: `${Astro.site}${lang}/${catId}/` }, { '@type': 'ListItem', position: 3, name: `${u1Name} → ${u2Name}` }] };
 const faqQuestions: Array<Record<string, any>> = [
-  { '@type': 'Question', name: `${lang === 'zh' ? '如何将' : 'How do I convert '}${displayValue} ${u1Name}${lang === 'zh' ? '换算成' : ' to '}${u2Name}？`, acceptedAnswer: { '@type': 'Answer', text: `${displayValue} ${u1Name} = ${formattedResult} ${u2Name}。${lang === 'zh' ? '换算公式' : 'Formula'}: 1 ${u1Name} = ${formatResult(rate)} ${u2Name}。` } },
-  { '@type': 'Question', name: `${lang === 'zh' ? '1' : 'What is '}${u1Name}${lang === 'zh' ? '等于多少' : ' in '}${u2Name}？`, acceptedAnswer: { '@type': 'Answer', text: `1 ${u1Name} = ${formatResult(rate)} ${u2Name}。` } },
+  { '@type': 'Question', name: `${t(lang, 'converter.whatIsUnit', { unit: `${displayValue} ${u1Name}` })} ${lang === 'zh' || lang === 'ja' || lang === 'ko' ? '' : ''}${u2Name}${lang === 'zh' ? '换算结果是' : ' = '}${formattedResult} ${u2Name}`, acceptedAnswer: { '@type': 'Answer', text: `${displayValue} ${u1Name} = ${formattedResult} ${u2Name}. ${t(lang, 'converter.formula')}: 1 ${u1Name} = ${formatResult(rate)} ${u2Name}.` } },
+  { '@type': 'Question', name: `1 ${u1Name} = ? ${u2Name}`, acceptedAnswer: { '@type': 'Answer', text: `1 ${u1Name} = ${formatResult(rate)} ${u2Name}.` } },
 ];
 const desc1 = unitDescriptions[catId]?.[unit1Id]; const desc2 = unitDescriptions[catId]?.[unit2Id];
-if (desc1) faqQuestions.push({ '@type': 'Question', name: `${lang === 'zh' ? '什么是' : 'What is '}${u1Name}${lang === 'zh' ? '？' : '?'}`, acceptedAnswer: { '@type': 'Answer', text: desc1[lang] } });
-if (desc2) faqQuestions.push({ '@type': 'Question', name: `${lang === 'zh' ? '什么是' : 'What is '}${u2Name}${lang === 'zh' ? '？' : '?'}`, acceptedAnswer: { '@type': 'Answer', text: desc2[lang] } });
+if (desc1) faqQuestions.push({ '@type': 'Question', name: t(lang, 'converter.whatIsUnit', { unit: u1Name }), acceptedAnswer: { '@type': 'Answer', text: desc1[lang] } });
+if (desc2) faqQuestions.push({ '@type': 'Question', name: t(lang, 'converter.whatIsUnit', { unit: u2Name }), acceptedAnswer: { '@type': 'Answer', text: desc2[lang] } });
 
 const faqJsonld = { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faqQuestions };
-const howToName = lang === 'zh' ? `如何将${u1Name}换算为${u2Name}` : `How to convert ${u1Name} to ${u2Name}`;
+const howToName = t(lang, 'converter.headingConverter', { unit1: u1Name, unit2: u2Name, name: catName });
 let howToSteps: Array<Record<string, any>>;
 if (category.convertFn) {
   if (unit1Id === 'f' && unit2Id === 'c') { howToSteps = [{ '@type': 'HowToStep', position: 1, text: lang === 'zh' ? '从华氏度值中减去32' : 'Subtract 32 from the Fahrenheit value' }, { '@type': 'HowToStep', position: 2, text: lang === 'zh' ? '将结果乘以5/9' : 'Multiply the result by 5/9' }, { '@type': 'HowToStep', position: 3, text: lang === 'zh' ? '得到的结果就是摄氏度' : 'The result is the temperature in Celsius' }]; }
@@ -139,8 +139,12 @@ const commonValuesForTable = getCommonValues(catId);
   <CrossLinks lang={lang} categoryId={catId} unit1Id={unit1Id} unit2Id={unit2Id} unit1Name={u1Name} unit2Name={u2Name} />
 
   <p class="lang-hint">
-    {lang === 'zh' ? '此页面还有 English 版本：' : 'This page is also available in '}
-    <a href={"/" + (lang === 'zh' ? 'en' : 'zh') + "/" + pagePath + "/"}>{lang === 'zh' ? 'English' : '中文'}</a>
+    {LANGUAGES.filter(l => l !== lang).slice(0, 5).map((l, i) => (
+      <>
+        {i > 0 && ' · '}
+        <a href={"/" + l + "/" + pagePath + "/"}>{LANG_LABELS[l] ?? l.toUpperCase()}</a>
+      </>
+    ))}
   </p>
 </BaseLayout>
 

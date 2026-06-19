@@ -1,0 +1,71 @@
+{
+  "site": {
+    "title": "Convertitore di Unità — Strumento di Conversione Online Gratuito e Rapido",
+    "description": "Convertitore di unità online gratuito. Converti tra lunghezza, peso, temperatura, archiviazione dati e altro. Risultati istantanei, conversione bidirezionale, nessuna pubblicità che blocca lo strumento."
+  },
+  "nav": {
+    "home": "Home",
+    "categories": "Categorie",
+    "length": "Lunghezza",
+    "weight": "Peso",
+    "temperature": "Temperatura",
+    "data": "Archiviazione",
+    "area": "Area",
+    "volume": "Volume",
+    "speed": "Velocità",
+    "time": "Tempo",
+    "pressure": "Pressione",
+    "energy": "Energia",
+    "power": "Potenza",
+    "fuel": "Consumo",
+    "frequency": "Frequenza",
+    "angle": "Angolo",
+    "force": "Forza",
+    "torque": "Coppia",
+    "shoe": "Taglia scarpa"
+  },
+  "home": {
+    "title": "Convertitore di Unità",
+    "subtitle": "Veloce, preciso, gratuito — converti qualsiasi unità all'istante",
+    "chooseCategory": "Scegli una categoria per iniziare:",
+    "trust": "Gratis · Istantaneo · Senza registrazione"
+  },
+  "category": {
+    "title": "Convertitore di %name%",
+    "description": "Convertitore online gratuito di %name%. Converti tra tutte le unità di %name% con risultati istantanei e una pratica tabella di conversione.",
+    "choosePair": "Scegli due unità da convertire:",
+    "otherCategories": "Altre categorie di conversione",
+    "popularConversions": "Conversioni popolari di %name%"
+  },
+  "converter": {
+    "pageTitle": "%value% %unit1% = %result% %unit2%",
+    "pageDescription": "Converti %value% %unit1% in %unit2% istantaneamente. Convertitore online gratuito di %name% con formula, tabella di conversione e calcolatrice bidirezionale. %value% %unit1% equivale a %result% %unit2%.",
+    "pageTitleConverter": "%unit1% in %unit2% — Convertitore gratuito di %name%",
+    "pageDescriptionConverter": "Convertitore online gratuito da %unit1% a %unit2%. Risultati istantanei, conversione bidirezionale, formula e tabella dei valori comuni.",
+    "heading": "%value% %unit1% = %result% %unit2%",
+    "headingConverter": "Convertitore da %unit1% a %unit2%",
+    "result": "%result% %unit2%",
+    "enterValue": "Inserisci il valore",
+    "from": "Da",
+    "to": "A",
+    "swap": "Scambia",
+    "convert": "Converti",
+    "formula": "Formula di conversione",
+    "formulaText": "1 %unit1% = %rate% %unit2%",
+    "reverseFormulaText": "1 %unit2% = %reverseRate% %unit1%",
+    "table": "Tabella di conversione rapida",
+    "tableUnit1": "%unit%",
+    "tableUnit2": "%unit%",
+    "seeAlso": "Vedi anche",
+    "reverseLink": "%unit1% in %unit2%",
+    "moreConversions": "Altre conversioni di %name%",
+    "aboutUnit": "Informazioni su %unit%",
+    "whatIsUnit": "Cos'è %unit%?",
+    "otherCategories": "Altre categorie di conversione"
+  },
+  "common": {
+    "loading": "Caricamento...",
+    "error": "Qualcosa è andato storto",
+    "adLabel": "Pubblicità"
+  }
+}

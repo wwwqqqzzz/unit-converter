@@ -37,10 +37,11 @@ const allUnits = allUnitsRaw ?? [
 const ratesMap = ratesMapRaw ?? {};
 const hasCustomConvert = hasCustomConvertRaw ?? false;
 
-const labelFrom  = lang === 'zh' ? '从' : 'From';
-const labelTo    = lang === 'zh' ? '到' : 'To';
-const labelSwap  = lang === 'zh' ? '互换' : 'Swap';
-const placeholder = lang === 'zh' ? '输入数值' : 'Enter value';
+import { t } from '../utils/i18n';
+const labelFrom  = t(lang, 'converter.from');
+const labelTo    = t(lang, 'converter.to');
+const labelSwap  = t(lang, 'converter.swap');
+const placeholder = t(lang, 'converter.enterValue');
 ---
 
 <div class="converter-card" id="converter-root"

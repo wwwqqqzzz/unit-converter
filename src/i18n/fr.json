@@ -1,0 +1,71 @@
+{
+  "site": {
+    "title": "Convertisseur d'Unités — Outil de Conversion Online Gratuit et Rapide",
+    "description": "Convertisseur d'unités gratuit en ligne. Convertissez entre longueur, poids, température, stockage de données et plus encore. Résultats instantanés, conversion bidirectionnelle, sans publicité bloquante."
+  },
+  "nav": {
+    "home": "Accueil",
+    "categories": "Catégories",
+    "length": "Longueur",
+    "weight": "Poids",
+    "temperature": "Température",
+    "data": "Stockage",
+    "area": "Superficie",
+    "volume": "Volume",
+    "speed": "Vitesse",
+    "time": "Temps",
+    "pressure": "Pression",
+    "energy": "Énergie",
+    "power": "Puissance",
+    "fuel": "Consommation",
+    "frequency": "Fréquence",
+    "angle": "Angle",
+    "force": "Force",
+    "torque": "Couple",
+    "shoe": "Pointure"
+  },
+  "home": {
+    "title": "Convertisseur d'Unités",
+    "subtitle": "Rapide, précis, gratuit — convertissez n'importe quelle unité instantanément",
+    "chooseCategory": "Choisissez une catégorie pour commencer :",
+    "trust": "Gratuit · Instantané · Sans inscription"
+  },
+  "category": {
+    "title": "Convertisseur de %name%",
+    "description": "Convertisseur gratuit en ligne de %name%. Convertissez entre toutes les unités de %name% avec des résultats instantanés et un tableau de conversion pratique.",
+    "choosePair": "Choisissez deux unités à convertir :",
+    "otherCategories": "Autres catégories de conversion",
+    "popularConversions": "Conversions populaires de %name%"
+  },
+  "converter": {
+    "pageTitle": "%value% %unit1% = %result% %unit2%",
+    "pageDescription": "Convertissez %value% %unit1% en %unit2% instantanément. Convertisseur gratuit en ligne de %name% avec formule, tableau de conversion et calculatrice bidirectionnelle. %value% %unit1% équivaut à %result% %unit2%.",
+    "pageTitleConverter": "%unit1% en %unit2% — Convertisseur gratuit de %name%",
+    "pageDescriptionConverter": "Convertisseur gratuit en ligne de %unit1% en %unit2%. Résultats instantanés, conversion bidirectionnelle, formule et tableau de valeurs communes.",
+    "heading": "%value% %unit1% = %result% %unit2%",
+    "headingConverter": "Convertisseur de %unit1% en %unit2%",
+    "result": "%result% %unit2%",
+    "enterValue": "Entrez la valeur",
+    "from": "De",
+    "to": "En",
+    "swap": "Inverser",
+    "convert": "Convertir",
+    "formula": "Formule de conversion",
+    "formulaText": "1 %unit1% = %rate% %unit2%",
+    "reverseFormulaText": "1 %unit2% = %reverseRate% %unit1%",
+    "table": "Tableau de conversion rapide",
+    "tableUnit1": "%unit%",
+    "tableUnit2": "%unit%",
+    "seeAlso": "Voir aussi",
+    "reverseLink": "%unit1% en %unit2%",
+    "moreConversions": "Plus de conversions de %name%",
+    "aboutUnit": "À propos de %unit%",
+    "whatIsUnit": "Qu'est-ce que %unit% ?",
+    "otherCategories": "Autres catégories de conversion"
+  },
+  "common": {
+    "loading": "Chargement...",
+    "error": "Une erreur est survenue",
+    "adLabel": "Publicité"
+  }
+}

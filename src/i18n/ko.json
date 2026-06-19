@@ -1,0 +1,71 @@
+{
+  "site": {
+    "title": "단위 변환 — 빠르고 무료인 온라인 변환 도구",
+    "description": "무료 온라인 단위 변환기. 길이, 무게, 온도, 데이터 저장 등 다양한 단위를 즉시 변환합니다. 양방향 변환, 도구를 가리는 광고 없음."
+  },
+  "nav": {
+    "home": "홈",
+    "categories": "카테고리",
+    "length": "길이",
+    "weight": "무게",
+    "temperature": "온도",
+    "data": "데이터 용량",
+    "area": "면적",
+    "volume": "부피",
+    "speed": "속도",
+    "time": "시간",
+    "pressure": "압력",
+    "energy": "에너지",
+    "power": "전력",
+    "fuel": "연비",
+    "frequency": "주파수",
+    "angle": "각도",
+    "force": "힘",
+    "torque": "토크",
+    "shoe": "신발 사이즈"
+  },
+  "home": {
+    "title": "단위 변환",
+    "subtitle": "빠르고, 정확하고, 무료 — 모든 단위를 즉시 변환",
+    "chooseCategory": "카테고리를 선택하세요:",
+    "trust": "무료 · 즉시 · 가입 불필요"
+  },
+  "category": {
+    "title": "%name% 변환",
+    "description": "무료 온라인 %name% 변환기. 모든 %name% 단위를 즉시 변환, 환산 공식과 편리한 대조표 포함.",
+    "choosePair": "변환할 두 단위를 선택하세요:",
+    "otherCategories": "다른 변환 카테고리",
+    "popularConversions": "인기 %name% 변환"
+  },
+  "converter": {
+    "pageTitle": "%value% %unit1% = %result% %unit2%",
+    "pageDescription": "%value% %unit1%을(를) %unit2%(으)로 즉시 변환. 무료 온라인 %name% 변환기, 환산 공식·대조표·양방향 계산기 포함. %value% %unit1%은 %result% %unit2%입니다.",
+    "pageTitleConverter": "%unit1%에서 %unit2% — 무료 %name% 변환기",
+    "pageDescriptionConverter": "무료 온라인 %unit1%에서 %unit2% 변환기. 즉시 결과, 양방향 변환, 환산 공식 및 자주 쓰는 값 대조표 포함.",
+    "heading": "%value% %unit1% = %result% %unit2%",
+    "headingConverter": "%unit1%에서 %unit2% 변환기",
+    "result": "%result% %unit2%",
+    "enterValue": "값 입력",
+    "from": "에서",
+    "to": "으로",
+    "swap": "교환",
+    "convert": "변환",
+    "formula": "환산 공식",
+    "formulaText": "1 %unit1% = %rate% %unit2%",
+    "reverseFormulaText": "1 %unit2% = %reverseRate% %unit1%",
+    "table": "빠른 환산 대조표",
+    "tableUnit1": "%unit%",
+    "tableUnit2": "%unit%",
+    "seeAlso": "관련 변환",
+    "reverseLink": "%unit1%에서 %unit2%",
+    "moreConversions": "더 많은 %name% 변환",
+    "aboutUnit": "%unit% 소개",
+    "whatIsUnit": "%unit%이란?",
+    "otherCategories": "다른 변환 카테고리"
+  },
+  "common": {
+    "loading": "로딩 중...",
+    "error": "오류가 발생했습니다",
+    "adLabel": "광고"
+  }
+}

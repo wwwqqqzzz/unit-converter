@@ -1,0 +1,71 @@
+{
+  "site": {
+    "title": "単位変換 — 無料で素早いオンライン換算ツール",
+    "description": "無料のオンライン単位変換ツール。長さ、重さ、温度、データストレージなど各種単位を即座に換算。双方向変換、ツールの邪魔になる広告なし。"
+  },
+  "nav": {
+    "home": "ホーム",
+    "categories": "カテゴリ",
+    "length": "長さ",
+    "weight": "重さ",
+    "temperature": "温度",
+    "data": "データ容量",
+    "area": "面積",
+    "volume": "体積",
+    "speed": "速度",
+    "time": "時間",
+    "pressure": "圧力",
+    "energy": "エネルギー",
+    "power": "電力",
+    "fuel": "燃費",
+    "frequency": "周波数",
+    "angle": "角度",
+    "force": "力",
+    "torque": "トルク",
+    "shoe": "靴サイズ"
+  },
+  "home": {
+    "title": "単位変換",
+    "subtitle": "速く、正確、無料 — どんな単位も即座に変換",
+    "chooseCategory": "カテゴリを選んで始めましょう：",
+    "trust": "無料 · 即座 · 登録不要"
+  },
+  "category": {
+    "title": "%name%変換",
+    "description": "無料オンライン%name%変換ツール。すべての%name%単位を即座に変換、換算式と便利な対照表付き。",
+    "choosePair": "変換する2つの単位を選択：",
+    "otherCategories": "その他の変換カテゴリ",
+    "popularConversions": "人気の%name%変換"
+  },
+  "converter": {
+    "pageTitle": "%value%%unit1% = %result%%unit2%",
+    "pageDescription": "%value%%unit1%を%unit2%に即座に変換。無料オンライン%name%変換ツール、換算式・対照表・双方向計算機能付き。%value%%unit1%は%result%%unit2%です。",
+    "pageTitleConverter": "%unit1%から%unit2% — 無料%name%変換ツール",
+    "pageDescriptionConverter": "無料オンライン%unit1%から%unit2%変換ツール。即座の結果、双方向変換、換算式と常用値対照表付き。",
+    "heading": "%value%%unit1% = %result%%unit2%",
+    "headingConverter": "%unit1%から%unit2%変換ツール",
+    "result": "%result%%unit2%",
+    "enterValue": "数値を入力",
+    "from": "変換元",
+    "to": "変換先",
+    "swap": "入替",
+    "convert": "変換",
+    "formula": "換算式",
+    "formulaText": "1 %unit1% = %rate% %unit2%",
+    "reverseFormulaText": "1 %unit2% = %reverseRate% %unit1%",
+    "table": "常用換算対照表",
+    "tableUnit1": "%unit%",
+    "tableUnit2": "%unit%",
+    "seeAlso": "関連変換",
+    "reverseLink": "%unit1%から%unit2%",
+    "moreConversions": "その他の%name%変換",
+    "aboutUnit": "%unit%について",
+    "whatIsUnit": "%unit%とは？",
+    "otherCategories": "その他の変換カテゴリ"
+  },
+  "common": {
+    "loading": "読み込み中...",
+    "error": "エラーが発生しました",
+    "adLabel": "広告"
+  }
+}

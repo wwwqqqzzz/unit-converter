@@ -2,13 +2,13 @@
 // Language homepage: /en/ and /zh/ — Neo-Brutalist
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import AdSense from '../../components/AdSense.astro';
-import { t, type Lang } from '../../utils/i18n';
+import { t, type Lang, LANGUAGES } from '../../utils/i18n';
 import { getCategories } from '../../lib/units';
 import { CATEGORY_ICONS } from '../../data/units';
 
 export interface Props { lang: Lang; }
 export function getStaticPaths() {
-  return [{ params: { lang: 'en' } }, { params: { lang: 'zh' } }];
+  return LANGUAGES.map(lang => ({ params: { lang } }));
 }
 const { lang } = Astro.params as Props;
 const categories = getCategories();
@@ -18,7 +18,7 @@ const categories = getCategories();
   <div class="home-hero">
     <h1>{t(lang, 'home.title')}</h1>
     <p class="home-subtitle">{t(lang, 'home.subtitle')}</p>
-    <p class="home-trust">{lang === 'zh' ? '免费 · 即时 · 无需注册' : 'Free · Instant · No signup'}</p>
+    <p class="home-trust">{t(lang, 'home.trust')}</p>
   </div>
 
   <AdSense position="top" />
@@ -30,7 +30,7 @@ const categories = getCategories();
         <a href={"/" + lang + "/" + cat.id + "/"} class="category-card">
           <span class="category-icon">{CATEGORY_ICONS[cat.id] ?? '📐'}</span>
           <span class="category-name">{cat.name[lang]}</span>
-          <span class="category-count">{cat.units.length} {lang === 'zh' ? '单位' : 'units'}</span>
+          <span class="category-count">{cat.units.length} {t(lang, 'nav.home') === '首页' ? '单位' : 'units'}</span>
         </a>
       ))}
     </div>

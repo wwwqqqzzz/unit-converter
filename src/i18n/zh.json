@@ -27,7 +27,8 @@
   "home": {
     "title": "单位换算",
     "subtitle": "快速、准确、免费——即时换算任何单位",
-    "chooseCategory": "选择一个类别开始换算："
+    "chooseCategory": "选择一个类别开始换算：",
+    "trust": "免费 · 即时 · 无需注册"
   },
   "category": {
     "title": "%name%换算",

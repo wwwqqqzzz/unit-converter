@@ -1,0 +1,71 @@
+{
+  "site": {
+    "title": "Einheitenrechner — Schnelles, kostenloses Online-Umrechnungstool",
+    "description": "Kostenloser Online-Einheitenrechner. Umrechnung zwischen Länge, Gewicht, Temperatur, Datenspeicher und mehr. Sofortige Ergebnisse, bidirektionale Umrechnung, keine störende Werbung."
+  },
+  "nav": {
+    "home": "Startseite",
+    "categories": "Kategorien",
+    "length": "Länge",
+    "weight": "Gewicht",
+    "temperature": "Temperatur",
+    "data": "Datenspeicher",
+    "area": "Fläche",
+    "volume": "Volumen",
+    "speed": "Geschwindigkeit",
+    "time": "Zeit",
+    "pressure": "Druck",
+    "energy": "Energie",
+    "power": "Leistung",
+    "fuel": "Verbrauch",
+    "frequency": "Frequenz",
+    "angle": "Winkel",
+    "force": "Kraft",
+    "torque": "Drehmoment",
+    "shoe": "Schuhgröße"
+  },
+  "home": {
+    "title": "Einheitenrechner",
+    "subtitle": "Schnell, genau, kostenlos — jede Einheit sofort umrechnen",
+    "chooseCategory": "Wählen Sie eine Kategorie zum Starten:",
+    "trust": "Kostenlos · Sofort · Keine Anmeldung"
+  },
+  "category": {
+    "title": "%name%-Rechner",
+    "description": "Kostenloser Online-%name%-Rechner. Umrechnung zwischen allen %name%-Einheiten mit Sofortergebnissen und praktischer Umrechnungstabelle.",
+    "choosePair": "Wählen Sie zwei Einheiten zum Umrechnen:",
+    "otherCategories": "Weitere Umrechnungskategorien",
+    "popularConversions": "Beliebte %name%-Umrechnungen"
+  },
+  "converter": {
+    "pageTitle": "%value% %unit1% = %result% %unit2%",
+    "pageDescription": "Rechnen Sie %value% %unit1% sofort in %unit2% um. Kostenloser Online-%name%-Rechner mit Formel, Umrechnungstabelle und bidirektionalem Rechner. %value% %unit1% entsprechen %result% %unit2%.",
+    "pageTitleConverter": "%unit1% in %unit2% — Kostenloser %name%-Rechner",
+    "pageDescriptionConverter": "Kostenloser Online-Rechner für %unit1% in %unit2%. Sofortergebnisse, bidirektionale Umrechnung, Formel und Wertetabelle.",
+    "heading": "%value% %unit1% = %result% %unit2%",
+    "headingConverter": "%unit1% in %unit2% Rechner",
+    "result": "%result% %unit2%",
+    "enterValue": "Wert eingeben",
+    "from": "Von",
+    "to": "Nach",
+    "swap": "Tauschen",
+    "convert": "Umrechnen",
+    "formula": "Umrechnungsformel",
+    "formulaText": "1 %unit1% = %rate% %unit2%",
+    "reverseFormulaText": "1 %unit2% = %reverseRate% %unit1%",
+    "table": "Schnelle Umrechnungstabelle",
+    "tableUnit1": "%unit%",
+    "tableUnit2": "%unit%",
+    "seeAlso": "Siehe auch",
+    "reverseLink": "%unit1% in %unit2%",
+    "moreConversions": "Weitere %name%-Umrechnungen",
+    "aboutUnit": "Über %unit%",
+    "whatIsUnit": "Was ist %unit%?",
+    "otherCategories": "Weitere Umrechnungskategorien"
+  },
+  "common": {
+    "loading": "Laden...",
+    "error": "Etwas ist schiefgelaufen",
+    "adLabel": "Werbung"
+  }
+}

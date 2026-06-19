@@ -27,7 +27,8 @@
   "home": {
     "title": "Unit Converter",
     "subtitle": "Fast, accurate, free — convert any unit instantly",
-    "chooseCategory": "Choose a category to get started:"
+    "chooseCategory": "Choose a category to get started:",
+    "trust": "Free · Instant · No signup"
   },
   "category": {
     "title": "%name% Converter",

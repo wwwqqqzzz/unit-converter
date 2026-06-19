@@ -10,7 +10,7 @@ export interface Props {
   values: number[];
 }
 const { lang, unit1Name, unit2Name, rate, values } = Astro.props;
-const caption = lang === 'zh' ? `${unit1Name}换算${unit2Name}` : `${unit1Name} to ${unit2Name}`;
+  const caption = `${unit1Name} → ${unit2Name}`;
 ---
 
 <section class="conv-table-section">

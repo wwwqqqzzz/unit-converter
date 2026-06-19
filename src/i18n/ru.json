@@ -1,0 +1,71 @@
+{
+  "site": {
+    "title": "Конвертер единиц — Быстрый бесплатный онлайн-инструмент для перевода",
+    "description": "Бесплатный онлайн-конвертер единиц. Переводите длину, вес, температуру, объём данных и многое другое. Мгновенные результаты, двусторонняя конвертация, без мешающей рекламы."
+  },
+  "nav": {
+    "home": "Главная",
+    "categories": "Категории",
+    "length": "Длина",
+    "weight": "Вес",
+    "temperature": "Температура",
+    "data": "Данные",
+    "area": "Площадь",
+    "volume": "Объём",
+    "speed": "Скорость",
+    "time": "Время",
+    "pressure": "Давление",
+    "energy": "Энергия",
+    "power": "Мощность",
+    "fuel": "Расход топлива",
+    "frequency": "Частота",
+    "angle": "Угол",
+    "force": "Сила",
+    "torque": "Крутящий момент",
+    "shoe": "Размер обуви"
+  },
+  "home": {
+    "title": "Конвертер единиц",
+    "subtitle": "Быстро, точно, бесплатно — мгновенный перевод любых единиц",
+    "chooseCategory": "Выберите категорию:",
+    "trust": "Бесплатно · Мгновенно · Без регистрации"
+  },
+  "category": {
+    "title": "Конвертер %name%",
+    "description": "Бесплатный онлайн-конвертер %name%. Переводите все единицы %name% мгновенно с таблицей преобразования.",
+    "choosePair": "Выберите две единицы для конвертации:",
+    "otherCategories": "Другие категории конвертации",
+    "popularConversions": "Популярные конвертации %name%"
+  },
+  "converter": {
+    "pageTitle": "%value% %unit1% = %result% %unit2%",
+    "pageDescription": "Переведите %value% %unit1% в %unit2% мгновенно. Бесплатный онлайн-конвертер %name% с формулой, таблицей и двусторонним калькулятором. %value% %unit1% равно %result% %unit2%.",
+    "pageTitleConverter": "%unit1% в %unit2% — Бесплатный конвертер %name%",
+    "pageDescriptionConverter": "Бесплатный онлайн-конвертер %unit1% в %unit2%. Мгновенные результаты, двусторонняя конвертация, формула и таблица значений.",
+    "heading": "%value% %unit1% = %result% %unit2%",
+    "headingConverter": "Конвертер %unit1% в %unit2%",
+    "result": "%result% %unit2%",
+    "enterValue": "Введите значение",
+    "from": "Из",
+    "to": "В",
+    "swap": "Поменять",
+    "convert": "Конвертировать",
+    "formula": "Формула перевода",
+    "formulaText": "1 %unit1% = %rate% %unit2%",
+    "reverseFormulaText": "1 %unit2% = %reverseRate% %unit1%",
+    "table": "Таблица быстрого перевода",
+    "tableUnit1": "%unit%",
+    "tableUnit2": "%unit%",
+    "seeAlso": "См. также",
+    "reverseLink": "%unit1% в %unit2%",
+    "moreConversions": "Ещё конвертации %name%",
+    "aboutUnit": "О %unit%",
+    "whatIsUnit": "Что такое %unit%?",
+    "otherCategories": "Другие категории конвертации"
+  },
+  "common": {
+    "loading": "Загрузка...",
+    "error": "Что-то пошло не так",
+    "adLabel": "Реклама"
+  }
+}
