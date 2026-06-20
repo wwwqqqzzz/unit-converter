@@ -71,12 +71,71 @@ interface Category {
 - **Sitemap**: 29,401 + 5×12 = **29,461 URLs**
 - **Git**: commit `efd053b` ✅ 已推送到 GitHub，自动部署到 convunit.net
 
-### 项目当前状态
+### Phase 9.1: 汇率转换器 (Currency Converter)
+
+**2026-06-21 追加** — 6 个计算器中最复杂的工具，需要实时汇率 API。
+
+#### API 选择: Frankfurter
+
+| 维度 | 值 |
+|------|-----|
+| API | `api.frankfurter.dev` v2 (ECB + 84家央行数据) |
+| API Key | **不需要** |
+| 货币数 | 201 (前端展示 30 种主流货币) |
+| 更新频率 | 每日 16:00 CET |
+| 限流 | 无限制 |
+| 开源 | 1.6k GitHub stars, MIT License |
+
+#### 数据流: SSR-Embedded 模式
+
+```
+用户请求 /en/currency/
+         │
+  Workers SSR → fetch(Frankfurter) → 注入 HTML <script id="cur-data">
+         │
+  CF 边缘缓存 HTML (max-age=3600)
+         │
+  浏览器 → 客户端 JS 读取 embedded rates → 即时换算
+```
+
+相比客户端直接 fetch 的好处：零额外 API 请求、无需 CORS、利用 Cloudflare 边缘缓存。
+
+#### Currency.astro 组件设计
+
+| 功能 | 实现 |
+|------|------|
+| 30种货币下拉 | 含国际通用名 + 中文名 (`USD - 美元`) |
+| 双向换算 | 左边输入金额，右边实时显示结果 |
+| 互换按钮 Swap | 一键调换 from/to |
+| 6个常用货币对快捷按钮 | USD→EUR, USD→JPY, USD→GBP, USD→CNY, USD→AUD, USD→CAD |
+| 上次更新时间 | 显示 `Rates updated: 2026-06-21` |
+| 缓存兜底 | 5s SSR timeout，API 异常时优雅报错 |
+| 双语 UI | 中文/英文适配，其他语言 fallback 英文 |
+
+#### 文件变更
+
+| 文件 | 变更 | 说明 |
+|------|------|------|
+| `src/data/units.ts` | 修改 | 新增 currency 分类定义、图标、CATEGORY_VALUES 跳过 |
+| `src/components/calculators/Currency.astro` | **新建** | 汇率转换器 (SSR fetch + 嵌入式 rates + 30货币下拉) |
+| `src/pages/[lang]/[category]/index.astro` | 修改 | 注册 Currency 组件映射 + calcMeta |
+| `src/i18n/*.json` (12 files) | 修改 | 新增 `calc.currency` title/desc |
+| `src/pages/[lang]/index.astro` | 修改 | 修复计算器徽标 i18n，改为 12语言翻译 |
+| `src/i18n/*.json` (12 files) | 修改 | 新增 `common.tool` + `common.units` i18n keys |
+
+#### Homepage 徽标修复
+
+原代码硬编码判断语言显示 `'工具'`/`'tool'`，现在通过 i18n key 支持所有 12 语言：
+- 转换器显示 `8 units` / `8 单位` / `8 Einheiten` ...
+- 计算器显示 `6 tools` / `6 个工具` / `6 Werkzeuge` ...
+
+### 项目当前状态 (更新)
 
 | 指标 | 值 |
 |------|-----|
-| 总 URL 数 | **29,461** |
-| 分类 | **22** (17 converter + 5 calculator) |
+| 总 URL 数 | **29,473** |
+| 分类 | **23** (17 converter + 6 calculator) |
+| 计算器 | 数字进制, 时间戳, 百分比, BMI, 年龄, **汇率** |
 | 单位 | 123 |
 | 语言 | 12 |
 | 架构 | Cloudflare Workers SSR (无文件数限制) |
