@@ -1,17 +1,18 @@
 # Unit Converter — Multilingual pSEO Tool Site
 
-A programmatic SEO (pSEO) unit conversion website built with **Astro + TypeScript**, serving **29,401 URLs** across **17 categories**, **123 units**, and **12 languages**. Live at **[convunit.net](https://convunit.net)**.
+A programmatic SEO (pSEO) unit conversion website built with **Astro + TypeScript**, serving **29,461 URLs** across **22 categories** (17 converters + 5 calculators), **123 units**, and **12 languages**. Live at **[convunit.net](https://convunit.net)**.
 
 ## Live Site
 
 | 项 | 值 |
 |---|---|
 | URL | https://convunit.net |
-| Pages | 29,401 |
+| Pages | 29,461 |
 | Languages | 12 (EN, 中文, ES, FR, DE, JA, PT, IT, KO, RU, HI, TR) |
+| Categories | 17 converters + 5 calculators = 22 total |
 | Architecture | Cloudflare Workers SSR (unlimited pages) |
 | AdSense | ca-pub-4967918867986181 |
-| Search Console | Verified, sitemap submitted (29,401 URLs) |
+| Search Console | Verified, sitemap submitted (29,461 URLs) |
 
 ## Tech Stack
 
@@ -26,10 +27,11 @@ A programmatic SEO (pSEO) unit conversion website built with **Astro + TypeScrip
 
 | Metric | Value |
 |--------|-------|
-| Total URLs | 29,401 |
+| Total URLs | 29,461 |
 | Languages | 12 (en, zh, es, fr, de, ja, pt, it, ko, ru, hi, tr) |
-| Categories | 17 (Length, Weight, Temperature, Data, Area, Volume, Speed, Time, Pressure, Energy, Power, Fuel Efficiency, Frequency, Angle, Force, Torque, Shoe Size) |
+| Categories | 22 (17 converters + 5 interactive calculators) |
 | Units | 123 |
+| Calculators | Number Base, Unix Timestamp, Percentage, BMI, Age |
 | Unit descriptions | 1,230 (123 units × 10 non-English languages) |
 | Internal links/page | ~22 |
 | Structured data | BreadcrumbList + FAQPage + HowTo |
@@ -69,7 +71,13 @@ src/
 │   ├── ConversionTable.astro  ← Common values table
 │   ├── CrossLinks.astro  ← Cross-linking navigation (12 same-cat + 9 cross-cat)
 │   ├── UnitDescription.astro ← Collapsible unit descriptions (native <details>)
-│   └── AdSense.astro     ← Conditional AdSense (top/middle/bottom)
+│   ├── AdSense.astro     ← Conditional AdSense (top/middle/bottom)
+│   └── calculators/      ← Interactive calculator components (no units/pairs)
+│       ├── NumberBase.astro   ← Bin/Oct/Dec/Hex converter
+│       ├── Timestamp.astro    ← Unix timestamp ↔ date
+│       ├── Percentage.astro   ← Discount/increase/difference
+│       ├── BMI.astro          ← BMI with unit toggles + color scale
+│       └── Age.astro          ← Age calculator + stats
 ├── layouts/
 │   └── BaseLayout.astro  ← HTML shell with SEO meta + JSON-LD + theme-color + favicon
 ├── middleware.ts          ← SSR middleware: cache-control + security headers
@@ -109,7 +117,17 @@ src/
 | Torque | 6 | 15 | 7 | 120 |
 | Shoe Size | 6 | 15 | 0 | 32 |
 
-**123 units, 433 pairs, ~2,450 content pages × 12 languages = 29,401 URLs total**
+### Calculators (non-converter interactive tools)
+
+| Calculator | Pages/lang | Description |
+|------------|-----------|-------------|
+| Number Base | 1 | Bin/Oct/Dec/Hex bidirectional conversion |
+| Unix Timestamp | 1 | Timestamp ↔ date, local/UTC sync |
+| Percentage | 1 | Discount/increase/difference with formula |
+| BMI | 1 | kg/lb + cm/ft, category badge, color scale |
+| Age | 1 | Years/months/days, total stats, next birthday |
+
+**123 units, 433 pairs, ~2,450 content pages + 5 calculator pages × 12 languages = 29,461 URLs total**
 
 ## SEO Features
 
@@ -121,9 +139,9 @@ src/
 - **JSON-LD structured data** — BreadcrumbList + FAQPage + HowTo
 - **Cross-category links** — 9 other category links per page
 - **Same-category links** — 12 pair links per page + 1 reverse link
-- **Auto-generated sitemap.xml** — 29,401 URLs
+- **Auto-generated sitemap.xml** — 29,461 URLs
 - **Mobile-first responsive** design
-- **Google Search Console** — verified, sitemap submitted (29,401 URLs)
+- **Google Search Console** — verified, sitemap submitted (29,461 URLs)
 
 ## Performance & Security
 
@@ -155,10 +173,11 @@ Domain: `convunit.net` (Cloudflare Registrar)
 - `docs/changelog.md` — Implementation log
 - `docs/phase5-7-report.md` — Deployment + AdSense report
 - `docs/phase8-report.md` — Multilingual + SSR migration report
+- `docs/phase9-report.md` — 5 interactive calculators (Number Base, Timestamp, Percentage, BMI, Age)
 
 ## What's Next
 
-- **High Priority**: Add number base converter (Bin/Dec/Hex/Oct) + Unix timestamp to current site
-- **Medium Priority**: Percentage calculator + enhanced shoe size landing pages
-- **Low Priority**: BMI calculator, Age Calculator, Currency converter (new sites)
+- **High Priority**: Currency converter with free API (exchangerate-api / frankfurter)
+- **Medium Priority**: Value landing pages for number base ("binary-42-to-decimal" as SEO pages)
+- **Low Priority**: Enhanced shoe size landing pages, multi-site monorepo
 - **Architecture**: Multi-site monorepo with shared converter-core package (phase 6)
