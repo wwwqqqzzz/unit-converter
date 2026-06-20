@@ -1,5 +1,92 @@
 # 实施日志
 
+## 2026-06-20 — Phase 8 + SSR 迁移完成：10新语言 + Workers 服务端渲染 + 全量描述翻译
+
+### Phase 8.1: 10新语言 UI 翻译 ✅
+
+| 语言 | 代码 | i18n JSON | 单位名翻译 | 描述翻译 |
+|------|------|-----------|-----------|---------|
+| 西班牙语 | es | ✅ | ✅ | ✅ Bing 翻译 |
+| 法语 | fr | ✅ | ✅ | ✅ Bing 翻译 |
+| 德语 | de | ✅ | ✅ | ✅ Bing 翻译 |
+| 日语 | ja | ✅ | ✅ | ✅ Bing 翻译 |
+| 葡萄牙语 | pt | ✅ | ✅ | ✅ Bing 翻译 |
+| 意大利语 | it | ✅ | ✅ | ✅ Bing 翻译 |
+| 韩语 | ko | ✅ | ✅ | ✅ Bing 翻译 |
+| 俄语 | ru | ✅ | ✅ | ✅ Bing 翻译 |
+| 印地语 | hi | ✅ | ✅ | ✅ Bing 翻译 |
+| 土耳其语 | tr | ✅ | ✅ | ✅ Bing 翻译 |
+
+**完成项**:
+- 创建 `src/i18n/{es,fr,de,ja,pt,it,ko,ru,hi,tr}.json` — 10个UI翻译文件
+- 更新 `src/data/units.ts` — 123个单位名 × 10语言 + 17个分类名 × 10语言
+- 更新 `src/utils/i18n.ts` — `LANG_LABELS` 映射, `LANGUAGES` 数组扩展至12语言
+- 修复所有硬编码 `lang==='zh'` 引用（页面、组件中改为使用 `LANGUAGES` 循环）
+- 更新 `getStaticPaths` 使用 `LANGUAGES` 常量
+
+### Phase 8.2: 翻译策略 — 3次尝试
+
+| 尝试 | 方法 | 结果 | 原因 |
+|------|------|------|------|
+| #1 | 后台代理翻译 (3个deep任务) | ❌ 超时 | 30分钟不活跃限制，1230条描述太长 |
+| #2 | 后台代理翻译 (5个并行, 每任务2语言) | ❌ 全部超时 | 同上，文件太大 |
+| #3 | `@vitalets/google-translate-api` 脚本 | ❌ 限流 | 1230次请求触发 Google 速率限制 |
+| #4 | Bing Translation API 脚本 | ✅ 完成 | 3并发，5分钟跑完，无限流 |
+
+**最终方案**: Node.js 脚本使用 `bing-translate-api`（免费），3并发，逐语言批处理，带进度保存。
+
+脚本: `scripts/translate-bing-fast.mjs` → 运行后删除
+
+### Phase 8.3: 描述翻译
+
+- 文件: `src/data/descriptions.ts`
+- 557行 → 1797行（+1240行）
+- 690 KB
+- 123个单位 × 10种语言 = 1230条翻译
+- UnitDescription 接口支持所有12种语言（`es?` `fr?` `de?` `ja?` `pt?` `it?` `ko?` `ru?` `hi?` `tr?`）
+- UnitDescription.astro 组件已适配：回退到 `desc.en` 如果某语言翻译缺失
+
+### SSG → SSR 迁移 ✅
+
+**原因**: Cloudflare Pages 有20K文件限制，123个单位 × 12语言 × 常用值远超限制
+
+**迁移详情**:
+| 步骤 | 操作 |
+|------|------|
+| 1 | 安装 `@astrojs/cloudflare@12` (兼容 Astro 5) |
+| 2 | `astro.config.mjs`: `output: 'server'` + cloudflare adapter |
+| 3 | 创建 `src/middleware.ts`: cache-control + 安全头 |
+| 4 | 创建 `wrangler.toml`: Workers 配置, `PUBLIC_ADSENSE_ID` env |
+| 5 | 恢复完整 `CATEGORY_VALUES` (原为规避20K限制而缩减) |
+
+**架构变更**:
+| 维度 | 迁移前 (SSG) | 迁移后 (Workers SSR) |
+|------|-------------|---------------------|
+| 输出方式 | 静态HTML文件 | 运行时渲染 |
+| 文件数限制 | 20K (Cloudflare Pages) | 无限制 |
+| 页面/URL | 固定 | 按需 (29,401 URLs) |
+| 头信息策略 | `public/_headers` 文件 | `src/middleware.ts` |
+| 部署命令 | `wrangler pages deploy dist` | 同上 (兼容) |
+
+### 部署上线
+
+- 部署命令: `npx wrangler pages deploy dist --project-name unit-convert`
+- 自定义域名: `convunit.net` ✅ （12种语言全部正常渲染）
+- 页面: 29,401 URLs（17分类 × 123单位 × 12语言）
+- Sitemap: `sitemap.xml` — 29,401 URLs
+
+### 当前项目状态
+
+- **网站**: https://convunit.net (29,401 URLs, 17 分类, 123 单位, 12 语言)
+- **架构**: Workers SSR (非 SSG，无文件数限制)
+- **GitHub**: https://github.com/wwwqqqzzz/unit-converter
+- **部署**: Cloudflare Workers + Pages, convunit.net
+- **AdSense**: ca-pub-4967918867986181, 3 广告位, 条件渲染
+- **SEO**: Google Search Console 已验证, sitemap 已提交 (29,401 URLs)
+- **性能**: TTFB ~0.38s (缓存), HTTP/2 + Brotli + H3/QUIC, 安全头 via middleware
+
+---
+
 ## 2026-06-20 — Phase 5 + Phase 7 完成：AdSense 集成 + 部署上线 + 域名配置
 
 ### Phase 5: AdSense 集成 ✅
@@ -59,7 +146,7 @@
 - 网址前缀资源: `https://convunit.net` ✅ 已验证
 - 域名资源: `convunit.net` ✅ 已验证 (DNS TXT)
 - Sitemap `sitemap.xml` ✅ 已提交
-- 状态: 成功, 8,041 URLs discovered
+- 状态: 成功, 29,401 URLs discovered
 
 **GitHub**:
 - 仓库: https://github.com/wwwqqqzzz/unit-converter
@@ -70,11 +157,11 @@
 
 ### 当前项目状态
 
-- **网站**: https://convunit.net (8,041 页面, 17 分类, 123 单位, 2 语言)
+- **网站**: https://convunit.net (29,401 URLs, 17 分类, 123 单位, 12 语言)
 - **GitHub**: https://github.com/wwwqqqzzz/unit-converter
-- **部署**: Cloudflare Pages, convunit.net 自定义域名
+- **部署**: Cloudflare Workers SSR, convunit.net 自定义域名
 - **AdSense**: ca-pub-4967918867986181, 3 广告位, 条件渲染
-- **SEO**: Google Search Console 已验证, sitemap 已提交 (8,041 URLs)
+- **SEO**: Google Search Console 已验证, sitemap 已提交 (29,401 URLs)
 - **性能**: TTFB ~0.38s (缓存), HTTP/2 + Brotli + H3/QUIC 自动
 - **安全**: X-Frame-Options: DENY, X-Content-Type-Options, Permissions-Policy
 

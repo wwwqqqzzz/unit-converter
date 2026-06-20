@@ -1,33 +1,36 @@
 # Unit Converter — Multilingual pSEO Tool Site
 
-A programmatic SEO (pSEO) unit conversion website built with **Astro + TypeScript**, statically generating **8,041 pages** across **17 categories**, **123 units**, and **2 languages** (English + Chinese). Live at **[convunit.net](https://convunit.net)**.
+A programmatic SEO (pSEO) unit conversion website built with **Astro + TypeScript**, serving **29,401 URLs** across **17 categories**, **123 units**, and **12 languages**. Live at **[convunit.net](https://convunit.net)**.
 
 ## Live Site
 
 | 项 | 值 |
 |---|---|
 | URL | https://convunit.net |
-| Pages | 8,041 |
+| Pages | 29,401 |
+| Languages | 12 (EN, 中文, ES, FR, DE, JA, PT, IT, KO, RU, HI, TR) |
+| Architecture | Cloudflare Workers SSR (unlimited pages) |
 | AdSense | ca-pub-4967918867986181 |
-| Search Console | Verified, sitemap submitted (8,041 URLs) |
+| Search Console | Verified, sitemap submitted (29,401 URLs) |
 
 ## Tech Stack
 
-- **Astro 5** — static site generation (SSG)
+- **Astro 5** — Cloudflare Workers SSR (`@astrojs/cloudflare` adapter)
 - **TypeScript** — type-safe unit configuration
 - **Vitest** — 74 unit tests
-- **Cloudflare Pages** — deployment + CDN
+- **Cloudflare Workers** — server-side rendering, unlimited pages
+- **Bing Translation API** — free multilingual content generation
 - **AdSense** — conditional rendering, 3 positions
-- **No backend** — all conversion logic runs in the browser via vanilla JS
 
 ## Stats
 
 | Metric | Value |
 |--------|-------|
-| Total pages | 8,041 |
+| Total URLs | 29,401 |
+| Languages | 12 (en, zh, es, fr, de, ja, pt, it, ko, ru, hi, tr) |
 | Categories | 17 (Length, Weight, Temperature, Data, Area, Volume, Speed, Time, Pressure, Energy, Power, Fuel Efficiency, Frequency, Angle, Force, Torque, Shoe Size) |
 | Units | 123 |
-| Languages | 2 (English, Chinese) |
+| Unit descriptions | 1,230 (123 units × 10 non-English languages) |
 | Internal links/page | ~22 |
 | Structured data | BreadcrumbList + FAQPage + HowTo |
 | Tests | 74 passing |
@@ -37,22 +40,10 @@ A programmatic SEO (pSEO) unit conversion website built with **Astro + TypeScrip
 
 ```bash
 npm install
-npm run dev      # local dev server at http://localhost:4321
-npm run build    # static output → dist/
-npm run preview  # preview the build locally
-npm test         # run 74 vitest tests
-```
-
-### Build with AdSense
-
-```bash
-PUBLIC_ADSENSE_ID=ca-pub-4967918867986181 npm run build
-```
-
-### Deploy to Cloudflare Pages
-
-```bash
-npx wrangler pages deploy dist --project-name unit-convert
+npm run dev              # local dev server at http://localhost:4321
+npm run build            # output → dist/
+PUBLIC_ADSENSE_ID=ca-pub-4967918867986181 npm run build  # build with AdSense
+npx wrangler pages deploy dist --project-name unit-convert  # deploy
 ```
 
 ## Project Structure
@@ -61,16 +52,18 @@ npx wrangler pages deploy dist --project-name unit-convert
 src/
 ├── data/
 │   ├── units.ts          ← Unit definitions (edit this to add categories/units)
-│   └── descriptions.ts   ← SEO descriptions for all 123 units × 2 languages
+│   └── descriptions.ts   ← SEO descriptions: 123 units × 12 languages (1,230 total)
 ├── i18n/
 │   ├── en.json           ← English UI strings
-│   └── zh.json           ← Chinese UI strings
+│   ├── zh.json           ← Chinese UI strings
+│   ├── es.json           ← Spanish (and 9 more languages...)
+│   └── ...
 ├── lib/
 │   ├── units.ts          ← Conversion logic (pure functions + convertFn)
 │   ├── seo.ts            ← Hreflang, canonical helpers
 │   └── __tests__/        ← Vitest test suite
 ├── utils/
-│   └── i18n.ts           ← Translation loader + LANGUAGES config
+│   └── i18n.ts           ← Translation loader + LANGUAGES (12 languages)
 ├── components/
 │   ├── Converter.astro   ← Interactive conversion tool (client-side JS)
 │   ├── ConversionTable.astro  ← Common values table
@@ -79,23 +72,25 @@ src/
 │   └── AdSense.astro     ← Conditional AdSense (top/middle/bottom)
 ├── layouts/
 │   └── BaseLayout.astro  ← HTML shell with SEO meta + JSON-LD + theme-color + favicon
+├── middleware.ts          ← SSR middleware: cache-control + security headers
 ├── pages/
 │   ├── index.astro              ← Root redirect → /en/
 │   ├── [lang]/index.astro       ← Language homepage
 │   ├── [lang]/[category]/index.astro ← Category overview
 │   ├── [lang]/[category]/[...slug].astro ← Dynamic converter/value pages
-│   ├── sitemap.xml.ts           ← Auto-generated sitemap (8,041 URLs)
+│   ├── sitemap.xml.ts           ← Auto-generated sitemap (29,401 URLs)
 │   └── robots.txt.ts            ← Robots config
-└── public/
-    ├── _headers            ← Cloudflare Pages caching + security headers
-    ├── _redirects          ← Root / → /en/ (302)
-    └── favicon.svg          ← Neo-brutalist yellow U on black
+├── public/
+│   ├── _headers            ← Legacy headers (partial use in SSR mode)
+│   ├── _redirects          ← Root / → /en/ (302)
+│   └── favicon.svg         ← Neo-brutalist yellow U on black
+└── wrangler.toml           ← Cloudflare Workers SSR configuration
 ```
 
 ## Categories
 
-| Category | Units | Pairs | Common Values | Pages |
-|-----------|-------|-------|---------------|-------|
+| Category | Units | Pairs | Values | Pages/lang |
+|-----------|-------|-------|--------|-----------|
 | Length | 8 | 28 | 10 | 616 |
 | Weight | 8 | 28 | 10 | 616 |
 | Temperature | 3 | 3 | 10 | 66 |
@@ -114,115 +109,56 @@ src/
 | Torque | 6 | 15 | 7 | 120 |
 | Shoe Size | 6 | 15 | 0 | 32 |
 
-**Total**: 123 units, 433 pairs, ~8,037 content pages + category/home/sitemap = **8,041 pages**
-
-## How to Add a New Category
-
-Only one file to edit: `src/data/units.ts`.
-
-```typescript
-// Add to the categories array:
-{
-  id: 'weight',
-  name: { en: 'Weight', zh: '重量' },
-  baseUnitId: 'g',
-  units: [
-    { id: 'mg',   name: { en: 'Milligrams', zh: '毫克' }, symbol: 'mg', toBase: 0.001 },
-    { id: 'g',    name: { en: 'Grams', zh: '克' }, symbol: 'g', toBase: 1 },
-    { id: 'kg',   name: { en: 'Kilograms', zh: '千克' }, symbol: 'kg', toBase: 1000 },
-    { id: 'lb',   name: { en: 'Pounds', zh: '磅' }, symbol: 'lb', toBase: 453.592 },
-  ],
-  // Add CATEGORY_VALUES and CATEGORY_ICONS entries
-},
-```
-
-Then add descriptions in `src/data/descriptions.ts`, update `en.json`/`zh.json` nav, and run `npm run build`.
-
-For non-linear conversions (e.g. temperature), add a `convertFn`:
-
-```typescript
-{
-  id: 'temperature',
-  name: { en: 'Temperature', zh: '温度' },
-  baseUnitId: 'c',
-  units: [...],
-  convertFn: (value, fromId, toId) => { /* Celsius-based conversion */ },
-},
-```
-
-## How to Add a New Language
-
-1. Create `src/i18n/{code}.json` — translate all ~50 UI strings
-2. Add the language code to `LANGUAGES` in `src/utils/i18n.ts`
-3. Add translated unit names in `src/data/units.ts` (each unit's `name` field)
-4. Add descriptions in `src/data/descriptions.ts`
-5. `npm run build` — all pages generate for the new language
-
-Each new language multiplies page count by ~1.5x. Adding Spanish (es) brings total to ~12,000 pages.
+**123 units, 433 pairs, ~2,450 content pages × 12 languages = 29,401 URLs total**
 
 ## SEO Features
 
 - **Value-in-title** — pages include the answer in the title (e.g. "5 cm = 1.97 inches")
 - **Unique meta descriptions** per page
-- **Hreflang tags** — en, zh, x-default (3 per page, no duplicates)
+- **Hreflang tags** — 12 languages + x-default (13 per page)
 - **Canonical URLs** — every page points to itself (convunit.net)
-- **Semantic HTML** — H1, breadcrumbs, proper heading hierarchy
-- **JSON-LD structured data**:
-  - BreadcrumbList on all pages
-  - FAQPage (2-4 questions per page)
-  - HowTo (3-step conversion guide per page)
-- **Unit descriptions** — collapsible `<details>` elements with unique content per unit
+- **Unit descriptions** — collapsible `<details>` with 123 units × 12 languages (1,230 descriptions)
+- **JSON-LD structured data** — BreadcrumbList + FAQPage + HowTo
 - **Cross-category links** — 9 other category links per page
 - **Same-category links** — 12 pair links per page + 1 reverse link
-- **Auto-generated sitemap.xml** — category-specific common values
+- **Auto-generated sitemap.xml** — 29,401 URLs
 - **Mobile-first responsive** design
-- **Core Web Vitals friendly** — minimal JS, no frameworks in client bundle
-- **Google Search Console** — verified, sitemap submitted (8,041 URLs)
+- **Google Search Console** — verified, sitemap submitted (29,401 URLs)
 
 ## Performance & Security
 
 | Feature | Value |
 |---------|-------|
-| HTML cache | max-age=3600, stale-while-revalidate=86400 |
+| HTML cache (middleware) | max-age=3600, stale-while-revalidate=86400 |
 | Static asset cache | immutable, max-age=31536000 |
 | Security headers | X-Frame-Options: DENY, X-Content-Type-Options: nosniff, X-XSS-Protection, Permissions-Policy, Referrer-Policy |
 | Root redirect | / → /en/ (302) |
 | Font preload | preconnect + preload Google Fonts |
-| Favicon | Neo-brutalist yellow U SVG |
 | CDN | Cloudflare (HTTP/2, Brotli, H3/QUIC) |
 | TTFB (cached) | ~0.38s |
 
 ## Deployment
 
-### Cloudflare Pages (current)
-
 ```bash
 # Build with AdSense
 PUBLIC_ADSENSE_ID=ca-pub-4967918867986181 npm run build
 
-# Deploy
+# Deploy to Cloudflare Workers SSR
 npx wrangler pages deploy dist --project-name unit-convert
 ```
 
 Domain: `convunit.net` (Cloudflare Registrar)
 
-### Environment Variables
-
-| Variable | Description |
-|----------|-------------|
-| `PUBLIC_ADSENSE_ID` | AdSense publisher ID (e.g. `ca-pub-4967918867986181`) |
-| `PUBLIC_ADSENSE_SLOT_TOP` | Ad slot for top position |
-| `PUBLIC_ADSENSE_SLOT_MIDDLE` | Ad slot for middle position |
-| `PUBLIC_ADSENSE_SLOT_BOTTOM` | Ad slot for bottom position |
-
 ## Documentation
 
-- `docs/roadmap.md` — Full implementation roadmap (8 phases)
+- `docs/roadmap.md` — Full implementation roadmap
 - `docs/changelog.md` — Implementation log
-- `docs/phase5-7-report.md` — Deployment + AdSense detailed report
+- `docs/phase5-7-report.md` — Deployment + AdSense report
+- `docs/phase8-report.md` — Multilingual + SSR migration report
 
 ## What's Next
 
-- **Phase 8**: Add Spanish (es) → ~12,000 pages, then Japanese (ja) → ~16,000 pages
-- **Phase 6**: Multi-site architecture (currency, BMI, percentage calculators)
-- **Analytics**: Google Analytics 4 integration
+- **High Priority**: Add number base converter (Bin/Dec/Hex/Oct) + Unix timestamp to current site
+- **Medium Priority**: Percentage calculator + enhanced shoe size landing pages
+- **Low Priority**: BMI calculator, Age Calculator, Currency converter (new sites)
+- **Architecture**: Multi-site monorepo with shared converter-core package (phase 6)
