@@ -12,9 +12,10 @@ export interface Unit {
 
 export interface Category {
   id: string;
+  type?: 'converter' | 'calculator'; // 'converter' (default) or 'calculator' (tools like BMI, timestamp)
   name: Record<string, string>;
-  baseUnitId: string;
-  units: Unit[];
+  baseUnitId?: string;
+  units?: Unit[];
   convertFn?: (value: number, fromId: string, toId: string) => number;
 }
 
@@ -26,6 +27,8 @@ export const CATEGORY_ICONS: Record<string, string> = {
   pressure: '🔧', energy: '⚡', power: '💡', fuel: '⛽',
   frequency: '📡', angle: '📐', force: '🏋️', torque: '🔩',
   shoe: '👟',
+  'number-base': '🔢', timestamp: '⏰', percentage: '💯',
+  bmi: '⚕️', age: '🎂',
 };
 
 export const CATEGORY_VALUES: Record<string, number[]> = {
@@ -363,6 +366,56 @@ export const categories: Category[] = [
         case 'jp': return cm * 10;
         default: return NaN;
       }
+    },
+  },
+
+  // ============================================================
+  // Calculator-style categories (interactive tools, not unit pairs)
+  // ============================================================
+
+  {
+    id: 'number-base',
+    type: 'calculator',
+    name: {
+      en: 'Number Base Converter', zh: '数字进制转换', es: 'Conversor de bases', fr: 'Convertisseur de bases', de: 'Zahlensystem-Konverter',
+      ja: '進数変換', pt: 'Conversor de bases', it: 'Convertitore di basi', ko: '진법 변환기', ru: 'Конвертер систем счисления',
+      hi: 'संख्या आधार परिवर्तक', tr: 'Sayı Tabanı Dönüştürücü',
+    },
+  },
+  {
+    id: 'timestamp',
+    type: 'calculator',
+    name: {
+      en: 'Unix Timestamp Converter', zh: 'Unix时间戳转换', es: 'Conversor de timestamp Unix', fr: 'Convertisseur de timestamp Unix', de: 'Unix-Zeitstempel-Konverter',
+      ja: 'Unixタイムスタンプ変換', pt: 'Conversor de timestamp Unix', it: 'Convertitore di timestamp Unix', ko: 'Unix 타임스탬프 변환기', ru: 'Конвертер Unix времени',
+      hi: 'Unix टाइमस्टैम्प परिवर्तक', tr: 'Unix Zaman Damgası Dönüştürücü',
+    },
+  },
+  {
+    id: 'percentage',
+    type: 'calculator',
+    name: {
+      en: 'Percentage Calculator', zh: '百分比计算器', es: 'Calculadora de porcentajes', fr: 'Calculatrice de pourcentage', de: 'Prozentrechner',
+      ja: 'パーセント計算機', pt: 'Calculadora de porcentagem', it: 'Calcolatore percentuale', ko: '백분율 계산기', ru: 'Процентный калькулятор',
+      hi: 'प्रतिशत कैलकुलेटर', tr: 'Yüzde Hesaplayıcı',
+    },
+  },
+  {
+    id: 'bmi',
+    type: 'calculator',
+    name: {
+      en: 'BMI Calculator', zh: 'BMI计算器', es: 'Calculadora de IMC', fr: 'Calculatrice IMC', de: 'BMI-Rechner',
+      ja: 'BMI計算機', pt: 'Calculadora de IMC', it: 'Calcolatore BMI', ko: 'BMI 계산기', ru: 'Калькулятор ИМТ',
+      hi: 'BMI कैलकुलेटर', tr: 'BMI Hesaplayıcı',
+    },
+  },
+  {
+    id: 'age',
+    type: 'calculator',
+    name: {
+      en: 'Age Calculator', zh: '年龄计算器', es: 'Calculadora de edad', fr: 'Calculatrice d\'âge', de: 'Altersrechner',
+      ja: '年齢計算機', pt: 'Calculadora de idade', it: 'Calcolatore età', ko: '나이 계산기', ru: 'Калькулятор возраста',
+      hi: 'आयु कैलकुलेटर', tr: 'Yaş Hesaplayıcı',
     },
   },
 ];

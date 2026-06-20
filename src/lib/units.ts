@@ -53,6 +53,7 @@ export function formatResult(value: number): string {
 
 /** Generate all unique unit pairs (only A→B once, not B→A) */
 export function getUnitPairs(category: Category): Array<[Unit, Unit]> {
+  if (category.type === 'calculator' || !category.units) return [];
   const pairs: Array<[Unit, Unit]> = [];
   for (let i = 0; i < category.units.length; i++) {
     for (let j = i + 1; j < category.units.length; j++) {

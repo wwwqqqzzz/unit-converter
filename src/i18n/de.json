@@ -63,6 +63,13 @@
     "whatIsUnit": "Was ist %unit%?",
     "otherCategories": "Weitere Umrechnungskategorien"
   },
+  "calc": {
+    "numberBase": { "title": "Zahlensystem-Konverter", "desc": "Kostenloser Online-Zahlensystem-Konverter. Konvertieren Sie zwischen binär, oktal, dezimal und hexadezimal." },
+    "timestamp": { "title": "Unix-Zeitstempel-Konverter", "desc": "Kostenloser Online-Unix-Zeitstempel-Konverter. Konvertieren Sie zwischen Unix-Zeitstempeln und lesbaren Daten." },
+    "percentage": { "title": "Prozentrechner", "desc": "Kostenloser Online-Prozentrechner. Berechnen Sie Rabatte, prozentuale Zunahmen und Unterschiede sofort." },
+    "bmi": { "title": "BMI-Rechner", "desc": "Kostenloser Online-BMI-Rechner. Berechnen Sie Ihren Body-Mass-Index sofort." },
+    "age": { "title": "Altersrechner", "desc": "Kostenloser Online-Altersrechner. Berechnen Sie Ihr genaues Alter in Jahren, Monaten und Tagen." }
+  },
   "common": {
     "loading": "Laden...",
     "error": "Etwas ist schiefgelaufen",

@@ -63,6 +63,13 @@
     "whatIsUnit": "¿Qué es %unit%?",
     "otherCategories": "Otras categorías de conversión"
   },
+  "calc": {
+    "numberBase": { "title": "Conversor de bases numéricas", "desc": "Conversor de bases numéricas en línea gratuito. Convierte entre binario, octal, decimal y hexadecimal al instante." },
+    "timestamp": { "title": "Conversor de timestamp Unix", "desc": "Conversor de timestamp Unix en línea gratuito. Convierte entre timestamps Unix y fechas legibles al instante." },
+    "percentage": { "title": "Calculadora de porcentajes", "desc": "Calculadora de porcentajes en línea gratuita. Calcula descuentos, incrementos y diferencias porcentuales al instante." },
+    "bmi": { "title": "Calculadora de IMC", "desc": "Calculadora de IMC en línea gratuita. Calcula tu Índice de Masa Corporal al instante." },
+    "age": { "title": "Calculadora de edad", "desc": "Calculadora de edad en línea gratuita. Calcula tu edad exacta en años, meses y días al instante." }
+  },
   "common": {
     "loading": "Cargando...",
     "error": "Algo salió mal",

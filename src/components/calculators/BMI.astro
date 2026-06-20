@@ -1,0 +1,219 @@
+---
+// BMI Calculator — Body Mass Index with category scale
+interface Props { lang: string; }
+const { lang } = Astro.props;
+const labelWeight = lang === 'zh' ? '体重' : 'Weight';
+const labelHeight = lang === 'zh' ? '身高' : 'Height';
+const labelBmi = 'BMI';
+const labelCategory = lang === 'zh' ? '体重分类' : 'Category';
+const labelHealthy = lang === 'zh' ? '健康体重范围' : 'Healthy BMI Range';
+const underweight = lang === 'zh' ? '偏瘦' : 'Underweight';
+const normal = lang === 'zh' ? '正常' : 'Normal';
+const overweight = lang === 'zh' ? '超重' : 'Overweight';
+const obese = lang === 'zh' ? '肥胖' : 'Obese';
+const placeholderW = lang === 'zh' ? '体重' : 'Weight';
+const placeholderH = lang === 'zh' ? '身高' : 'Height';
+const kg = 'kg';
+const lb = 'lb';
+const cm = 'cm';
+const ft = 'ft';
+const labelKg = 'kg';
+const labelLb = 'lb';
+const labelCm = 'cm';
+const labelFtIn = lang === 'zh' ? '英尺/英寸' : 'ft/in';
+const labelFt = 'ft';
+const labelIn = 'in';
+---
+
+<div class="calc-card" id="bmi-root">
+  <h1 class="calc-title"><slot name="title" /></h1>
+
+  <div class="bmi-row">
+    <div class="calc-field">
+      <label class="calc-label">{labelWeight}</label>
+      <div class="bmi-unit-row">
+        <input id="bmi-weight" type="number" class="calc-input bmi-input" value="70" step="0.1" placeholder={placeholderW} />
+        <select id="bmi-weight-unit" class="calc-select bmi-unit-select">
+          <option value="kg">{labelKg}</option>
+          <option value="lb">{labelLb}</option>
+        </select>
+      </div>
+    </div>
+    <div class="calc-field">
+      <label class="calc-label">{labelHeight}</label>
+      <div class="bmi-unit-row">
+        <input id="bmi-height" type="number" class="calc-input bmi-input" value="175" step="0.1" placeholder={placeholderH} />
+        <select id="bmi-height-unit" class="calc-select bmi-unit-select">
+          <option value="cm">{labelCm}</option>
+          <option value="ftin">{labelFtIn}</option>
+        </select>
+      </div>
+      <div id="bmi-ftin" class="bmi-ftin" style="display:none">
+        <input id="bmi-ft" type="number" class="calc-input bmi-ft-input" value="5" step="1" min="0" placeholder={labelFt} />
+        <span class="bmi-ftin-sep">{labelFt}</span>
+        <input id="bmi-in" type="number" class="calc-input bmi-ft-input" value="9" step="1" min="0" max="11" placeholder={labelIn} />
+        <span class="bmi-ftin-sep">{labelIn}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="calc-result">
+    <div class="bmi-result-main">
+      <div>
+        <div class="calc-result-label">{labelBmi}</div>
+        <div class="calc-result-value" id="bmi-value">22.9</div>
+      </div>
+      <div>
+        <div class="calc-result-label">{labelCategory}</div>
+        <div class="bmi-badge" id="bmi-category">{normal}</div>
+      </div>
+    </div>
+  </div>
+
+  <h3 class="calc-subtitle">{labelHealthy}</h3>
+  <div class="bmi-scale">
+    <div class="bmi-segment bmi-underweight" data-range="underweight">
+      <span class="bmi-seg-label">{underweight}</span>
+      <span class="bmi-seg-value">&lt; 18.5</span>
+    </div>
+    <div class="bmi-segment bmi-normal" data-range="normal">
+      <span class="bmi-seg-label">{normal}</span>
+      <span class="bmi-seg-value">18.5 – 25</span>
+    </div>
+    <div class="bmi-segment bmi-overweight" data-range="overweight">
+      <span class="bmi-seg-label">{overweight}</span>
+      <span class="bmi-seg-value">25 – 30</span>
+    </div>
+    <div class="bmi-segment bmi-obese" data-range="obese">
+      <span class="bmi-seg-label">{obese}</span>
+      <span class="bmi-seg-value">&gt; 30</span>
+    </div>
+  </div>
+  <div class="bmi-indicator" id="bmi-indicator" style="margin-left: 56%"></div>
+</div>
+
+<script>
+(function() {
+  const root = document.getElementById('bmi-root');
+  if (!root) return;
+  const weightInput = document.getElementById('bmi-weight') as HTMLInputElement;
+  const weightUnit = document.getElementById('bmi-weight-unit') as HTMLSelectElement;
+  const heightInput = document.getElementById('bmi-height') as HTMLInputElement;
+  const heightUnit = document.getElementById('bmi-height-unit') as HTMLSelectElement;
+  const ftDiv = document.getElementById('bmi-ftin') as HTMLElement;
+  const ftInput = document.getElementById('bmi-ft') as HTMLInputElement;
+  const inInput = document.getElementById('bmi-in') as HTMLInputElement;
+  const bmiDisplay = document.getElementById('bmi-value') as HTMLElement;
+  const categoryDisplay = document.getElementById('bmi-category') as HTMLElement;
+  const indicator = document.getElementById('bmi-indicator') as HTMLElement;
+
+  function getWeightKg(): number {
+    const w = parseFloat(weightInput.value);
+    if (isNaN(w) || w <= 0) return NaN;
+    return weightUnit.value === 'lb' ? w * 0.453592 : w;
+  }
+
+  function getHeightCm(): number {
+    const hu = heightUnit.value;
+    if (hu === 'cm') {
+      const h = parseFloat(heightInput.value);
+      return isNaN(h) || h <= 0 ? NaN : h;
+    } else {
+      const ft = parseFloat(ftInput.value) || 0;
+      const inc = parseFloat(inInput.value) || 0;
+      const total = ft * 30.48 + inc * 2.54;
+      return total <= 0 ? NaN : total;
+    }
+  }
+
+  function calcBMI() {
+    const w = getWeightKg();
+    const h = getHeightCm();
+    if (!isFinite(w) || !isFinite(h) || h <= 0) {
+      bmiDisplay.textContent = '—';
+      categoryDisplay.textContent = '—';
+      indicator.style.display = 'none';
+      return;
+    }
+    const bmi = w / ((h/100) * (h/100));
+    const bmiStr = bmi.toFixed(1);
+    bmiDisplay.textContent = bmiStr;
+
+    let cat: string;
+    let cssClass: string;
+    let pct: number;
+
+    if (bmi < 18.5) {
+      cat = 'Underweight'; cssClass = 'underweight';
+      pct = Math.max(0, (bmi / 18.5) * 20);
+    } else if (bmi < 25) {
+      cat = 'Normal'; cssClass = 'normal';
+      pct = 20 + ((bmi - 18.5) / (25 - 18.5)) * 30;
+    } else if (bmi < 30) {
+      cat = 'Overweight'; cssClass = 'overweight';
+      pct = 50 + ((bmi - 25) / (30 - 25)) * 20;
+    } else {
+      cat = 'Obese'; cssClass = 'obese';
+      pct = Math.min(95, 70 + ((bmi - 30) / 10) * 25);
+    }
+
+    categoryDisplay.textContent = cat;
+    indicator.style.display = 'block';
+    indicator.style.marginLeft = pct + '%';
+    indicator.className = 'bmi-indicator ' + cssClass;
+  }
+
+  weightInput.addEventListener('input', calcBMI);
+  weightUnit.addEventListener('change', calcBMI);
+  heightInput.addEventListener('input', calcBMI);
+  heightUnit.addEventListener('change', function() {
+    const show = heightUnit.value === 'ftin';
+    ftDiv.style.display = show ? 'flex' : 'none';
+    heightInput.style.display = show ? 'none' : 'block';
+    calcBMI();
+  });
+  ftInput.addEventListener('input', calcBMI);
+  inInput.addEventListener('input', calcBMI);
+  calcBMI();
+})();
+</script>
+
+<style>
+  .calc-card { background: var(--c-hero-bg); border: var(--b); box-shadow: var(--shadow-hard); padding: var(--sp-6); color: var(--c-hero-text); margin: var(--sp-8) 0; }
+  .calc-title { font-size: var(--text-xl); margin-bottom: var(--sp-4); letter-spacing: -0.01em; }
+  .calc-subtitle { font-size: var(--text-xs); font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--c-bg); margin: var(--sp-6) 0 var(--sp-3); }
+  .calc-label { display: block; font-size: var(--text-xs); font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--c-text-secondary); margin-bottom: var(--sp-1); }
+  .calc-input { width: 100%; padding: var(--sp-3) var(--sp-4); border: 2px solid var(--c-hero-border); font-size: var(--text-xl); font-weight: 600; font-family: var(--font); background: var(--c-hero-input-bg); color: var(--c-text); box-sizing: border-box; }
+  .calc-input:focus { outline: none; border-color: var(--c-accent); }
+  .calc-select { padding: var(--sp-2) var(--sp-3); border: 2px solid var(--c-hero-border); font-size: var(--text-sm); font-family: var(--font); background: var(--c-hero-surface); color: var(--c-hero-text); cursor: pointer; appearance: none; min-width: 70px; }
+  .calc-select:focus { outline: none; border-color: var(--c-accent); }
+  .calc-select option { color: #111; background: #fff; }
+  .bmi-row { display: flex; gap: var(--sp-3); margin-bottom: var(--sp-3); }
+  .calc-field { flex: 1; min-width: 0; }
+  .bmi-unit-row { display: flex; gap: var(--sp-2); }
+  .bmi-input { flex: 1; }
+  .bmi-unit-select { flex-shrink: 0; }
+  .bmi-ftin { display: flex; align-items: center; gap: var(--sp-2); margin-top: var(--sp-2); }
+  .bmi-ft-input { width: 80px; flex: none; }
+  .bmi-ftin-sep { font-size: var(--text-sm); color: var(--c-text-secondary); }
+  .calc-result { background: var(--c-accent); color: #000; padding: var(--sp-4) var(--sp-5); border: 2px solid #000; margin: var(--sp-4) 0; }
+  .bmi-result-main { display: flex; gap: var(--sp-8); align-items: flex-start; justify-content: center; }
+  .calc-result-label { font-size: var(--text-xs); font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: var(--sp-1); }
+  .calc-result-value { font-size: var(--text-2xl); font-weight: 700; font-family: var(--font-mono); }
+  .bmi-badge { display: inline-block; padding: var(--sp-1) var(--sp-3); background: #000; color: #fff; font-size: var(--text-base); font-weight: 700; }
+  .bmi-scale { display: flex; height: 40px; border: 2px solid #000; overflow: hidden; }
+  .bmi-segment { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: var(--sp-1); text-align: center; font-size: var(--text-xs); font-weight: 600; }
+  .bmi-underweight { background: #93c5fd; color: #000; flex: 18.5; }
+  .bmi-normal { background: #86efac; color: #000; flex: 6.5; }
+  .bmi-overweight { background: #fde047; color: #000; flex: 5; }
+  .bmi-obese { background: #fca5a5; color: #000; flex: 10; }
+  .bmi-seg-label { font-weight: 700; }
+  .bmi-seg-value { font-size: 0.65rem; }
+  .bmi-indicator { width: 4px; height: 0; border-left: 8px solid transparent; border-right: 8px solid transparent; border-top: 12px solid #000; transition: margin-left 200ms ease; margin-top: -2px; }
+  .bmi-indicator.underweight { border-top-color: #3b82f6; }
+  .bmi-indicator.normal { border-top-color: #16a34a; }
+  .bmi-indicator.overweight { border-top-color: #ca8a04; }
+  .bmi-indicator.obese { border-top-color: #dc2626; }
+  @media (max-width: 600px) { .calc-card { padding: var(--sp-4); } .bmi-row { flex-direction: column; } .bmi-result-main { flex-direction: column; gap: var(--sp-3); align-items: center; } .bmi-seg-label { font-size: 0.6rem; } }
+  @media (prefers-color-scheme: dark) { .calc-select option { color: #f0f0f0; background: #1a1a1a; } }
+</style>

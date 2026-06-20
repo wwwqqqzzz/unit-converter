@@ -1,0 +1,168 @@
+---
+// Unix Timestamp Calculator — bidirectional Unix timestamp ↔ date conversion
+interface Props { lang: string; }
+const { lang } = Astro.props;
+const placeholder = lang === 'zh' ? '请输入Unix时间戳' : 'Enter Unix timestamp';
+const labelTsToDate = lang === 'zh' ? '时间戳 → 日期' : 'Timestamp → Date';
+const labelDateToTs = lang === 'zh' ? '日期 → 时间戳' : 'Date → Timestamp';
+const labelTimestamp = lang === 'zh' ? 'Unix时间戳' : 'Unix Timestamp';
+const labelDate = lang === 'zh' ? '人类可读日期' : 'Human Date';
+const labelNow = lang === 'zh' ? '当前时间戳' : 'Current Timestamp';
+const btnNow = lang === 'zh' ? '获取当前时间戳' : 'Get Current Timestamp';
+const labelLocal = 'Local';
+const labelUTC = 'UTC';
+---
+
+<div class="calc-card" id="timestamp-root">
+  <h1 class="calc-title"><slot name="title" /></h1>
+
+  <div class="ts-section">
+    <h3 class="calc-subtitle">{labelTsToDate}</h3>
+    <div class="ts-row">
+      <div class="calc-field">
+        <label class="calc-label">{labelTimestamp}</label>
+        <input id="ts-input" type="number" class="calc-input" value="1718870400" placeholder={placeholder} />
+      </div>
+      <div class="calc-field">
+        <label class="calc-label">{labelDate} ({labelLocal})</label>
+        <output id="ts-local" class="calc-output">2024-06-21 00:00:00</output>
+      </div>
+      <div class="calc-field">
+        <label class="calc-label">{labelDate} ({labelUTC})</label>
+        <output id="ts-utc" class="calc-output">2024-06-20 16:00:00</output>
+      </div>
+    </div>
+  </div>
+
+  <div class="ts-section">
+    <h3 class="calc-subtitle">{labelDateToTs}</h3>
+    <div class="ts-row">
+      <div class="calc-field">
+        <label class="calc-label">{labelDate} ({labelLocal})</label>
+        <input id="ts-date-local" type="datetime-local" class="calc-input calc-input-date" />
+      </div>
+      <div class="calc-field">
+        <label class="calc-label">{labelDate} ({labelUTC})</label>
+        <input id="ts-date-utc" type="datetime-local" class="calc-input calc-input-date" />
+      </div>
+    </div>
+  </div>
+
+  <div class="ts-now">
+    <span class="calc-label">{labelNow}: <strong id="ts-now-display">1718870400</strong></span>
+    <button id="ts-refresh" class="calc-btn">{btnNow}</button>
+  </div>
+</div>
+
+<script>
+(function() {
+  const root = document.getElementById('timestamp-root');
+  if (!root) return;
+  const tsInput = document.getElementById('ts-input') as HTMLInputElement;
+  const tsLocal = document.getElementById('ts-local') as HTMLElement;
+  const tsUtc = document.getElementById('ts-utc') as HTMLElement;
+  const dateLocal = document.getElementById('ts-date-local') as HTMLInputElement;
+  const dateUtc = document.getElementById('ts-date-utc') as HTMLInputElement;
+  const nowDisplay = document.getElementById('ts-now-display') as HTMLElement;
+  const refreshBtn = document.getElementById('ts-refresh') as HTMLButtonElement;
+
+  function pad(n: number): string { return String(n).padStart(2, '0'); }
+
+  function tsToDate(ts: number): { local: string; utc: string } {
+    const d = new Date(ts * 1000);
+    const local = `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+    const utc = `${d.getUTCFullYear()}-${pad(d.getUTCMonth()+1)}-${pad(d.getUTCDate())} ${pad(d.getUTCHours())}:${pad(d.getUTCMinutes())}:${pad(d.getUTCSeconds())}`;
+    return { local, utc };
+  }
+
+  function dateToTs(year: number, month: number, day: number, hour: number, min: number, sec: number, isUTC: boolean): number {
+    return isUTC ? Date.UTC(year, month-1, day, hour, min, sec) / 1000 : new Date(year, month-1, day, hour, min, sec).getTime() / 1000;
+  }
+
+  function parseDatetimeLocal(val: string): { y: number; m: number; d: number; h: number; min: number } | null {
+    const m = val.match(/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})/);
+    if (!m) return null;
+    return { y: parseInt(m[1]), m: parseInt(m[2]), d: parseInt(m[3]), h: parseInt(m[4]), min: parseInt(m[5]) };
+  }
+
+  let updating = false;
+
+  function fromTs() {
+    if (updating) return;
+    const raw = tsInput.value.trim();
+    if (!raw) { tsLocal.textContent = '—'; tsUtc.textContent = '—'; return; }
+    const ts = parseInt(raw, 10);
+    if (isNaN(ts)) { tsLocal.textContent = '—'; tsUtc.textContent = '—'; return; }
+    const { local, utc } = tsToDate(ts);
+    updating = true;
+    tsLocal.textContent = local;
+    tsUtc.textContent = utc;
+    updating = false;
+  }
+
+  function fromDateLocal() {
+    if (updating) return;
+    const parsed = parseDatetimeLocal(dateLocal.value);
+    if (!parsed) return;
+    const ts = dateToTs(parsed.y, parsed.m, parsed.d, parsed.h, parsed.min, 0, false);
+    updating = true;
+    tsInput.value = String(Math.floor(ts));
+    fromTs();
+    updating = false;
+  }
+
+  function fromDateUtc() {
+    if (updating) return;
+    const parsed = parseDatetimeLocal(dateUtc.value);
+    if (!parsed) return;
+    const ts = dateToTs(parsed.y, parsed.m, parsed.d, parsed.h, parsed.min, 0, true);
+    updating = true;
+    tsInput.value = String(Math.floor(ts));
+    fromTs();
+    updating = false;
+  }
+
+  function updateNow() {
+    const now = Math.floor(Date.now() / 1000);
+    nowDisplay.textContent = String(now);
+  }
+
+  function refreshNow() {
+    updateNow();
+    tsInput.value = nowDisplay.textContent;
+    fromTs();
+  }
+
+  // Init date inputs
+  const now = new Date();
+  dateLocal.value = `${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())}T${pad(now.getHours())}:${pad(now.getMinutes())}`;
+  dateUtc.value = `${now.getUTCFullYear()}-${pad(now.getUTCMonth()+1)}-${pad(now.getUTCDate())}T${pad(now.getUTCHours())}:${pad(now.getUTCMinutes())}`;
+
+  tsInput.addEventListener('input', fromTs);
+  dateLocal.addEventListener('input', fromDateLocal);
+  dateUtc.addEventListener('input', fromDateUtc);
+  refreshBtn.addEventListener('click', refreshNow);
+  updateNow();
+  fromTs();
+})();
+</script>
+
+<style>
+  .calc-card { background: var(--c-hero-bg); border: var(--b); box-shadow: var(--shadow-hard); padding: var(--sp-6); color: var(--c-hero-text); margin: var(--sp-8) 0; }
+  .calc-title { font-size: var(--text-xl); margin-bottom: var(--sp-4); letter-spacing: -0.01em; }
+  .calc-subtitle { font-size: var(--text-xs); font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--c-text-secondary); margin: var(--sp-5) 0 var(--sp-3); }
+  .ts-section { margin-bottom: var(--sp-4); }
+  .ts-row { display: flex; gap: var(--sp-3); flex-wrap: wrap; }
+  .calc-field { flex: 1; min-width: 180px; }
+  .calc-label { display: block; font-size: var(--text-xs); font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--c-text-secondary); margin-bottom: var(--sp-1); }
+  .calc-input { width: 100%; padding: var(--sp-3) var(--sp-4); border: 2px solid var(--c-hero-border); font-size: var(--text-base); font-weight: 600; font-family: var(--font-mono); background: var(--c-hero-input-bg); color: var(--c-text); box-sizing: border-box; }
+  .calc-input:focus { outline: none; border-color: var(--c-accent); }
+  .calc-input-date { font-size: var(--text-sm); }
+  .calc-output { display: block; width: 100%; padding: var(--sp-3) var(--sp-4); font-size: var(--text-base); font-weight: 600; font-family: var(--font-mono); background: var(--c-hero-surface); color: var(--c-hero-text); border: 2px solid var(--c-hero-border); min-height: 2.5rem; box-sizing: border-box; word-break: break-all; }
+  .ts-now { display: flex; align-items: center; gap: var(--sp-3); margin-top: var(--sp-4); padding: var(--sp-3); background: var(--c-hero-surface); border: 2px solid var(--c-hero-border); }
+  .ts-now .calc-label { margin-bottom: 0; }
+  .calc-btn { padding: var(--sp-1) var(--sp-4); background: var(--c-accent); color: #000; border: 2px solid #000; font-weight: 700; font-size: var(--text-sm); cursor: pointer; transition: all var(--t); font-family: var(--font); }
+  .calc-btn:hover { transform: translate(-1px, -1px); box-shadow: var(--shadow-hard-xs); }
+  .calc-btn:active { transform: translate(1px, 1px); box-shadow: none; }
+  @media (max-width: 600px) { .calc-card { padding: var(--sp-4); } .ts-row { flex-direction: column; } }
+</style>

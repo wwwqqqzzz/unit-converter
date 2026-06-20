@@ -1,7 +1,14 @@
 ---
 // Category overview page — Neo-Brutalist
+// 'converter' categories: show unit pair grid
+// 'calculator' categories: render interactive calculator tool
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import AdSense from '../../../components/AdSense.astro';
+import NumberBase from '../../../components/calculators/NumberBase.astro';
+import Timestamp from '../../../components/calculators/Timestamp.astro';
+import Percentage from '../../../components/calculators/Percentage.astro';
+import BMI from '../../../components/calculators/BMI.astro';
+import Age from '../../../components/calculators/Age.astro';
 import { t, type Lang, LANGUAGES } from '../../../utils/i18n';
 import { getCategory, getUnitPairs, pairSlug, valueSlug, getCommonValues } from '../../../lib/units';
 import { categories, CATEGORY_ICONS } from '../../../data/units';
@@ -19,10 +26,8 @@ export function getStaticPaths() {
 const { lang, category: catId } = Astro.params as Props;
 const category = getCategory(catId);
 if (!category) return Astro.redirect('/404');
-const pairs = getUnitPairs(category);
 const catName = category.name[lang];
 const catPath = `${catId}/`;
-const commonValues = getCommonValues(catId);
 const otherCategories = categories.filter(c => c.id !== catId);
 
 const breadcrumbJsonld = {
@@ -33,48 +38,85 @@ const breadcrumbJsonld = {
   ],
 };
 const jsonld = JSON.stringify([breadcrumbJsonld]);
+
+// Calculator titles and descriptions
+const calcMeta: Record<string, { title: string; desc: string }> = {
+  'number-base': {
+    title: t(lang, 'calc.numberBase.title'),
+    desc: t(lang, 'calc.numberBase.desc'),
+  },
+  'timestamp': {
+    title: t(lang, 'calc.timestamp.title'),
+    desc: t(lang, 'calc.timestamp.desc'),
+  },
+  'percentage': {
+    title: t(lang, 'calc.percentage.title'),
+    desc: t(lang, 'calc.percentage.desc'),
+  },
+  'bmi': {
+    title: t(lang, 'calc.bmi.title'),
+    desc: t(lang, 'calc.bmi.desc'),
+  },
+  'age': {
+    title: t(lang, 'calc.age.title'),
+    desc: t(lang, 'calc.age.desc'),
+  },
+};
+const isCalculator = category.type === 'calculator';
+const pageTitle = isCalculator ? calcMeta[catId]?.title ?? catName : t(lang, 'category.title', { name: catName });
+const pageDesc = isCalculator ? calcMeta[catId]?.desc : t(lang, 'category.description', { name: catName });
 ---
 
-<BaseLayout lang={lang} title={t(lang, 'category.title', { name: catName })} description={t(lang, 'category.description', { name: catName })} pagePath={catPath} jsonld={jsonld}>
+<BaseLayout lang={lang} title={pageTitle} description={pageDesc} pagePath={catPath} jsonld={jsonld}>
   <nav class="breadcrumbs" aria-label="Breadcrumb">
     <a href={"/" + lang + "/"}>{t(lang, 'nav.home')}</a>
     <span class="sep">/</span>
     <span>{catName}</span>
   </nav>
 
-  <h1>{t(lang, 'converter.moreConversions', { name: catName })}</h1>
-  <p class="category-desc">{t(lang, 'category.description', { name: catName })}</p>
+  {isCalculator && catId === 'number-base' && <NumberBase lang={lang} />}
+  {isCalculator && catId === 'timestamp' && <Timestamp lang={lang} />}
+  {isCalculator && catId === 'percentage' && <Percentage lang={lang} />}
+  {isCalculator && catId === 'bmi' && <BMI lang={lang} />}
+  {isCalculator && catId === 'age' && <Age lang={lang} />}
 
-  <AdSense position="top" />
+  {!isCalculator && (
+    <>
+      <h1>{t(lang, 'converter.moreConversions', { name: catName })}</h1>
+      <p class="category-desc">{t(lang, 'category.description', { name: catName })}</p>
 
-  <h2>{t(lang, 'category.choosePair')}</h2>
-  <div class="pair-grid">
-    {pairs.map(([a, b]) => {
-      const slug = pairSlug(a, b, lang);
-      const label = `${a.name[lang]} → ${b.name[lang]}`;
-      return (
-        <a href={"/" + lang + "/" + catId + "/" + slug + "/"} class="pair-card">
-          <span>{label}</span>
-        </a>
-      );
-    })}
-  </div>
+      <AdSense position="top" />
 
-  <AdSense position="middle" />
+      <h2>{t(lang, 'category.choosePair')}</h2>
+      <div class="pair-grid">
+        {getUnitPairs(category).map(([a, b]) => {
+          const slug = pairSlug(a, b, lang);
+          const label = `${a.name[lang]} → ${b.name[lang]}`;
+          return (
+            <a href={"/" + lang + "/" + catId + "/" + slug + "/"} class="pair-card">
+              <span>{label}</span>
+            </a>
+          );
+        })}
+      </div>
 
-  <h2>{t(lang, 'category.popularConversions')}</h2>
-  <div class="pair-grid">
-    {pairs.slice(0, 6).map(([a, b]) => {
-      const val = commonValues[0];
-      const vs = valueSlug(val, a, b, lang);
-      const label = `${val} ${a.name[lang]} → ${b.name[lang]}`;
-      return (
-        <a href={"/" + lang + "/" + catId + "/" + vs + "/"} class="pair-card small">
-          <span>{label}</span>
-        </a>
-      );
-    })}
-  </div>
+      <AdSense position="middle" />
+
+      <h2>{t(lang, 'category.popularConversions')}</h2>
+      <div class="pair-grid">
+        {getUnitPairs(category).slice(0, 6).map(([a, b]) => {
+          const val = getCommonValues(catId)[0];
+          const vs = valueSlug(val, a, b, lang);
+          const label = `${val} ${a.name[lang]} → ${b.name[lang]}`;
+          return (
+            <a href={"/" + lang + "/" + catId + "/" + vs + "/"} class="pair-card small">
+              <span>{label}</span>
+            </a>
+          );
+        })}
+      </div>
+    </>
+  )}
 
   <h2>{t(lang, 'category.otherCategories')}</h2>
   <div class="other-categories">

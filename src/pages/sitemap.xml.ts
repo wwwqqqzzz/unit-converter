@@ -19,6 +19,9 @@ export async function GET() {
       // Category page
       urls.push(`${site}/${lang}/${cat.id}/`);
 
+      // Calculator categories: no pair/value pages
+      if (cat.type === 'calculator') continue;
+
       const pairs = getUnitPairs(cat);
       const commonValues = getCommonValues(cat.id);
 

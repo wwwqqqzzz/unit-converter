@@ -63,6 +63,13 @@
     "whatIsUnit": "%unit% Nedir?",
     "otherCategories": "Diğer Dönüşüm Kategorileri"
   },
+  "calc": {
+    "numberBase": { "title": "Sayı Tabanı Dönüştürücü", "desc": "Ücretsiz çevrimiçi sayı tabanı dönüştürücü. İkili, sekizli, ondalık ve onaltılı arasında anında dönüşüm." },
+    "timestamp": { "title": "Unix Zaman Damgası Dönüştürücü", "desc": "Ücretsiz çevrimiçi Unix zaman damgası dönüştürücü. Unix zaman damgaları ve okunabilir tarihler arasında anında dönüşüm." },
+    "percentage": { "title": "Yüzde Hesaplayıcı", "desc": "Ücretsiz çevrimiçi yüzde hesaplayıcı. İndirim, artış ve yüzde farkını anında hesaplayın." },
+    "bmi": { "title": "BMI Hesaplayıcı", "desc": "Ücretsiz çevrimiçi BMI hesaplayıcı. Vücut Kitle İndeksinizi anında hesaplayın." },
+    "age": { "title": "Yaş Hesaplayıcı", "desc": "Ücretsiz çevrimiçi yaş hesaplayıcı. Tam yaşınızı yıl, ay ve gün olarak anında hesaplayın." }
+  },
   "common": {
     "loading": "Yükleniyor...",
     "error": "Bir şeyler ters gitti",

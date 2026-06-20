@@ -17,6 +17,8 @@ export function getStaticPaths() {
   const paths: Array<{ params: Props }> = [];
   for (const lang of LANGUAGES) {
     for (const cat of categories) {
+      // Calculator categories: no pair/value pages
+      if (cat.type === 'calculator') continue;
       const pairs = getUnitPairs(cat);
       const commonValues = getCommonValues(cat.id);
       for (const [u1, u2] of pairs) {
@@ -36,6 +38,8 @@ const category = getCategory(catId);
 if (!category || !slug) return Astro.redirect(`/${lang}/`);
 const rawSlug = Array.isArray(slug) ? slug.join('/') : slug;
 if (!rawSlug) return Astro.redirect(`/${lang}/${catId}/`);
+// Calculator categories: redirect any detail page to their index page
+if (category.type === 'calculator') return Astro.redirect(`/${lang}/${catId}/`);
 
 interface PageData { unit1Id: string; unit2Id: string; value: number | null; }
 function parseSlug(slugStr: string, cat: typeof category, l: Lang): PageData | null {

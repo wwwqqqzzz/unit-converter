@@ -63,6 +63,13 @@
     "whatIsUnit": "什么是%unit%？",
     "otherCategories": "其他换算类别"
   },
+  "calc": {
+    "numberBase": { "title": "数字进制转换", "desc": "免费在线数字进制转换器。支持二进制、八进制、十进制和十六进制之间的即时转换。" },
+    "timestamp": { "title": "Unix时间戳转换", "desc": "免费在线Unix时间戳转换器。在Unix时间戳和人类可读日期之间即时转换。" },
+    "percentage": { "title": "百分比计算器", "desc": "免费在线百分比计算器。即时计算折扣、增长率和百分比差。" },
+    "bmi": { "title": "BMI计算器", "desc": "免费在线BMI计算器。即时计算你的身体质量指数并查看体重分类。" },
+    "age": { "title": "年龄计算器", "desc": "免费在线年龄计算器。精确计算你的岁数、月数和天数。" }
+  },
   "common": {
     "loading": "加载中...",
     "error": "出错了",
