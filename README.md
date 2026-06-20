@@ -1,18 +1,18 @@
 # Unit Converter — Multilingual pSEO Tool Site
 
-A programmatic SEO (pSEO) unit conversion website built with **Astro + TypeScript**, serving **29,461 URLs** across **22 categories** (17 converters + 5 calculators), **123 units**, and **12 languages**. Live at **[convunit.net](https://convunit.net)**.
+A programmatic SEO (pSEO) unit conversion website built with **Astro + TypeScript**, serving **29,473 URLs** across **23 categories** (17 converters + 6 calculators), **123 units**, and **12 languages**. Live at **[convunit.net](https://convunit.net)**.
 
 ## Live Site
 
 | 项 | 值 |
 |---|---|
 | URL | https://convunit.net |
-| Pages | 29,461 |
+| Pages | 29,473 |
 | Languages | 12 (EN, 中文, ES, FR, DE, JA, PT, IT, KO, RU, HI, TR) |
-| Categories | 17 converters + 5 calculators = 22 total |
+| Categories | 17 converters + 6 calculators = 23 total |
 | Architecture | Cloudflare Workers SSR (unlimited pages) |
 | AdSense | ca-pub-4967918867986181 |
-| Search Console | Verified, sitemap submitted (29,461 URLs) |
+| Search Console | Verified, sitemap submitted (29,473 URLs) |
 
 ## Tech Stack
 
@@ -27,11 +27,11 @@ A programmatic SEO (pSEO) unit conversion website built with **Astro + TypeScrip
 
 | Metric | Value |
 |--------|-------|
-| Total URLs | 29,461 |
+| Total URLs | 29,473 |
 | Languages | 12 (en, zh, es, fr, de, ja, pt, it, ko, ru, hi, tr) |
-| Categories | 22 (17 converters + 5 interactive calculators) |
+| Categories | 23 (17 converters + 6 interactive calculators) |
 | Units | 123 |
-| Calculators | Number Base, Unix Timestamp, Percentage, BMI, Age |
+| Calculators | Number Base, Unix Timestamp, Percentage, BMI, Age, Currency |
 | Unit descriptions | 1,230 (123 units × 10 non-English languages) |
 | Internal links/page | ~22 |
 | Structured data | BreadcrumbList + FAQPage + HowTo |
@@ -126,8 +126,9 @@ src/
 | Percentage | 1 | Discount/increase/difference with formula |
 | BMI | 1 | kg/lb + cm/ft, category badge, color scale |
 | Age | 1 | Years/months/days, total stats, next birthday |
+| Currency | 1 | Live rates via Frankfurter API, 30 currencies, SSR-embedded |
 
-**123 units, 433 pairs, ~2,450 content pages + 5 calculator pages × 12 languages = 29,461 URLs total**
+**123 units, 433 pairs, ~2,450 content pages + 6 calculator pages × 12 languages = 29,473 URLs total**
 
 ## SEO Features
 
@@ -139,9 +140,9 @@ src/
 - **JSON-LD structured data** — BreadcrumbList + FAQPage + HowTo
 - **Cross-category links** — 9 other category links per page
 - **Same-category links** — 12 pair links per page + 1 reverse link
-- **Auto-generated sitemap.xml** — 29,461 URLs
+- **Auto-generated sitemap.xml** — 29,473 URLs
 - **Mobile-first responsive** design
-- **Google Search Console** — verified, sitemap submitted (29,461 URLs)
+- **Google Search Console** — verified, sitemap submitted (29,473 URLs)
 
 ## Performance & Security
 
@@ -173,11 +174,10 @@ Domain: `convunit.net` (Cloudflare Registrar)
 - `docs/changelog.md` — Implementation log
 - `docs/phase5-7-report.md` — Deployment + AdSense report
 - `docs/phase8-report.md` — Multilingual + SSR migration report
-- `docs/phase9-report.md` — 5 interactive calculators (Number Base, Timestamp, Percentage, BMI, Age)
+- `docs/phase9-report.md` — 6 interactive calculators (Number Base, Timestamp, Percentage, BMI, Age, Currency)
 
 ## What's Next
 
-- **High Priority**: Currency converter with free API (exchangerate-api / frankfurter)
-- **Medium Priority**: Value landing pages for number base ("binary-42-to-decimal" as SEO pages)
-- **Low Priority**: Enhanced shoe size landing pages, multi-site monorepo
-- **Architecture**: Multi-site monorepo with shared converter-core package (phase 6)
+- **Medium Priority**: Number base SEO value pages ("binary-42-to-decimal" long-tail pages)
+- **Medium Priority**: Enhanced shoe size landing pages
+- **Low Priority**: Multi-site monorepo with shared converter-core package (phase 6)
