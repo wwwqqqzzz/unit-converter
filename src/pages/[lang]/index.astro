@@ -12,6 +12,7 @@ export function getStaticPaths() {
 }
 const { lang } = Astro.params as Props;
 const categories = getCategories();
+const calcCount = categories.filter(c => c.type === 'calculator').length;
 ---
 
 <BaseLayout lang={lang} title={t(lang, 'home.title')} description={t(lang, 'home.description')} pagePath="" isHome={true}>
@@ -30,7 +31,7 @@ const categories = getCategories();
         <a href={"/" + lang + "/" + cat.id + "/"} class="category-card">
           <span class="category-icon">{CATEGORY_ICONS[cat.id] ?? '📐'}</span>
           <span class="category-name">{cat.name[lang]}</span>
-          <span class="category-count">{cat.type === 'calculator' ? t(lang, 'common.tool') : `${cat.units?.length ?? 0} ${t(lang, 'common.units')}`}</span>
+          <span class="category-count">{cat.type === 'calculator' ? `${calcCount} ${t(lang, 'common.tool')}` : `${cat.units?.length ?? 0} ${t(lang, 'common.units')}`}</span>
         </a>
       ))}
     </div>
