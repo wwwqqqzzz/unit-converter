@@ -1,5 +1,93 @@
 # 实施日志
 
+## 2026-06-21 — Phase 9 完成：5 个交互式计算器工具（数字进制/时间戳/百分比/BMI/年龄）
+
+### Phase 9: 高价值品类扩展 ✅
+
+**新增 5 个计算器类别**，直接嵌入当前站，不走多站架构：
+
+| 计算器 | URL | 类型 | 流量潜力 | 开发方式 |
+|--------|-----|------|---------|---------|
+| 🔢 数字进制 | `/en/number-base/` | 程序员工具 | 中 | 自包含 Astro 组件 |
+| ⏰ Unix 时间戳 | `/en/timestamp/` | 程序员+运维 | 中 | 自包含 Astro 组件 |
+| 💯 百分比计算 | `/en/percentage/` | 通用工具 | 高 | 自包含 Astro 组件 |
+| ⚕️ BMI 计算 | `/en/bmi/` | 健康类 | 极高 | 自包含 Astro 组件 |
+| 🎂 年龄计算 | `/en/age/` | 通用工具 | 极高 | 自包含 Astro 组件 |
+
+### 架构变更
+
+为了支持非标准转换工具（计算器），Category 类型系统新增了 `type` 字段：
+
+```typescript
+interface Category {
+  id: string;
+  type?: 'converter' | 'calculator';  // 新增
+  name: Record<string, string>;
+  baseUnitId?: string;                 // 现在可选
+  units?: Unit[];                      // 现在可选
+  convertFn?: ...
+}
+```
+
+**关键区别**:
+| 维度 | converter (现有) | calculator (新增) |
+|------|-----------------|-------------------|
+| units | 有 | 无 |
+| 转换对 | 有 (A→B pairs) | 无 |
+| 值页面 | 有 (10 values × pairs) | 无 |
+| 页面数/语言 | 多 (最多 1,404) | 1 (仅 index) |
+| UI | 统一 Converter + 表格 | 自定义交互组件 |
+| 渲染 | 服务端 + 客户端JS | 服务端 + 客户端JS |
+
+### 文件变更清单
+
+| 文件 | 变更 | 说明 |
+|------|------|------|
+| `src/data/units.ts` | 修改 | Category 新增 `type` 字段; 5 个计算器分类定义; CATEGORY_ICONS 新增5个 |
+| `src/lib/units.ts` | 修改 | getUnitPairs 跳过 calculator 类型 |
+| `src/pages/[lang]/[category]/index.astro` | 修改 | 渲染计算器组件; 添加 calcMeta 标题/描述 |
+| `src/pages/[lang]/[category]/[...slug].astro` | 修改 | getStaticPaths 跳过 calculator; 运行时重定向到 index |
+| `src/pages/sitemap.xml.ts` | 修改 | 为 calculator 类型只生成 index 页 |
+| `src/pages/[lang]/index.astro` | 修改 | `cat.units.length` → `cat.units?.length`，处理无 units 情况 |
+| `src/components/calculators/NumberBase.astro` | **新建** | 进制转换器 (Bin/Oct/Dec/Hex, 4种表示同时显示) |
+| `src/components/calculators/Timestamp.astro` | **新建** | 时间戳双向转换 (时间戳↔本地/UTC时间) |
+| `src/components/calculators/Percentage.astro` | **新建** | 百分比计算器 (折扣/增长/占比, 3模式) |
+| `src/components/calculators/BMI.astro` | **新建** | BMI 计算器 (kg/lb, cm/ft, 分类刻度尺) |
+| `src/components/calculators/Age.astro` | **新建** | 年龄计算器 (年月日, 总天数/周数/月数, 下个生日) |
+| `src/i18n/*.json` (12 files) | 修改 | 每个语言新增 `calc.*` 5个计算器的 title/description |
+
+### 计算器组件设计模式
+
+每个计算器组件遵循统一的模式：
+1. **Neo-Brutalist 风格** — 黑色 hero 卡、硬阴影、黄色强调
+2. **客户端交互** — 使用 `<script>` 内联 JS，实时计算（`input` 事件）
+3. **12 语言支持** — 接收 `lang` prop，组件内映射 UI 文本
+4. **SEO** — 独立 page title/meta description (通过 `calcMeta`)
+
+### 部署验证
+
+- **构建**: 0 类型错误，0 警告
+- **测试**: 74/74 转换测试通过（3 个 turnstile 部署测试预存在失败状态）
+- **Sitemap**: 29,401 + 5×12 = **29,461 URLs**
+- **Git**: commit `efd053b` ✅ 已推送到 GitHub，自动部署到 convunit.net
+
+### 项目当前状态
+
+| 指标 | 值 |
+|------|-----|
+| 总 URL 数 | **29,461** |
+| 分类 | **22** (17 converter + 5 calculator) |
+| 单位 | 123 |
+| 语言 | 12 |
+| 架构 | Cloudflare Workers SSR (无文件数限制) |
+| 设计 | Neo-Brutalist (Space Grotesk, 3px borders, hard shadows, #ffe033) |
+| 测试 | 74 passing |
+| 部署 | convunit.net (Cloudflare Pages + Workers) |
+| AdSense | ca-pub-4967918867986181 (3 广告位) |
+| Git | https://github.com/wwwqqqzzz/unit-converter |
+
+---
+
 ## 2026-06-20 — Phase 8 + SSR 迁移完成：10新语言 + Workers 服务端渲染 + 全量描述翻译
 
 ### Phase 8.1: 10新语言 UI 翻译 ✅
