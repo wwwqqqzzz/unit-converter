@@ -74,6 +74,8 @@
   "common": {
     "loading": "로딩 중...",
     "error": "오류가 발생했습니다",
-    "adLabel": "광고"
+    "adLabel": "광고",
+    "tool": "도구",
+    "units": "단위"
   }
 }

@@ -74,6 +74,8 @@
   "common": {
     "loading": "Chargement...",
     "error": "Une erreur est survenue",
-    "adLabel": "Publicité"
+    "adLabel": "Publicité",
+    "tool": "outil",
+    "units": "unités"
   }
 }

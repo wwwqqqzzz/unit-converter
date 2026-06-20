@@ -74,6 +74,8 @@
   "common": {
     "loading": "Cargando...",
     "error": "Algo salió mal",
-    "adLabel": "Anuncio"
+    "adLabel": "Anuncio",
+    "tool": "herramienta",
+    "units": "unidades"
   }
 }

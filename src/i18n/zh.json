@@ -74,6 +74,8 @@
   "common": {
     "loading": "加载中...",
     "error": "出错了",
-    "adLabel": "广告"
+    "adLabel": "广告",
+    "tool": "工具",
+    "units": "单位"
   }
 }

@@ -30,7 +30,7 @@ const categories = getCategories();
         <a href={"/" + lang + "/" + cat.id + "/"} class="category-card">
           <span class="category-icon">{CATEGORY_ICONS[cat.id] ?? '📐'}</span>
           <span class="category-name">{cat.name[lang]}</span>
-          <span class="category-count">{cat.type === 'calculator' ? (t(lang, 'nav.home') === '首页' ? '工具' : 'tool') : `${cat.units?.length ?? 0} ${t(lang, 'nav.home') === '首页' ? '单位' : 'units'}`}</span>
+          <span class="category-count">{cat.type === 'calculator' ? t(lang, 'common.tool') : `${cat.units?.length ?? 0} ${t(lang, 'common.units')}`}</span>
         </a>
       ))}
     </div>

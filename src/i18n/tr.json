@@ -74,6 +74,8 @@
   "common": {
     "loading": "Yükleniyor...",
     "error": "Bir şeyler ters gitti",
-    "adLabel": "Reklam"
+    "adLabel": "Reklam",
+    "tool": "araç",
+    "units": "birim"
   }
 }

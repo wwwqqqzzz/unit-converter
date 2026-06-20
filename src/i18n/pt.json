@@ -74,6 +74,8 @@
   "common": {
     "loading": "Carregando...",
     "error": "Algo deu errado",
-    "adLabel": "Anúncio"
+    "adLabel": "Anúncio",
+    "tool": "ferramenta",
+    "units": "unidades"
   }
 }

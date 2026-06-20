@@ -74,6 +74,8 @@
   "common": {
     "loading": "Loading...",
     "error": "Something went wrong",
-    "adLabel": "Advertisement"
+    "adLabel": "Advertisement",
+    "tool": "tool",
+    "units": "units"
   }
 }
