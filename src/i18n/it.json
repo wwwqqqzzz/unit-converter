@@ -68,7 +68,8 @@
     "timestamp": { "title": "Convertitore di timestamp Unix", "desc": "Convertitore di timestamp Unix online gratuito. Converti tra timestamp Unix e date leggibili all'istante." },
     "percentage": { "title": "Calcolatore percentuale", "desc": "Calcolatore percentuale online gratuito. Calcola sconti, aumenti e differenze percentuali all'istante." },
     "bmi": { "title": "Calcolatore BMI", "desc": "Calcolatore BMI online gratuito. Calcola il tuo Indice di Massa Corporea all'istante." },
-    "age": { "title": "Calcolatore età", "desc": "Calcolatore età online gratuito. Calcola la tua età esatta in anni, mesi e giorni all'istante." }
+    "age": { "title": "Calcolatore età", "desc": "Calcolatore età online gratuito. Calcola la tua età esatta in anni, mesi e giorni all'istante." },
+    "currency": { "title": "Convertitore di valuta", "desc": "Convertitore di valuta online gratuito. Converti tra USD, EUR, GBP, JPY e oltre 150 valute con tassi di cambio in tempo reale." }
   },
   "common": {
     "loading": "Caricamento...",

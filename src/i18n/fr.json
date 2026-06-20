@@ -68,7 +68,8 @@
     "timestamp": { "title": "Convertisseur de timestamp Unix", "desc": "Convertisseur de timestamp Unix en ligne gratuit. Convertissez entre timestamps Unix et dates lisibles instantanément." },
     "percentage": { "title": "Calculatrice de pourcentage", "desc": "Calculatrice de pourcentage en ligne gratuite. Calculez remises, augmentations et différences en pourcentage instantanément." },
     "bmi": { "title": "Calculatrice IMC", "desc": "Calculatrice IMC en ligne gratuite. Calculez votre Indice de Masse Corporelle instantanément." },
-    "age": { "title": "Calculatrice d'âge", "desc": "Calculatrice d'âge en ligne gratuite. Calculez votre âge exact en années, mois et jours instantanément." }
+    "age": { "title": "Calculatrice d'âge", "desc": "Calculatrice d'âge en ligne gratuite. Calculez votre âge exact en années, mois et jours instantanément." },
+    "currency": { "title": "Convertisseur de devises", "desc": "Convertisseur de devises en ligne gratuit. Convertissez entre USD, EUR, GBP, JPY et 150+ devises avec des taux en direct." }
   },
   "common": {
     "loading": "Chargement...",

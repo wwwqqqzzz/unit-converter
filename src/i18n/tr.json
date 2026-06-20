@@ -68,7 +68,8 @@
     "timestamp": { "title": "Unix Zaman Damgası Dönüştürücü", "desc": "Ücretsiz çevrimiçi Unix zaman damgası dönüştürücü. Unix zaman damgaları ve okunabilir tarihler arasında anında dönüşüm." },
     "percentage": { "title": "Yüzde Hesaplayıcı", "desc": "Ücretsiz çevrimiçi yüzde hesaplayıcı. İndirim, artış ve yüzde farkını anında hesaplayın." },
     "bmi": { "title": "BMI Hesaplayıcı", "desc": "Ücretsiz çevrimiçi BMI hesaplayıcı. Vücut Kitle İndeksinizi anında hesaplayın." },
-    "age": { "title": "Yaş Hesaplayıcı", "desc": "Ücretsiz çevrimiçi yaş hesaplayıcı. Tam yaşınızı yıl, ay ve gün olarak anında hesaplayın." }
+    "age": { "title": "Yaş Hesaplayıcı", "desc": "Ücretsiz çevrimiçi yaş hesaplayıcı. Tam yaşınızı yıl, ay ve gün olarak anında hesaplayın." },
+    "currency": { "title": "Döviz Çevirici", "desc": "Ücretsiz çevrimiçi döviz çevirici. USD, EUR, GBP, JPY ve 150'den fazla para birimi arasında canlı döviz kurlarıyla dönüşüm yapın." }
   },
   "common": {
     "loading": "Yükleniyor...",

@@ -68,7 +68,8 @@
     "timestamp": { "title": "Unix Timestamp Converter", "desc": "Free online Unix timestamp converter. Convert between Unix timestamps and human-readable dates instantly." },
     "percentage": { "title": "Percentage Calculator", "desc": "Free online percentage calculator. Calculate discounts, percentage increases, and percentage differences instantly." },
     "bmi": { "title": "BMI Calculator", "desc": "Free online BMI calculator. Calculate your Body Mass Index instantly and check your weight category." },
-    "age": { "title": "Age Calculator", "desc": "Free online age calculator. Calculate your exact age in years, months, and days instantly." }
+    "age": { "title": "Age Calculator", "desc": "Free online age calculator. Calculate your exact age in years, months, and days instantly." },
+    "currency": { "title": "Currency Converter", "desc": "Free online currency converter. Convert between USD, EUR, GBP, JPY and 150+ currencies with live exchange rates." }
   },
   "common": {
     "loading": "Loading...",

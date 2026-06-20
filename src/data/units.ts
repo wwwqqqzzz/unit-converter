@@ -28,7 +28,7 @@ export const CATEGORY_ICONS: Record<string, string> = {
   frequency: '📡', angle: '📐', force: '🏋️', torque: '🔩',
   shoe: '👟',
   'number-base': '🔢', timestamp: '⏰', percentage: '💯',
-  bmi: '⚕️', age: '🎂',
+  bmi: '⚕️', age: '🎂', currency: '💱',
 };
 
 export const CATEGORY_VALUES: Record<string, number[]> = {
@@ -49,6 +49,7 @@ export const CATEGORY_VALUES: Record<string, number[]> = {
   force: [1, 5, 10, 50, 100, 500, 1000],
   torque: [1, 5, 10, 50, 100, 500, 1000],
   shoe: [],
+  currency: [],
 };
 
 export const categories: Category[] = [
@@ -416,6 +417,15 @@ export const categories: Category[] = [
       en: 'Age Calculator', zh: '年龄计算器', es: 'Calculadora de edad', fr: 'Calculatrice d\'âge', de: 'Altersrechner',
       ja: '年齢計算機', pt: 'Calculadora de idade', it: 'Calcolatore età', ko: '나이 계산기', ru: 'Калькулятор возраста',
       hi: 'आयु कैलकुलेटर', tr: 'Yaş Hesaplayıcı',
+    },
+  },
+  {
+    id: 'currency',
+    type: 'calculator',
+    name: {
+      en: 'Currency Converter', zh: '汇率转换器', es: 'Conversor de divisas', fr: 'Convertisseur de devises', de: 'Währungsrechner',
+      ja: '通貨換算', pt: 'Conversor de moedas', it: 'Convertitore di valuta', ko: '환율 변환기', ru: 'Конвертер валют',
+      hi: 'मुद्रा परिवर्तक', tr: 'Döviz Çevirici',
     },
   },
 ];

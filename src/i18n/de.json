@@ -68,7 +68,8 @@
     "timestamp": { "title": "Unix-Zeitstempel-Konverter", "desc": "Kostenloser Online-Unix-Zeitstempel-Konverter. Konvertieren Sie zwischen Unix-Zeitstempeln und lesbaren Daten." },
     "percentage": { "title": "Prozentrechner", "desc": "Kostenloser Online-Prozentrechner. Berechnen Sie Rabatte, prozentuale Zunahmen und Unterschiede sofort." },
     "bmi": { "title": "BMI-Rechner", "desc": "Kostenloser Online-BMI-Rechner. Berechnen Sie Ihren Body-Mass-Index sofort." },
-    "age": { "title": "Altersrechner", "desc": "Kostenloser Online-Altersrechner. Berechnen Sie Ihr genaues Alter in Jahren, Monaten und Tagen." }
+    "age": { "title": "Altersrechner", "desc": "Kostenloser Online-Altersrechner. Berechnen Sie Ihr genaues Alter in Jahren, Monaten und Tagen." },
+    "currency": { "title": "Währungsrechner", "desc": "Kostenloser Online-Währungsrechner. Konvertieren Sie zwischen USD, EUR, GBP, JPY und 150+ Währungen mit Live-Wechselkursen." }
   },
   "common": {
     "loading": "Laden...",
