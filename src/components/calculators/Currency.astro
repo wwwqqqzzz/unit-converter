@@ -1,0 +1,227 @@
+---
+// Currency.astro — Live exchange rate converter (SSR-embedded rates)
+// Fetches rates from Frankfurter API at serve time, embeds in HTML
+interface Props { lang: string; }
+const { lang } = Astro.props;
+
+// Fetch rates from Frankfurter at SSR time
+let ratesJson: string = '{}';
+let dateStr: string = '';
+try {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 5000);
+  const res = await fetch('https://api.frankfurter.dev/v2/rates?base=USD', { signal: controller.signal });
+  clearTimeout(timeout);
+  if (res.ok) {
+    const data: Record<string, unknown> = await res.json();
+    const rates = (data.rates as Record<string, number>) || {};
+    rates.USD = 1; // base currency
+    dateStr = typeof data.updated === 'string' ? data.updated : '';
+    ratesJson = JSON.stringify(rates);
+  }
+} catch {
+  // Rates unavailable — component will show error state client-side
+}
+
+const currencies: Array<{ code: string; en: string; zh: string }> = [
+  { code: 'USD', en: 'US Dollar', zh: '美元' },
+  { code: 'EUR', en: 'Euro', zh: '欧元' },
+  { code: 'GBP', en: 'British Pound', zh: '英镑' },
+  { code: 'JPY', en: 'Japanese Yen', zh: '日元' },
+  { code: 'CNY', en: 'Chinese Yuan', zh: '人民币' },
+  { code: 'AUD', en: 'Australian Dollar', zh: '澳元' },
+  { code: 'CAD', en: 'Canadian Dollar', zh: '加元' },
+  { code: 'CHF', en: 'Swiss Franc', zh: '瑞士法郎' },
+  { code: 'HKD', en: 'Hong Kong Dollar', zh: '港元' },
+  { code: 'SGD', en: 'Singapore Dollar', zh: '新加坡元' },
+  { code: 'SEK', en: 'Swedish Krona', zh: '瑞典克朗' },
+  { code: 'KRW', en: 'South Korean Won', zh: '韩元' },
+  { code: 'NOK', en: 'Norwegian Krone', zh: '挪威克朗' },
+  { code: 'NZD', en: 'New Zealand Dollar', zh: '新西兰元' },
+  { code: 'INR', en: 'Indian Rupee', zh: '印度卢比' },
+  { code: 'MXN', en: 'Mexican Peso', zh: '墨西哥比索' },
+  { code: 'TWD', en: 'Taiwan Dollar', zh: '新台币' },
+  { code: 'ZAR', en: 'South African Rand', zh: '南非兰特' },
+  { code: 'BRL', en: 'Brazilian Real', zh: '巴西雷亚尔' },
+  { code: 'DKK', en: 'Danish Krone', zh: '丹麦克朗' },
+  { code: 'PLN', en: 'Polish Zloty', zh: '波兰兹罗提' },
+  { code: 'THB', en: 'Thai Baht', zh: '泰铢' },
+  { code: 'TRY', en: 'Turkish Lira', zh: '土耳其里拉' },
+  { code: 'RUB', en: 'Russian Ruble', zh: '俄罗斯卢布' },
+  { code: 'MYR', en: 'Malaysian Ringgit', zh: '林吉特' },
+  { code: 'PHP', en: 'Philippine Peso', zh: '菲律宾比索' },
+  { code: 'IDR', en: 'Indonesian Rupiah', zh: '印尼盾' },
+  { code: 'VND', en: 'Vietnamese Dong', zh: '越南盾' },
+  { code: 'AED', en: 'UAE Dirham', zh: '阿联酋迪拉姆' },
+  { code: 'SAR', en: 'Saudi Riyal', zh: '沙特里亚尔' },
+];
+
+function curDisplay(code: string, en: string, zh: string): string {
+  return lang === 'zh' ? `${code} - ${zh}` : `${code} - ${en}`;
+}
+
+const labelAmount = lang === 'zh' ? '金额' : 'Amount';
+const labelResult = lang === 'zh' ? '结果' : 'Result';
+const labelFrom = lang === 'zh' ? '从' : 'From';
+const labelTo = lang === 'zh' ? '到' : 'To';
+const labelSwap = lang === 'zh' ? '互换' : 'Swap';
+const labelUpdated = lang === 'zh' ? '汇率更新' : 'Rates updated';
+const labelPopular = lang === 'zh' ? '常用货币对' : 'Popular Pairs';
+const labelError = lang === 'zh' ? '汇率加载失败，请刷新页面重试' : 'Failed to load rates. Please refresh.';
+---
+
+<!-- Embedded rates for client-side consumption -->
+<script id="cur-data" type="application/json">{ratesJson}</script>
+
+<div class="calc-card" id="cur-root">
+  <h1 class="calc-title"><slot name="title" /></h1>
+
+  <!-- Amount Input Row -->
+  <div class="calc-row">
+    <div class="cur-amount-wrap">
+      <label class="calc-label">{labelAmount}</label>
+      <input id="cur-amount" type="number" class="calc-input" value="100" step="any" autofocus />
+    </div>
+    <div class="cur-select-wrap">
+      <label class="calc-label">{labelFrom}</label>
+      <select id="cur-from" class="calc-select">
+        {currencies.map(c => (
+          <option value={c.code} selected={c.code === 'USD'}>{curDisplay(c.code, c.en, c.zh)}</option>
+        ))}
+      </select>
+    </div>
+  </div>
+
+  <!-- Swap Button -->
+  <div class="cur-swap-row">
+    <button id="cur-swap" class="cur-swap-btn">{labelSwap} ↕</button>
+  </div>
+
+  <!-- Result Row -->
+  <div class="calc-row">
+    <div class="cur-amount-wrap">
+      <label class="calc-label">{labelResult}</label>
+      <div class="cur-result-box" id="cur-result">—</div>
+    </div>
+    <div class="cur-select-wrap">
+      <label class="calc-label">{labelTo}</label>
+      <select id="cur-to" class="calc-select">
+        {currencies.map(c => (
+          <option value={c.code} selected={c.code === 'EUR'}>{curDisplay(c.code, c.en, c.zh)}</option>
+        ))}
+      </select>
+    </div>
+  </div>
+
+  <!-- Updated timestamp -->
+  <div class="cur-updated" id="cur-updated">
+    {labelUpdated}: {dateStr || (lang === 'zh' ? '加载中...' : 'Loading...')}
+  </div>
+
+  <!-- Popular pairs -->
+  <div class="cur-quick">
+    <span class="calc-label">{labelPopular}</span>
+    <div class="cur-quick-grid">
+      {[['EUR', 'USD/EUR'], ['JPY', 'USD/JPY'], ['GBP', 'USD/GBP'], ['CNY', 'USD/CNY'], ['AUD', 'USD/AUD'], ['CAD', 'USD/CAD']].map(([code, label]) => (
+        <button class="cur-quick-btn" data-code={code}>{label}</button>
+      ))}
+    </div>
+  </div>
+</div>
+
+<script>
+(function() {
+  const dataEl = document.getElementById('cur-data');
+  if (!dataEl) return;
+  let rates;
+  try { rates = JSON.parse(dataEl.textContent || '{}'); } catch { rates = {}; }
+
+  const root = document.getElementById('cur-root');
+  const amountIn = document.getElementById('cur-amount') as HTMLInputElement | null;
+  const fromSel = document.getElementById('cur-from') as HTMLSelectElement | null;
+  const toSel = document.getElementById('cur-to') as HTMLSelectElement | null;
+  const resultEl = document.getElementById('cur-result') as HTMLElement | null;
+  const swapBtn = document.getElementById('cur-swap') as HTMLButtonElement | null;
+  const updatedEl = document.getElementById('cur-updated') as HTMLElement | null;
+
+  if (!rates || Object.keys(rates).length === 0 || !amountIn || !fromSel || !toSel || !resultEl) {
+    if (resultEl) resultEl.textContent = '⚠️ ' + (updatedEl ? (root?.dataset.lang === 'zh' ? '加载失败' : 'Error') : 'Error');
+    return;
+  }
+
+  const noDecimals = new Set(['JPY', 'KRW', 'VND', 'IDR']);
+
+  function convert() {
+    const amount = parseFloat(amountIn!.value) || 0;
+    const from = fromSel!.value;
+    const to = toSel!.value;
+    const rateFrom = rates[from] || 1;
+    const rateTo = rates[to] || 1;
+    if (rateFrom === 0) { resultEl!.textContent = '—'; return; }
+    const result = amount / rateFrom * rateTo;
+    resultEl!.textContent = formatCur(result, to);
+  }
+
+  function formatCur(n: number, currency: string): string {
+    if (!isFinite(n)) return '—';
+    const dec = noDecimals.has(currency) ? 0 : 2;
+    try {
+      return n.toLocaleString(undefined, { minimumFractionDigits: dec, maximumFractionDigits: dec });
+    } catch {
+      return n.toFixed(dec);
+    }
+  }
+
+  function swap() {
+    const tmp = fromSel!.value;
+    fromSel!.value = toSel!.value;
+    toSel!.value = tmp;
+    convert();
+  }
+
+  // Quick pair buttons
+  root?.querySelectorAll('.cur-quick-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const code = (btn as HTMLElement).dataset.code;
+      if (code) {
+        fromSel!.value = 'USD';
+        toSel!.value = code;
+        convert();
+      }
+    });
+  });
+
+  amountIn!.addEventListener('input', convert);
+  fromSel!.addEventListener('change', convert);
+  toSel!.addEventListener('change', convert);
+  swapBtn?.addEventListener('click', swap);
+  convert();
+})();
+</script>
+
+<style>
+  .calc-card { background: var(--c-hero-bg); border: var(--b); box-shadow: var(--shadow-hard); padding: var(--sp-6); color: var(--c-hero-text); margin: var(--sp-8) 0; }
+  .calc-title { font-size: var(--text-xl); margin-bottom: var(--sp-4); letter-spacing: -0.01em; }
+  .calc-row { display: flex; gap: var(--sp-3); margin-bottom: var(--sp-2); align-items: flex-end; }
+  .calc-label { display: block; font-size: var(--text-xs); font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--c-text-secondary); margin-bottom: var(--sp-1); }
+  .calc-input { width: 100%; padding: var(--sp-3) var(--sp-4); border: 2px solid var(--c-hero-border); font-size: var(--text-xl); font-weight: 600; font-family: var(--font); background: var(--c-hero-input-bg); color: var(--c-text); box-sizing: border-box; }
+  .calc-input:focus { outline: none; border-color: var(--c-accent); }
+  .calc-select { width: 100%; padding: var(--sp-2) var(--sp-3); border: 2px solid var(--c-hero-border); font-size: var(--text-sm); font-family: var(--font); background: var(--c-hero-surface); color: var(--c-hero-text); cursor: pointer; appearance: none; padding-right: 32px; }
+  .calc-select:focus { outline: none; border-color: var(--c-accent); }
+  .calc-select option { color: #111; background: #fff; }
+  .cur-amount-wrap { flex: 0 0 160px; min-width: 0; }
+  .cur-select-wrap { flex: 1; min-width: 0; }
+  .cur-swap-row { display: flex; justify-content: flex-end; margin: var(--sp-1) 0 var(--sp-1); }
+  .cur-swap-btn { background: var(--c-accent); color: #000; border: 2px solid #000; padding: var(--sp-1) var(--sp-3); font-size: var(--text-sm); font-weight: 700; font-family: var(--font); cursor: pointer; box-shadow: var(--shadow-hard-xs); transition: all var(--t); }
+  .cur-swap-btn:hover { transform: translate(-1px, -1px); box-shadow: var(--shadow-hard-sm); }
+  .cur-swap-btn:active { transform: translate(1px, 1px); box-shadow: none; }
+  .cur-result-box { background: var(--c-accent); color: #000; padding: var(--sp-3) var(--sp-4); border: 2px solid #000; font-size: var(--text-xl); font-weight: 700; font-family: var(--font-mono); min-height: 1.4em; }
+  .cur-updated { font-size: var(--text-xs); color: var(--c-text-tertiary); margin: var(--sp-3) 0; }
+  .cur-quick { margin-top: var(--sp-3); }
+  .cur-quick-grid { display: flex; flex-wrap: wrap; gap: var(--sp-2); margin-top: var(--sp-2); }
+  .cur-quick-btn { padding: var(--sp-1) var(--sp-3); background: var(--c-hero-surface); border: 2px solid var(--c-hero-border); color: var(--c-hero-text); font-size: var(--text-sm); font-weight: 600; font-family: var(--font); cursor: pointer; transition: all var(--t); }
+  .cur-quick-btn:hover { background: var(--c-accent); color: #000; border-color: #000; transform: translate(-1px, -1px); box-shadow: var(--shadow-hard-xs); }
+  .cur-quick-btn:active { transform: translate(1px, 1px); box-shadow: none; }
+  @media (max-width: 600px) { .calc-card { padding: var(--sp-4); } .calc-row { flex-direction: column; align-items: stretch; } .cur-amount-wrap { flex: 1; } .cur-swap-row { justify-content: center; } .cur-result-box { font-size: var(--text-lg); } }
+  @media (prefers-color-scheme: dark) { .calc-select option { color: #f0f0f0; background: #1a1a1a; } }
+</style>

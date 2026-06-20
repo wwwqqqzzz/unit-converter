@@ -9,6 +9,7 @@ import Timestamp from '../../../components/calculators/Timestamp.astro';
 import Percentage from '../../../components/calculators/Percentage.astro';
 import BMI from '../../../components/calculators/BMI.astro';
 import Age from '../../../components/calculators/Age.astro';
+import Currency from '../../../components/calculators/Currency.astro';
 import { t, type Lang, LANGUAGES } from '../../../utils/i18n';
 import { getCategory, getUnitPairs, pairSlug, valueSlug, getCommonValues } from '../../../lib/units';
 import { categories, CATEGORY_ICONS } from '../../../data/units';
@@ -61,6 +62,10 @@ const calcMeta: Record<string, { title: string; desc: string }> = {
     title: t(lang, 'calc.age.title'),
     desc: t(lang, 'calc.age.desc'),
   },
+  'currency': {
+    title: t(lang, 'calc.currency.title'),
+    desc: t(lang, 'calc.currency.desc'),
+  },
 };
 const isCalculator = category.type === 'calculator';
 const pageTitle = isCalculator ? calcMeta[catId]?.title ?? catName : t(lang, 'category.title', { name: catName });
@@ -79,6 +84,7 @@ const pageDesc = isCalculator ? calcMeta[catId]?.desc : t(lang, 'category.descri
   {isCalculator && catId === 'percentage' && <Percentage lang={lang} />}
   {isCalculator && catId === 'bmi' && <BMI lang={lang} />}
   {isCalculator && catId === 'age' && <Age lang={lang} />}
+  {isCalculator && catId === 'currency' && <Currency lang={lang} />}
 
   {!isCalculator && (
     <>
