@@ -12,7 +12,7 @@ A programmatic SEO (pSEO) unit conversion website built with **Astro + TypeScrip
 | Categories | 17 converters + 6 calculators = 23 total |
 | Architecture | Cloudflare Workers SSR (unlimited pages) |
 | AdSense | ca-pub-4967918867986181 |
-| Search Console | Verified, sitemap submitted (48,925 URLs — pending re-submit) |
+| Search Console | Verified, sitemap submitted (48,925 URLs — resubmitted Jun 22, 2026) |
 
 ## Tech Stack
 
@@ -181,5 +181,5 @@ Domain: `convunit.net` (Cloudflare Registrar)
 ## What's Next
 
 - **Medium Priority**: Multi-site monorepo — extract converter-core, create BMI standalone site
-- **Medium Priority**: Re-submit sitemap (48,925 URLs) to Google Search Console
+- **Done**: Sitemap (48,925 URLs) resubmitted to Google Search Console via Webmasters API (Jun 22, 2026)
 - **Low Priority**: Additional calculator SEO value pages (timestamp, percentage, BMI, age, currency)

@@ -4,3 +4,6 @@ dist/
 *.db
 .DS_Store
 .agents/
+# Google OAuth — do not commit
+credentials.json
+token.json
