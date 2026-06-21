@@ -71,6 +71,28 @@
     "age": { "title": "Age Calculator", "desc": "Free online age calculator. Calculate your exact age in years, months, and days instantly." },
     "currency": { "title": "Currency Converter", "desc": "Free online currency converter. Convert between USD, EUR, GBP, JPY and 150+ currencies with live exchange rates." }
   },
+  "shoeGuide": {
+    "title": "Shoe Size Conversion Guide",
+    "howToMeasure": "How to Measure Your Foot",
+    "howToMeasureDesc1": "Place your foot on a piece of paper with your heel against a wall.",
+    "howToMeasureDesc2": "Mark the longest toe and measure the distance from the wall to the mark.",
+    "howToMeasureDesc3": "Use this measurement in centimeters to find your size in the chart below.",
+    "sizeChart": "International Shoe Size Chart",
+    "sizeChartNote": "Sizes are approximate. Always try shoes on when possible.",
+    "tips": "Shoe Size Tips",
+    "tip1": "Measure your feet in the afternoon — feet swell during the day.",
+    "tip2": "Measure both feet and use the larger measurement.",
+    "tip3": "Different brands may fit differently — check their specific size guide.",
+    "faqTitle": "Frequently Asked Questions",
+    "faq1": "How do US men's and women's sizes differ?",
+    "faq1a": "US women's sizes run approximately 1.5 sizes larger than men's for the same foot length. For example, a US Women's 9 is roughly equivalent to a US Men's 7.5.",
+    "faq2": "What is the difference between US and UK shoe sizes?",
+    "faq2a": "US men's sizes are approximately 1 size larger than UK sizes. For example, US 9 ≈ UK 8.",
+    "faq3": "How do I convert EU sizes to US sizes?",
+    "faq3a": "EU sizes use a different scale where each size increment equals 2/3 cm (6.67 mm). EU 40 ≈ US Men's 7.5, EU 42 ≈ US Men's 9.",
+    "metaTitle": "Shoe Size Conversion Guide - International Shoe Size Chart",
+    "metaDesc": "Comprehensive shoe size conversion guide. Convert between US, UK, EU, Japanese sizes and centimeters. Find your perfect fit with our international shoe size chart."
+  },
   "common": {
     "loading": "Loading...",
     "error": "Something went wrong",

@@ -10,6 +10,7 @@ import Percentage from '../../../components/calculators/Percentage.astro';
 import BMI from '../../../components/calculators/BMI.astro';
 import Age from '../../../components/calculators/Age.astro';
 import Currency from '../../../components/calculators/Currency.astro';
+import ShoeSizeChart from '../../../components/ShoeSizeChart.astro';
 import { t, type Lang, LANGUAGES } from '../../../utils/i18n';
 import { getCategory, getUnitPairs, pairSlug, valueSlug, getCommonValues } from '../../../lib/units';
 import { categories, CATEGORY_ICONS } from '../../../data/units';
@@ -40,6 +41,15 @@ const breadcrumbJsonld = {
 };
 const jsonld = JSON.stringify([breadcrumbJsonld]);
 
+// Shoe guide i18n helper (falls back to English for untranslated languages)
+const sg = (key: string): string => {
+  const val = t(lang, `shoeGuide.${key}` as any);
+  if (val && val !== `shoeGuide.${key}`) return val;
+  // Fallback: try to get English value
+  const enVal = t('en', `shoeGuide.${key}` as any);
+  return enVal && enVal !== `shoeGuide.${key}` ? enVal : key;
+};
+
 // Calculator titles and descriptions
 const calcMeta: Record<string, { title: string; desc: string }> = {
   'number-base': {
@@ -68,11 +78,27 @@ const calcMeta: Record<string, { title: string; desc: string }> = {
   },
 };
 const isCalculator = category.type === 'calculator';
-const pageTitle = isCalculator ? calcMeta[catId]?.title ?? catName : t(lang, 'category.title', { name: catName });
-const pageDesc = isCalculator ? calcMeta[catId]?.desc : t(lang, 'category.description', { name: catName });
+const isShoe = catId === 'shoe';
+const pageTitle = isShoe ? sg('metaTitle') : isCalculator ? calcMeta[catId]?.title ?? catName : t(lang, 'category.title', { name: catName });
+const pageDesc = isShoe ? sg('metaDesc') : isCalculator ? calcMeta[catId]?.desc : t(lang, 'category.description', { name: catName });
+
+// Shoe page: add FAQ JSON-LD
+let extraJsonld = '';
+if (isShoe) {
+  const shoeBreadcrumb = { '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [
+    { '@type': 'ListItem', position: 1, name: t(lang, 'nav.home'), item: `${Astro.site}${lang}/` },
+    { '@type': 'ListItem', position: 2, name: catName, item: `${Astro.site}${lang}/${catId}/` },
+  ]};
+  const shoeFaq = { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: [
+    { '@type': 'Question', name: sg('faq1'), acceptedAnswer: { '@type': 'Answer', text: sg('faq1a') } },
+    { '@type': 'Question', name: sg('faq2'), acceptedAnswer: { '@type': 'Answer', text: sg('faq2a') } },
+    { '@type': 'Question', name: sg('faq3'), acceptedAnswer: { '@type': 'Answer', text: sg('faq3a') } },
+  ]};
+  extraJsonld = JSON.stringify([shoeBreadcrumb, shoeFaq]);
+}
 ---
 
-<BaseLayout lang={lang} title={pageTitle} description={pageDesc} pagePath={catPath} jsonld={jsonld}>
+<BaseLayout lang={lang} title={pageTitle} description={pageDesc} pagePath={catPath} jsonld={extraJsonld || jsonld}>
   <nav class="breadcrumbs" aria-label="Breadcrumb">
     <a href={"/" + lang + "/"}>{t(lang, 'nav.home')}</a>
     <span class="sep">/</span>
@@ -86,7 +112,55 @@ const pageDesc = isCalculator ? calcMeta[catId]?.desc : t(lang, 'category.descri
   {isCalculator && catId === 'age' && <Age lang={lang} />}
   {isCalculator && catId === 'currency' && <Currency lang={lang} />}
 
-  {!isCalculator && (
+  {isShoe && (
+    <section class="shoe-landing">
+      <h1 class="shoe-title">{sg('title')}</h1>
+
+      <div class="shoe-section">
+        <h2>{sg('howToMeasure')}</h2>
+        <ol class="shoe-steps">
+          <li>{sg('howToMeasureDesc1')}</li>
+          <li>{sg('howToMeasureDesc2')}</li>
+          <li>{sg('howToMeasureDesc3')}</li>
+        </ol>
+      </div>
+
+      <div class="shoe-section">
+        <h2>{sg('sizeChart')}</h2>
+        <ShoeSizeChart lang={lang} />
+        <p class="chart-note">{sg('sizeChartNote')}</p>
+      </div>
+
+      <AdSense position="middle" />
+
+      <div class="shoe-section">
+        <h2>{sg('tips')}</h2>
+        <ul class="shoe-tips">
+          <li>{sg('tip1')}</li>
+          <li>{sg('tip2')}</li>
+          <li>{sg('tip3')}</li>
+        </ul>
+      </div>
+
+      <div class="shoe-section">
+        <h2>{sg('faqTitle')}</h2>
+        <details class="faq-item">
+          <summary class="faq-q">{sg('faq1')}</summary>
+          <p class="faq-a">{sg('faq1a')}</p>
+        </details>
+        <details class="faq-item">
+          <summary class="faq-q">{sg('faq2')}</summary>
+          <p class="faq-a">{sg('faq2a')}</p>
+        </details>
+        <details class="faq-item">
+          <summary class="faq-q">{sg('faq3')}</summary>
+          <p class="faq-a">{sg('faq3a')}</p>
+        </details>
+      </div>
+    </section>
+  )}
+
+  {!isCalculator && !isShoe && (
     <>
       <h1>{t(lang, 'converter.moreConversions', { name: catName })}</h1>
       <p class="category-desc">{t(lang, 'category.description', { name: catName })}</p>
@@ -121,6 +195,25 @@ const pageDesc = isCalculator ? calcMeta[catId]?.desc : t(lang, 'category.descri
           );
         })}
       </div>
+
+    </>
+  )}
+
+  {isShoe && (
+    <>
+      <AdSense position="bottom" />
+      <h2>{t(lang, 'category.choosePair')}</h2>
+      <div class="pair-grid">
+        {getUnitPairs(category).map(([a, b]) => {
+          const slug = pairSlug(a, b, lang);
+          const label = `${a.name[lang]} → ${b.name[lang]}`;
+          return (
+            <a href={"/" + lang + "/" + catId + "/" + slug + "/"} class="pair-card">
+              <span>{label}</span>
+            </a>
+          );
+        })}
+      </div>
     </>
   )}
 
@@ -134,7 +227,7 @@ const pageDesc = isCalculator ? calcMeta[catId]?.desc : t(lang, 'category.descri
     ))}
   </div>
 
-  <AdSense position="bottom" />
+  {!isCalculator && !isShoe && <AdSense position="bottom" />}
 </BaseLayout>
 
 <style>
@@ -208,6 +301,23 @@ const pageDesc = isCalculator ? calcMeta[catId]?.desc : t(lang, 'category.descri
   }
   .category-chip:active { transform: translate(1px, 1px); box-shadow: none; }
   .cat-icon { font-size: var(--text-base); }
+  .shoe-landing { margin: var(--sp-4) 0; }
+  .shoe-title { font-size: var(--text-2xl); margin-bottom: var(--sp-6); letter-spacing: -0.02em; }
+  .shoe-section { margin: var(--sp-8) 0; }
+  .shoe-section h2 {
+    font-size: var(--text-sm); font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em;
+    color: var(--c-text-tertiary); margin-bottom: var(--sp-3);
+    border-bottom: 2px solid var(--c-accent); padding-bottom: var(--sp-1); display: inline-block;
+  }
+  .shoe-steps { list-style: decimal; padding-left: var(--sp-6); }
+  .shoe-steps li { margin-bottom: var(--sp-2); line-height: 1.6; font-size: var(--text-sm); }
+  .shoe-tips { list-style: disc; padding-left: var(--sp-6); }
+  .shoe-tips li { margin-bottom: var(--sp-2); line-height: 1.6; font-size: var(--text-sm); }
+  .chart-note { font-size: var(--text-xs); color: var(--c-text-tertiary); margin-top: var(--sp-2); font-style: italic; }
+  .faq-item { border: 2px solid var(--c-border); margin-bottom: var(--sp-2); background: var(--c-surface); }
+  .faq-q { padding: var(--sp-3) var(--sp-4); cursor: pointer; font-weight: 600; font-size: var(--text-sm); }
+  .faq-q:hover { background: rgba(0,0,0,0.02); }
+  .faq-a { padding: 0 var(--sp-4) var(--sp-3); font-size: var(--text-sm); line-height: 1.6; color: var(--c-text-secondary); }
   @media (max-width: 480px) {
     .pair-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
   }
