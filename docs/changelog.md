@@ -1,5 +1,99 @@
 # 实施日志
 
+## 2026-06-21 — Phase 10: Number Base SEO 价值页 + 鞋码 Landing Page
+
+### Phase 10.1: Number Base SEO 价值页面 ✅
+
+**目标**: 为 Number Base 计算器生成长尾 SEO 价值页面，类似 converter 的 value 页模式。
+
+#### 新增数据
+
+| 文件 | 说明 |
+|------|------|
+| `src/data/number-base-values.ts` | 43 组精选进制换算对 (binary/octal/decimal/hex) |
+
+43 个换算对涵盖: binary→decimal (16), decimal→binary (15), decimal→hex (8), hex→decimal (6), decimal→octal (3), octal→decimal (3)。
+
+#### 架构变更
+
+`[...slug].astro` 路由页面增强：
+
+| 变更 | 说明 |
+|------|------|
+| `getStaticPaths()` | 为 number-base 分类生成 43 条 slug 路径 × 12 语言 |
+| slug 解析 | 新增 `parseNumberBaseSlug()` 支持非标准 slug 格式 |
+| 渲染分支 | number-base 页面渲染答案 hero + 嵌入计算器 + 专属 FAQ |
+| 计算器重定向 | 放开 number-base 分类限制（其他 calculator 仍重定向到 index） |
+
+**URL 格式**:
+- 英文: `/en/number-base/binary-1010-to-decimal/`
+- 中文: `/zh/number-base/二进制-1010-转-十进制/`
+
+#### 页面结构
+
+每个 value 页包含：
+- **答案 hero**: 黄色 yello-box 展示换算结果 (e.g. "1010 (binary) = 10 (decimal)")
+- **嵌入计算器**: NumberBase.astro 组件，可继续交互换算
+- **FAQ**: 针对性问答 (e.g. "What is 1010 in binary to decimal?")
+- **BreadcrumbList + FAQPage JSON-LD**: 结构化数据
+- **Hreflang**: 12 语言链接
+
+#### SEO 覆盖
+
+| 指标 | 值 |
+|------|-----|
+| 新增 URL | 43 换算 × 12 语言 = **516** |
+| 总 URL | **48,925** |
+| Sitemap 更新 | ✅ |
+
+### Phase 10.2: 鞋码独立 Landing Page ✅
+
+**目标**: 将鞋码分类页从标准 converter 网格升级为内容丰富的 Landing Page。
+
+#### 新增组件
+
+`src/components/ShoeSizeChart.astro` — 国际鞋码对照表：
+- 脚长 22–31cm (每 0.5cm 递增)
+- 列: cm → US Men / US Women / UK / EU / JP
+- 使用实际 shoe `convertFn` 计算显示值
+- 高亮常见尺码范围 (24–28cm)
+- 深色模式适配
+- 移动端水平滚动
+
+#### i18n 内容
+
+| 语言 | shoeGuide 键值 |
+|------|----------------|
+| en | 完整翻译 (17 键) |
+| zh | 完整翻译 (17 键) |
+| es/fr/de/ja/pt/it/ko/ru/hi/tr | 自动 fallback 英文 |
+
+新增 i18n 键: `shoeGuide.title`, `howToMeasure`, `sizeChart`, `tips`, `faq1-3` 等 17 个键。
+
+#### 页面结构
+
+```
+[面包屑]
+[鞋码转换指南 — H1]
+[量脚 3 步骤]
+[国际尺码对照表]
+[鞋码小贴士 3 条]
+[常见问题 FAQ (3 问, <details> 折叠)]
+[单位换算网格 (保留)]
+[其他分类链接]
+```
+
+#### SEO
+
+| 要素 | 实现 |
+|------|------|
+| Page title | "Shoe Size Conversion Guide - International Shoe Size Chart" |
+| Meta description | 全面鞋码指南，175 chars |
+| JSON-LD | BreadcrumbList + FAQPage (3 Q&A) |
+| Hreflang | 12 语言 |
+
+---
+
 ## 2026-06-21 — Phase 9 完成：5 个交互式计算器工具（数字进制/时间戳/百分比/BMI/年龄）
 
 ### Phase 9: 高价值品类扩展 ✅
@@ -129,13 +223,13 @@ interface Category {
 - 转换器显示 `8 units` / `8 单位` / `8 Einheiten` ...
 - 计算器显示 `6 tools` / `6 个工具` / `6 Werkzeuge` ...
 
-### 项目当前状态 (更新)
+### 项目当前状态 (2026-06-21 终)
 
 | 指标 | 值 |
 |------|-----|
-| 总 URL 数 | **29,473** |
+| 总 URL 数 | **48,925** (含 516 number-base value 页) |
 | 分类 | **23** (17 converter + 6 calculator) |
-| 计算器 | 数字进制, 时间戳, 百分比, BMI, 年龄, **汇率** |
+| 计算器 | 数字进制, 时间戳, 百分比, BMI, 年龄, 汇率 |
 | 单位 | 123 |
 | 语言 | 12 |
 | 架构 | Cloudflare Workers SSR (无文件数限制) |
