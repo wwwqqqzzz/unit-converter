@@ -120,15 +120,23 @@ npm run dev                    # apps/main (localhost:4321)
 # 构建
 npm run build                  # apps/main → dist/
 npx astro build --root apps/bmi
+npx astro build --root apps/age
 
 # 测试
 npm test                       # 所有 workspace
 npm test -w converter-core     # 仅 core
 
-# 部署 (Cloudflare Workers SSR)
-npx wrangler pages deploy apps/main/dist --project-name unit-convert
-npx wrangler pages deploy apps/bmi/dist --project-name bmi-calculator
+# CI/CD
+推送 main 分支 → GitHub Actions 自动测试 + 部署所有站点
 ```
+
+### 线上地址
+
+| 站点 | Project | URL | 自定义域名 |
+|------|---------|-----|-----------|
+| 主站 | `unit-convert` | `https://convunit.net` | convunit.net ✅ |
+| BMI | `bmi-calculator` | `https://bmi-calculator-27p.pages.dev` | ⬜ 待绑定 |
+| Age | `age-calculator` | `https://age-calculator-2rd.pages.dev` | ⬜ 待绑定 |
 
 ### 构建产物
 
@@ -136,6 +144,7 @@ npx wrangler pages deploy apps/bmi/dist --project-name bmi-calculator
 |------|---------|------|------|
 | apps/main | `apps/main/dist/` | SSR (Worker) | ~1.5MB |
 | apps/bmi | `apps/bmi/dist/` | SSR (Worker) | ~300KB |
+| apps/age | `apps/age/dist/` | SSR (Worker) | ~300KB |
 
 ## 六、项目统计
 
@@ -144,8 +153,8 @@ npx wrangler pages deploy apps/bmi/dist --project-name bmi-calculator
 | 项目结构 | 单体 | npm workspaces monorepo |
 | Workspaces | 1 (root) | 3 (root + apps/main + apps/bmi + converter-core) |
 | 共享包 | 无 | `converter-core` (7 子路径导出) |
-| 站点数 | 1 (convunit.net) | 2 (main + bmi PoC) |
-| 总 URL | 48,925 | 48,925 (main) + 12 (bmi) |
+| 站点数 | 1 (convunit.net) | 3 (main + bmi + age) |
+| 总 URL | 48,925 | 48,925 (main) + 12 (bmi) + 12 (age) |
 | 测试 | 74 passing | 74 passing (converter-core) |
 | 构建 | 0 errors | 0 errors (both apps) |
 | Git | `de872aa` | `9ad36b6` |

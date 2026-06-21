@@ -1,0 +1,9 @@
+name = "age-calculator"
+compatibility_date = "2024-12-01"
+compatibility_flags = ["nodejs_compat"]
+
+[assets]
+directory = "./dist/client"
+
+[vars]
+PUBLIC_ADSENSE_ID = "ca-pub-4967918867986181"
