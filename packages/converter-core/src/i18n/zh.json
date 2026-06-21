@@ -1,0 +1,103 @@
+{
+  "site": {
+    "title": "单位换算 — 快速、免费的在线换算工具",
+    "description": "免费在线单位换算。支持长度、重量、温度、数据存储等各类单位即时换算，双向转换，工具永远优先展示，广告不遮挡。"
+  },
+  "nav": {
+    "home": "首页",
+    "categories": "换算类别",
+    "length": "长度",
+    "weight": "重量",
+    "temperature": "温度",
+    "data": "数据存储",
+    "area": "面积",
+    "volume": "体积",
+    "speed": "速度",
+    "time": "时间",
+    "pressure": "压力",
+    "energy": "能量",
+    "power": "功率",
+    "fuel": "燃油效率",
+    "frequency": "频率",
+    "angle": "角度",
+    "force": "力",
+    "torque": "扭矩",
+    "shoe": "鞋码"
+  },
+  "home": {
+    "title": "单位换算",
+    "subtitle": "快速、准确、免费——即时换算任何单位",
+    "chooseCategory": "选择一个类别开始换算：",
+    "trust": "免费 · 即时 · 无需注册"
+  },
+  "category": {
+    "title": "%name%换算",
+    "description": "免费在线%name%换算器。支持所有%name%单位之间的即时换算，附带换算公式和常用数值对照表。",
+    "choosePair": "选择两个单位进行换算：",
+    "otherCategories": "其他换算类别",
+    "popularConversions": "常用%name%换算"
+  },
+  "converter": {
+    "pageTitle": "%value%%unit1% = %result%%unit2%",
+    "pageDescription": "将 %value%%unit1% 换算为 %unit2%，结果即时显示。免费在线%name%换算器，附带换算公式、对照表和双向计算功能。%value%%unit1%等于%result%%unit2%。",
+    "pageTitleConverter": "%unit1%换算%unit2% — 免费%name%换算器",
+    "pageDescriptionConverter": "免费在线%unit1%换算%unit2%工具。即时结果、双向换算、换算公式和常用数值对照表。",
+    "heading": "%value%%unit1% = %result%%unit2%",
+    "headingConverter": "%unit1% 换算 %unit2% 换算器",
+    "result": "%result%%unit2%",
+    "enterValue": "输入数值",
+    "from": "从",
+    "to": "到",
+    "swap": "互换",
+    "convert": "换算",
+    "formula": "换算公式",
+    "formulaText": "1 %unit1% = %rate% %unit2%",
+    "reverseFormulaText": "1 %unit2% = %reverseRate% %unit1%",
+    "table": "常用数值对照表",
+    "tableUnit1": "%unit%",
+    "tableUnit2": "%unit%",
+    "seeAlso": "相关换算",
+    "reverseLink": "%unit1%换算%unit2%",
+    "moreConversions": "更多%name%换算",
+    "aboutUnit": "关于%unit%",
+    "whatIsUnit": "什么是%unit%？",
+    "otherCategories": "其他换算类别"
+  },
+  "calc": {
+    "numberBase": { "title": "数字进制转换", "desc": "免费在线数字进制转换器。支持二进制、八进制、十进制和十六进制之间的即时转换。" },
+    "timestamp": { "title": "Unix时间戳转换", "desc": "免费在线Unix时间戳转换器。在Unix时间戳和人类可读日期之间即时转换。" },
+    "percentage": { "title": "百分比计算器", "desc": "免费在线百分比计算器。即时计算折扣、增长率和百分比差。" },
+    "bmi": { "title": "BMI计算器", "desc": "免费在线BMI计算器。即时计算你的身体质量指数并查看体重分类。", "metaDesc": "免费在线BMI计算器，即时计算身体质量指数。包含体重分类、健康范围、公制/英制单位支持。", "faqTitle": "常见问题", "faq1q": "什么是BMI？", "faq1a": "BMI（身体质量指数）是根据身高和体重衡量体脂的指标。计算公式为体重（公斤）除以身高（米）的平方。", "faq2q": "健康的BMI范围是多少？", "faq2a": "健康BMI范围为18.5至24.9。低于18.5为偏瘦，25至29.9为超重，30及以上为肥胖。", "faq3q": "BMI对所有人都准确吗？", "faq3a": "BMI是一般筛查工具，可能对运动员、孕妇或老年人不准确。请咨询医疗专业人员进行全面健康评估。" },
+    "age": { "title": "年龄计算器", "desc": "免费在线年龄计算器。精确计算你的岁数、月数和天数。" },
+    "currency": { "title": "汇率转换器", "desc": "免费在线汇率转换器。使用实时汇率在美元、欧元、英镑、日元等150多种货币之间即时换算。" }
+  },
+  "shoeGuide": {
+    "title": "鞋码转换指南",
+    "howToMeasure": "如何测量脚长",
+    "howToMeasureDesc1": "将脚踩在白纸上，脚后跟紧贴墙壁。",
+    "howToMeasureDesc2": "在最长的脚趾处做标记，测量从墙壁到标记的距离。",
+    "howToMeasureDesc3": "用得到的厘米数在下表中找到对应的鞋码。",
+    "sizeChart": "国际鞋码对照表",
+    "sizeChartNote": "尺码为近似值，建议试穿。",
+    "tips": "鞋码小贴士",
+    "tip1": "下午量脚最准——脚在一天中会轻微肿胀。",
+    "tip2": "两只脚都要量，以较大的那只为准。",
+    "tip3": "不同品牌尺码可能有差异，请查阅该品牌的具体尺码表。",
+    "faqTitle": "常见问题",
+    "faq1": "美码男款和女款有什么不同？",
+    "faq1a": "女款美码通常比男款大1.5个号。例如，美码女款9号约等于男款7.5号。",
+    "faq2": "美码和英码有什么区别？",
+    "faq2a": "美码（男款）约比英码大1个号。例如，美码9号≈英码8号。",
+    "faq3": "欧码如何换算为美码？",
+    "faq3a": "欧码每增加1号相当于脚长增加2/3厘米。欧码40≈美码男7.5，欧码42≈美码男9。",
+    "metaTitle": "鞋码转换指南 - 国际鞋码对照表",
+    "metaDesc": "全面的鞋码转换指南。美码、英码、欧码、日码与厘米之间互相转换。国际鞋码对照表帮你找到最合适的尺码。"
+  },
+  "common": {
+    "loading": "加载中...",
+    "error": "出错了",
+    "adLabel": "广告",
+    "tool": "工具",
+    "units": "单位"
+  }
+}

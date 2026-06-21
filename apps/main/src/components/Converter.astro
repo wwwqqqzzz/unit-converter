@@ -1,0 +1,263 @@
+---
+// ============================================================
+// Server-rendered converter — Neo-Brutalist hero card
+// Black card, hard shadow, yellow accents, zero border-radius
+// ============================================================
+
+export interface Props {
+  lang: string;
+  categoryName: string;
+  unit1Id: string;
+  unit1Name: string;
+  unit1Symbol: string;
+  unit2Id: string;
+  unit2Name: string;
+  unit2Symbol: string;
+  initialValue?: number;
+  rate: number;
+  reverseRate: number;
+  initialResult?: string;
+  allUnits?: Array<{ id: string; name: string; symbol: string }>;
+  ratesMap?: Record<string, number>;
+  hasCustomConvert?: boolean;
+}
+
+const {
+  lang, categoryName,
+  unit1Id, unit1Name, unit1Symbol,
+  unit2Id, unit2Name, unit2Symbol,
+  initialValue, rate, reverseRate, initialResult,
+  allUnits: allUnitsRaw, ratesMap: ratesMapRaw, hasCustomConvert: hasCustomConvertRaw,
+} = Astro.props;
+
+const allUnits = allUnitsRaw ?? [
+  { id: unit1Id, name: unit1Name, symbol: unit1Symbol },
+  { id: unit2Id, name: unit2Name, symbol: unit2Symbol },
+];
+const ratesMap = ratesMapRaw ?? {};
+const hasCustomConvert = hasCustomConvertRaw ?? false;
+
+import { t } from 'converter-core/utils/i18n';
+const labelFrom  = t(lang, 'converter.from');
+const labelTo    = t(lang, 'converter.to');
+const labelSwap  = t(lang, 'converter.swap');
+const placeholder = t(lang, 'converter.enterValue');
+---
+
+<div class="converter-card" id="converter-root"
+  data-rates={JSON.stringify(ratesMap)}
+  data-all-units={JSON.stringify(allUnits)}
+  data-custom-convert={hasCustomConvert ? 'true' : 'false'}
+>
+  <div class="converter-fields">
+    <div class="converter-field">
+      <label for="conv-from" class="conv-label">{labelFrom}</label>
+      <select id="conv-from-unit" class="conv-select">
+        {allUnits.map(u => (
+          <option value={u.id} selected={u.id === unit1Id}>{u.name} ({u.symbol})</option>
+        ))}
+      </select>
+      <input
+        id="conv-value"
+        type="number"
+        class="conv-input"
+        value={initialValue ?? 1}
+        placeholder={placeholder}
+        step="any"
+        min="0"
+        autofocus
+      />
+    </div>
+    <button id="conv-swap" class="conv-swap" title={labelSwap} aria-label={labelSwap}>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M7 16l-4-4 4-4"/><path d="M17 8l4 4-4 4"/><line x1="3" y1="12" x2="21" y2="12"/>
+      </svg>
+    </button>
+    <div class="converter-field">
+      <label for="conv-to" class="conv-label">{labelTo}</label>
+      <select id="conv-to-unit" class="conv-select">
+        {allUnits.map(u => (
+          <option value={u.id} selected={u.id === unit2Id}>{u.name} ({u.symbol})</option>
+        ))}
+      </select>
+      <output id="conv-result" class="conv-result">{initialResult ?? '—'}</output>
+    </div>
+  </div>
+</div>
+
+<script>
+  (function() {
+    const root = document.getElementById('converter-root');
+    if (!root) return;
+    const fromUnit = document.getElementById('conv-from-unit') as HTMLSelectElement;
+    const toUnit = document.getElementById('conv-to-unit') as HTMLSelectElement;
+    const valueInput = document.getElementById('conv-value') as HTMLInputElement;
+    const resultOutput = document.getElementById('conv-result') as HTMLElement;
+    const swapBtn = document.getElementById('conv-swap');
+    const rates = JSON.parse(root.dataset.rates || '{}');
+    const hasCustomConvert = root.dataset.customConvert === 'true';
+
+    function doConvert() {
+      const from = fromUnit.value;
+      const to = toUnit.value;
+      const val = parseFloat(valueInput.value);
+      if (isNaN(val)) { resultOutput.textContent = '—'; return; }
+      let result: number;
+      if (hasCustomConvert) {
+        const celsiusFrom: Record<string, (v: number) => number> = { 'c': (v) => v, 'f': (v) => (v - 32) * 5 / 9, 'k': (v) => v - 273.15 };
+        const fromCelsius: Record<string, (v: number) => number> = { 'c': (v) => v, 'f': (v) => v * 9 / 5 + 32, 'k': (v) => v + 273.15 };
+        const inCelsius = (celsiusFrom[from] || ((v) => v))(val);
+        result = (fromCelsius[to] || ((v) => v))(inCelsius);
+      } else {
+        if (!rates[from] || !rates[to]) { resultOutput.textContent = '—'; return; }
+        const base = val * rates[from];
+        result = base / rates[to];
+      }
+      resultOutput.textContent = formatNum(result);
+    }
+
+    function formatNum(n: number): string {
+      if (!isFinite(n)) return '—';
+      if (n === 0) return '0';
+      const abs = Math.abs(n);
+      if (abs < 0.001 || abs >= 1_000_000) return n.toExponential(6);
+      const fixed = n.toFixed(10);
+      return fixed.replace(/\.?0+$/, '');
+    }
+
+    function swap() {
+      const tmp = fromUnit.value;
+      fromUnit.value = toUnit.value;
+      toUnit.value = tmp;
+      doConvert();
+    }
+
+    valueInput.addEventListener('input', doConvert);
+    fromUnit.addEventListener('change', doConvert);
+    toUnit.addEventListener('change', doConvert);
+    if (swapBtn) swapBtn.addEventListener('click', swap);
+    doConvert();
+  })();
+</script>
+
+<style>
+  .converter-card {
+    background: var(--c-hero-bg);
+    border: var(--b);
+    box-shadow: var(--shadow-hard);
+    padding: var(--sp-6);
+    color: var(--c-hero-text);
+    margin: var(--sp-8) 0;
+  }
+  .converter-fields {
+    display: flex;
+    align-items: flex-end;
+    gap: var(--sp-3);
+    flex-wrap: wrap;
+  }
+  .converter-field {
+    flex: 1;
+    min-width: 180px;
+  }
+  .conv-label {
+    display: block;
+    font-size: var(--text-xs);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--c-text-secondary);
+    margin-bottom: var(--sp-1);
+  }
+  .conv-select {
+    width: 100%;
+    padding: var(--sp-2) var(--sp-3);
+    border: 2px solid var(--c-hero-border);
+    font-size: var(--text-sm);
+    font-family: var(--font);
+    background: var(--c-hero-surface);
+    color: var(--c-hero-text);
+    margin-bottom: var(--sp-1);
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='none' stroke='%23666' stroke-width='2'%3E%3Cpath d='M3 4.5L6 7.5L9 4.5'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 32px;
+    transition: border-color var(--t);
+  }
+  .conv-select:focus { outline: none; border-color: var(--c-accent); }
+  .conv-select option { color: #111; background: #fff; }
+  .conv-input {
+    width: 100%;
+    padding: var(--sp-3) var(--sp-4);
+    border: 2px solid transparent;
+    font-size: var(--text-xl);
+    font-weight: 600;
+    font-family: var(--font);
+    background: var(--c-hero-input-bg);
+    color: var(--c-text);
+    box-sizing: border-box;
+    transition: border-color var(--t);
+  }
+  .conv-input:focus {
+    outline: none;
+    border-color: var(--c-accent);
+  }
+  .conv-swap {
+    background: var(--c-hero-surface);
+    border: 2px solid var(--c-hero-border);
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    cursor: pointer;
+    color: var(--c-hero-text);
+    transition: all var(--t);
+    margin-bottom: 0;
+  }
+  .conv-swap:hover {
+    background: var(--c-accent);
+    color: #000;
+    border-color: var(--c-accent);
+  }
+  .conv-swap:active {
+    transform: translate(2px, 2px);
+    box-shadow: none;
+  }
+  .conv-swap svg { opacity: 0.8; }
+  .conv-result {
+    display: block;
+    width: 100%;
+    padding: var(--sp-3) var(--sp-4);
+    font-size: var(--text-xl);
+    font-weight: 700;
+    font-family: var(--font);
+    background: var(--c-hero-surface);
+    color: var(--c-hero-text);
+    min-height: 2.5rem;
+    box-sizing: border-box;
+    word-break: break-all;
+    line-height: 1.4;
+    border: 2px solid var(--c-hero-border);
+  }
+
+  @media (max-width: 600px) {
+    .converter-card { padding: var(--sp-4); }
+    .converter-fields { flex-direction: column; gap: var(--sp-2); }
+    .converter-field { min-width: 100%; }
+    .conv-swap { align-self: center; }
+    .conv-swap svg { transform: rotate(90deg); }
+    .conv-input { font-size: var(--text-lg); }
+    .conv-result { font-size: var(--text-lg); }
+  }
+
+  @media (prefers-color-scheme: dark) {
+    .conv-select option { color: #f0f0f0; background: #1a1a1a; }
+    .conv-select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='none' stroke='%23ccc' stroke-width='2'%3E%3Cpath d='M3 4.5L6 7.5L9 4.5'/%3E%3C/svg%3E");
+    }
+  }
+</style>

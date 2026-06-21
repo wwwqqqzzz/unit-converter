@@ -1,0 +1,66 @@
+---
+// Collapsible unit description — Neo-Brutalist
+import type { Unit } from 'converter-core/data/units';
+import type { Lang } from 'converter-core/utils/i18n';
+import { t } from 'converter-core/utils/i18n';
+import { unitDescriptions } from 'converter-core/data/descriptions';
+
+export interface Props { lang: Lang; unit: Unit; categoryId: string; }
+const { lang, unit, categoryId } = Astro.props;
+const desc = unitDescriptions[categoryId]?.[unit.id];
+if (!desc) return;
+const text = desc[lang] || desc.en;
+if (!text) return;
+const label = t(lang, 'converter.aboutUnit', { unit: unit.name[lang] });
+---
+
+<details class="unit-desc">
+  <summary>{label}</summary>
+  <p>{text}</p>
+</details>
+
+<style>
+  .unit-desc {
+    margin: var(--sp-2) 0;
+    border: 2px solid var(--c-border);
+  }
+  .unit-desc summary {
+    padding: var(--sp-3) var(--sp-4);
+    background: var(--c-surface);
+    cursor: pointer;
+    font-weight: 700;
+    font-size: var(--text-sm);
+    color: var(--c-text-secondary);
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: var(--sp-2);
+    transition: background var(--t);
+    user-select: none;
+  }
+  .unit-desc summary::before {
+    content: '+';
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    font-weight: 400;
+    color: var(--c-text);
+    width: 22px;
+    height: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--c-accent);
+    flex-shrink: 0;
+    transition: all var(--t);
+  }
+  .unit-desc[open] summary::before { content: '−'; }
+  .unit-desc summary:hover { background: var(--c-surface-hover); }
+  .unit-desc p {
+    padding: var(--sp-4);
+    margin: 0;
+    font-size: var(--text-sm);
+    line-height: 1.7;
+    color: var(--c-text-secondary);
+    border-top: 2px solid var(--c-border);
+  }
+</style>

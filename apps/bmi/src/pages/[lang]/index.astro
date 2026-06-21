@@ -1,0 +1,15 @@
+---
+// Redirect to BMI calculator
+export const prerender = true;
+export async function getStaticPaths() {
+  const langs = ['en','zh','es','fr','de','ja','pt','it','ko','ru','hi','tr'];
+  return langs.map(lang => ({ params: { lang } }));
+}
+const { lang } = Astro.params;
+---
+
+<!doctype html>
+<html>
+  <head><meta charset="utf-8" /><meta http-equiv="refresh" content={`0;url=/${lang}/bmi/`} /></head>
+  <body><script>window.location.href='/{lang}/bmi/';</script></body>
+</html>

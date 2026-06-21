@@ -1,0 +1,130 @@
+---
+// BMI Calculator — Body Mass Index with category scale
+interface Props { lang: string; }
+const { lang } = Astro.props;
+const labelWeight = lang === 'zh' ? '体重' : 'Weight';
+const labelHeight = lang === 'zh' ? '身高' : 'Height';
+const labelBmi = 'BMI';
+const labelCategory = lang === 'zh' ? '体重分类' : 'Category';
+const labelHealthy = lang === 'zh' ? '健康体重范围' : 'Healthy BMI Range';
+const underweight = lang === 'zh' ? '偏瘦' : 'Underweight';
+const normal = lang === 'zh' ? '正常' : 'Normal';
+const overweight = lang === 'zh' ? '超重' : 'Overweight';
+const obese = lang === 'zh' ? '肥胖' : 'Obese';
+const placeholderW = lang === 'zh' ? '体重' : 'Weight';
+const placeholderH = lang === 'zh' ? '身高' : 'Height';
+const kg = 'kg';
+const lb = 'lb';
+const cm = 'cm';
+const ft = 'ft';
+const labelKg = 'kg';
+---
+
+<div class="bmi-calculator" data-lang={lang}>
+  <div class="bmi-inputs">
+    <div class="bmi-field">
+      <label for="weight">{labelWeight}:</label>
+      <div class="bmi-unit-row">
+        <input type="number" id="weight" placeholder={placeholderW} step="0.1" />
+        <select id="weightUnit">
+          <option value="kg">{kg}</option>
+          <option value="lb">{lb}</option>
+        </select>
+      </div>
+    </div>
+    <div class="bmi-field">
+      <label for="height">{labelHeight}:</label>
+      <div class="bmi-unit-row">
+        <input type="number" id="height" placeholder={placeholderH} step="0.1" />
+        <select id="heightUnit">
+          <option value="cm">{cm}</option>
+          <option value="ft">{ft}</option>
+        </select>
+      </div>
+    </div>
+    <button id="calcBmi" class="bmi-btn">{lang === 'zh' ? '计算 BMI' : 'Calculate BMI'}</button>
+  </div>
+
+  <div id="bmiResult" class="bmi-result" style="display:none;">
+    <div class="bmi-number">
+      <span class="bmi-value" id="bmiValue">--</span>
+      <span class="bmi-unit">{labelBmi}</span>
+    </div>
+    <div class="bmi-category" id="bmiCategory"></div>
+    <div class="bmi-scale">
+      <div class="bmi-bar">
+        <div class="bmi-fill" id="bmiFill"></div>
+      </div>
+      <div class="bmi-labels">
+        <span style="left:0%">{underweight}</span>
+        <span style="left:26%">{normal}</span>
+        <span style="left:55%">{overweight}</span>
+        <span style="left:80%">{obese}</span>
+      </div>
+    </div>
+    <div class="bmi-healthy" id="bmiHealthy"></div>
+  </div>
+</div>
+
+<style is:global>
+  .bmi-calculator { font-family: 'Space Grotesk', system-ui, sans-serif; }
+  .bmi-inputs { display: flex; flex-direction: column; gap: 1rem; margin-bottom: 1.5rem; }
+  .bmi-field { display: flex; flex-direction: column; gap: 0.375rem; }
+  .bmi-field label { font-weight: 600; font-size: 0.9rem; }
+  .bmi-unit-row { display: flex; gap: 0.5rem; align-items: center; }
+  .bmi-unit-row input { flex: 1; padding: 0.75rem; border: 3px solid #1a1a1a; font-size: 1rem; font-family: inherit; background: #fff; }
+  .bmi-unit-row select { padding: 0.75rem; border: 3px solid #1a1a1a; font-size: 1rem; font-family: inherit; background: #fff; cursor: pointer; }
+  .bmi-btn { padding: 0.75rem 2rem; background: #ffe033; border: 3px solid #1a1a1a; font-size: 1rem; font-weight: 700; cursor: pointer; font-family: inherit; box-shadow: 4px 4px 0 #1a1a1a; transition: all 0.1s; }
+  .bmi-btn:hover { transform: translate(-1px, -1px); box-shadow: 5px 5px 0 #1a1a1a; }
+  .bmi-btn:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0 #1a1a1a; }
+  .bmi-result { text-align: center; padding: 1.5rem; background: #f5f5f0; border: 3px solid #1a1a1a; }
+  .bmi-number { display: flex; align-items: baseline; justify-content: center; gap: 0.5rem; margin-bottom: 0.5rem; }
+  .bmi-value { font-size: 3rem; font-weight: 700; }
+  .bmi-unit { font-size: 1.25rem; color: #666; }
+  .bmi-category { font-size: 1.25rem; font-weight: 600; margin-bottom: 1rem; padding: 0.5rem; background: #ffe033; display: inline-block; border: 3px solid #1a1a1a; }
+  .bmi-scale { margin: 1rem 0; }
+  .bmi-bar { height: 12px; background: linear-gradient(to right, #2196F3 0% 20%, #4CAF50 20% 50%, #FFC107 50% 75%, #f44336 75% 100%); border: 2px solid #1a1a1a; position: relative; border-radius: 0; }
+  .bmi-fill { position: absolute; top: -4px; width: 6px; height: 20px; background: #1a1a1a; transition: left 0.3s; }
+  .bmi-labels { position: relative; height: 1.5rem; }
+  .bmi-labels span { position: absolute; font-size: 0.7rem; color: #666; transform: translateX(-50%); }
+  .bmi-healthy { margin-top: 0.5rem; font-size: 0.9rem; color: #666; }
+</style>
+
+<script>
+  document.getElementById('calcBmi')?.addEventListener('click', () => {
+    const w = parseFloat(document.getElementById('weight').value);
+    const h = parseFloat(document.getElementById('height').value);
+    const wUnit = document.getElementById('weightUnit').value;
+    const hUnit = document.getElementById('heightUnit').value;
+    const lang = document.querySelector('.bmi-calculator')?.getAttribute('data-lang') || 'en';
+
+    if (!w || !h) return alert(lang === 'zh' ? '请输入体重和身高' : 'Enter weight and height');
+
+    let weightKg = wUnit === 'lb' ? w * 0.453592 : w;
+    let heightM = hUnit === 'ft' ? h * 0.3048 : h / 100;
+
+    const bmi = weightKg / (heightM * heightM);
+    const cat = bmi < 18.5 ? 'underweight' : bmi < 25 ? 'normal' : bmi < 30 ? 'overweight' : 'obese';
+    const labels = {
+      underweight: lang === 'zh' ? '偏瘦' : 'Underweight',
+      normal: lang === 'zh' ? '正常' : 'Normal',
+      overweight: lang === 'zh' ? '超重' : 'Overweight',
+      obese: lang === 'zh' ? '肥胖' : 'Obese',
+    };
+    const colors = { underweight: '#2196F3', normal: '#4CAF50', overweight: '#FFC107', obese: '#f44336' };
+    const healthyMin = Math.round(18.5 * heightM * heightM * 10) / 10;
+    const healthyMax = Math.round(24.9 * heightM * heightM * 10) / 10;
+
+    document.getElementById('bmiValue').textContent = bmi.toFixed(1);
+    document.getElementById('bmiCategory').textContent = labels[cat];
+    document.getElementById('bmiCategory').style.background = colors[cat];
+    document.getElementById('bmiHealthy').textContent =
+      lang === 'zh'
+        ? `健康体重范围: ${weightKg >= healthyMin && weightKg <= healthyMax ? '✓ 在健康范围内' : healthyMin.toFixed(1) + ' - ' + healthyMax.toFixed(1) + ' ' + (wUnit === 'lb' ? 'lb' : 'kg')}`
+        : `Healthy weight range: ${weightKg >= healthyMin && weightKg <= healthyMax ? '✓ You are within a healthy range' : healthyMin.toFixed(1) + ' - ' + healthyMax.toFixed(1) + ' ' + (wUnit === 'lb' ? 'lb' : 'kg')}`;
+
+    const pct = Math.min(Math.max((bmi - 10) / 30 * 100, 0), 100);
+    document.getElementById('bmiFill').style.left = pct + '%';
+    document.getElementById('bmiResult').style.display = 'block';
+  });
+</script>

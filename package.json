@@ -2,18 +2,18 @@
   "name": "unit-converter",
   "type": "module",
   "version": "1.0.0",
+  "private": true,
+  "workspaces": ["packages/*", "apps/*"],
   "description": "Multilingual unit conversion tool site — pSEO driven, AdSense monetized",
   "scripts": {
-    "dev": "astro dev",
-    "build": "astro build",
-    "preview": "astro preview",
-    "test": "vitest run",
-    "test:watch": "vitest"
+    "dev": "astro dev --root apps/main",
+    "build": "astro build --root apps/main",
+    "preview": "astro preview --root apps/main",
+    "test": "npm test -w converter-core -w apps/main",
+    "test:core": "npm test -w converter-core",
+    "test:main": "npm test -w apps/main"
   },
-  "dependencies": {
-    "@astrojs/cloudflare": "^12.6.13",
-    "astro": "^5.0.0"
-  },
+  "dependencies": {},
   "devDependencies": {
     "vitest": "^4.1.9",
     "wrangler": "^4.103.0"

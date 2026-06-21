@@ -1,0 +1,112 @@
+---
+// Language homepage: /en/ and /zh/ — Neo-Brutalist
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import AdSense from '../../components/AdSense.astro';
+import { t, type Lang, LANGUAGES } from 'converter-core/utils/i18n';
+import { getCategories } from 'converter-core/lib/units';
+import { CATEGORY_ICONS } from 'converter-core/data/units';
+
+export interface Props { lang: Lang; }
+export function getStaticPaths() {
+  return LANGUAGES.map(lang => ({ params: { lang } }));
+}
+const { lang } = Astro.params as Props;
+const categories = getCategories();
+const calcCount = categories.filter(c => c.type === 'calculator').length;
+---
+
+<BaseLayout lang={lang} title={t(lang, 'home.title')} description={t(lang, 'home.description')} pagePath="" isHome={true}>
+  <div class="home-hero">
+    <h1>{t(lang, 'home.title')}</h1>
+    <p class="home-subtitle">{t(lang, 'home.subtitle')}</p>
+    <p class="home-trust">{t(lang, 'home.trust')}</p>
+  </div>
+
+  <AdSense position="top" />
+
+  <section class="category-list">
+    <h2>{t(lang, 'home.chooseCategory')}</h2>
+    <div class="category-grid">
+      {categories.map(cat => (
+        <a href={"/" + lang + "/" + cat.id + "/"} class="category-card">
+          <span class="category-icon">{CATEGORY_ICONS[cat.id] ?? '📐'}</span>
+          <span class="category-name">{cat.name[lang]}</span>
+          <span class="category-count">{cat.type === 'calculator' ? `${calcCount} ${t(lang, 'common.tool')}` : `${cat.units?.length ?? 0} ${t(lang, 'common.units')}`}</span>
+        </a>
+      ))}
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .home-hero { text-align: center; padding: var(--sp-12) 0 var(--sp-8); }
+  .home-hero h1 {
+    font-size: var(--text-4xl);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1.05;
+    color: var(--c-text);
+  }
+  .home-subtitle {
+    color: var(--c-text-secondary);
+    font-size: var(--text-lg);
+    margin-top: var(--sp-3);
+    line-height: 1.5;
+  }
+  .home-trust {
+    display: inline-block;
+    margin-top: var(--sp-3);
+    padding: var(--sp-1) var(--sp-4);
+    background: var(--c-accent);
+    color: #000;
+    font-size: var(--text-xs);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .category-list { margin: var(--sp-10) 0; }
+  .category-list h2 {
+    font-size: var(--text-xs);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--c-text-tertiary);
+    margin-bottom: var(--sp-4);
+  }
+  .category-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: var(--sp-3);
+  }
+  .category-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: var(--sp-4) var(--sp-3);
+    background: var(--c-surface);
+    border: var(--b);
+    box-shadow: var(--shadow-hard-sm);
+    text-decoration: none;
+    color: var(--c-text);
+    transition: all var(--t);
+  }
+  .category-card:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: var(--shadow-hard);
+    text-decoration: none;
+    background: var(--c-accent);
+  }
+  .category-card:active {
+    transform: translate(2px, 2px);
+    box-shadow: none;
+  }
+  .category-icon { font-size: 1.5rem; margin-bottom: var(--sp-1); }
+  .category-name { font-weight: 600; font-size: var(--text-base); }
+  .category-count { font-size: var(--text-xs); color: var(--c-text-tertiary); margin-top: 2px; }
+  @media (max-width: 480px) {
+    .home-hero { padding: var(--sp-8) 0 var(--sp-6); }
+    .home-hero h1 { font-size: var(--text-3xl); }
+    .category-grid { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); }
+  }
+</style>
