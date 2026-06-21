@@ -146,6 +146,17 @@ const canonicalHref = canonical ?? canonicalUrl(lang, pagePath, siteUrl.replace(
       img { max-width: 100%; height: auto; }
       h1, h2, h3, h4 { line-height: 1.2; letter-spacing: -0.02em; }
     </style>
+    {import.meta.env.PROD && (
+      <>
+        <script is:inline src="https://www.googletagmanager.com/gtag/js?id=G-9BT1QMSP00" async></script>
+        <script is:inline>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-9BT1QMSP00');
+        </script>
+      </>
+    )}
   </head>
   <body>
     <header class="site-header">
