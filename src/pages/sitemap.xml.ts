@@ -1,6 +1,7 @@
 import { LANGUAGES } from '../utils/i18n';
 import { categories } from '../data/units';
 import { getUnitPairs, pairSlug, valueSlug, getCommonValues } from '../lib/units';
+import { NUMBER_BASE_VALUES, numberBaseSlug } from '../data/number-base-values';
 
 export const prerender = true;
 
@@ -19,8 +20,15 @@ export async function GET() {
       // Category page
       urls.push(`${site}/${lang}/${cat.id}/`);
 
-      // Calculator categories: no pair/value pages
-      if (cat.type === 'calculator') continue;
+      // Calculator categories: no pair/value pages (except number-base)
+      if (cat.type === 'calculator') {
+        if (cat.id === 'number-base') {
+          for (const conv of NUMBER_BASE_VALUES) {
+            urls.push(`${site}/${lang}/${cat.id}/${numberBaseSlug(conv, lang)}/`);
+          }
+        }
+        continue;
+      }
 
       const pairs = getUnitPairs(cat);
       const commonValues = getCommonValues(cat.id);
