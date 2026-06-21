@@ -1,5 +1,128 @@
 # 实施日志
 
+## 2026-06-21 — Phase 11: 多站群 Monorepo 架构重构
+
+### 背景
+
+项目从单体 Astro 应用发展到 48,925 URLs 后，需要为多站群战略做准备。核心问题是：转换逻辑、i18n、数据与 Astro 页面深度耦合，无法独立部署子站。
+
+**目标**: 将 `src/data/`, `src/i18n/`, `src/lib/`, `src/utils/` 提取为独立包 `converter-core`，主站移到 `apps/main/`，创建 BMI 独立站 `apps/bmi/` 作为 PoC。
+
+### 最终结构
+
+```
+unit-converter/                      ← npm workspaces root
+├── package.json                     ← workspaces: [packages/*, apps/*]
+├── tsconfig.base.json               ← 共享 TS 配置
+├── packages/
+│   └── converter-core/              ← 共享核心包 (纯 TypeScript)
+│       ├── data/units.ts            ← 123 单位 + 23 分类
+│       ├── data/descriptions.ts     ← 1,230 SEO 描述 (707KB)
+│       ├── data/number-base-values.ts ← 43 换算对
+│       ├── i18n/*.json              ← 12 语言翻译文件
+│       ├── lib/units.ts             ← 转换逻辑 + 74 测试
+│       ├── lib/seo.ts               ← hreflang/canonical
+│       └── utils/i18n.ts            ← t() 翻译函数
+├── apps/
+│   ├── main/                        ← convunit.net 主站
+│   │   ├── src/pages/               ← 全部 48K+ 路由
+│   │   ├── src/components/          ← 12 个 Astro 组件
+│   │   └── src/layouts/             ← BaseLayout
+│   └── bmi/                         ← BMI 独立站 (PoC)
+│       ├── src/pages/[lang]/bmi/    ← 12 语言 BMI 页面
+│       ├── src/components/BMI.astro ← 计算器组件
+│       └── src/layouts/             ← 独立基础布局
+```
+
+### 迁移步骤
+
+| 步骤 | 操作 | 文件数 |
+|------|------|--------|
+| 1 | 创建 `packages/converter-core/` + package.json/tsconfig/index.ts | 4 |
+| 2 | 复制 `src/data/`, `src/i18n/`, `src/lib/`, `src/utils/` → converter-core | 19 |
+| 3 | 创建 `apps/main/` + 复制 `src/components/` `layouts/` `pages/` `middleware.ts` `public/` | 20+ |
+| 4 | 更新 31 处 import: `../data/` → `converter-core/data/`（所有 .astro + .ts 文件） | 10 files |
+| 5 | 创建 `apps/bmi/` — 12 语言 BMI 独立站 | 10 files |
+| 6 | 配置 npm workspaces + tsconfig.base.json | 2 |
+| 7 | 删除旧 `src/` `public/` 根目录文件 | — |
+
+### Import 转换
+
+所有相对路径 import 改为 `converter-core/...` 子路径导出：
+
+| 模式 | 转换 |
+|------|------|
+| `from '../data/units'` | → `from 'converter-core/data/units'` |
+| `from '../../../lib/units'` | → `from 'converter-core/lib/units'` |
+| `from '../../utils/i18n'` | → `from 'converter-core/utils/i18n'` |
+| `../../components/` | → 保留 (同在 apps/main) |
+| `../../layouts/` | → 保留 (同在 apps/main) |
+
+### converter-core 包设计
+
+```jsonc
+{
+  "exports": {
+    ".": "./src/index.ts",
+    "./data/units": "./src/data/units.ts",
+    "./data/descriptions": "./src/data/descriptions.ts",
+    "./data/number-base-values": "./src/data/number-base-values.ts",
+    "./lib/units": "./src/lib/units.ts",
+    "./lib/seo": "./src/lib/seo.ts",
+    "./utils/i18n": "./src/utils/i18n.ts"
+  }
+}
+```
+
+子路径导出支持 tree-shaking（descriptions.ts 707KB 不会被未使用的站点打包）。
+
+### BMI 独立站 (apps/bmi)
+
+| 配置 | 值 |
+|------|-----|
+| 域名 | bmi.example.com (占位) |
+| 部署 | Cloudflare Workers SSR |
+| 页面 | 12 语言 × 1 (BMI 计算器) + 12 重定向首页 + sitemap + robots |
+| 组件 | BMI.astro (从 main 复制，纯客户端 JS) |
+| i18n | 新增 FAQ 键 (faq1q/faq1a/faq2q/faq2a/faq3q/faq3a) |
+| Layout | 简化版，仅 nav + lang switcher + footer |
+| SEO | BreadcrumbList + WebApplication + MedicalWebPage JSON-LD |
+| 构建 | 独立 `npx astro build`，输出到 `apps/bmi/dist/` |
+
+### 构建验证
+
+| 检查项 | 结果 |
+|--------|------|
+| `npm run build` (apps/main) | ✅ 48,925 URLs, SSR |
+| `npx astro build --root apps/bmi` | ✅ 12 语言, 全部 prerender |
+| `npm test -w converter-core` | ✅ 74/74 测试通过 |
+| Root `npm test` | ✅ |
+
+### 文件变更统计
+
+| 指标 | 值 |
+|------|-----|
+| 新增文件 | 18 (packages/ 11 + apps/main 2 + apps/bmi 10 - 重复) |
+| 重命名文件 | 37 (git rename detection) |
+| 删除文件 | 0 (所有旧文件被重命名/复制) |
+| Import 修改 | 31 处，10 个文件 |
+| Git commit | `9ad36b6` |
+
+### 使用方式
+
+```bash
+npm run dev                    # 开发 apps/main (localhost:4321)
+npm run build                  # 构建 apps/main → dist/
+npm test                       # 运行所有 workspace 测试
+npm run build --root apps/bmi  # 构建 BMI 独立站
+
+# 部署
+npx wrangler pages deploy apps/main/dist --project-name unit-convert
+npx wrangler pages deploy apps/bmi/dist --project-name bmi-calculator
+```
+
+---
+
 ## 2026-06-21 — Phase 10: Number Base SEO 价值页 + 鞋码 Landing Page
 
 ### Phase 10.1: Number Base SEO 价值页面 ✅
