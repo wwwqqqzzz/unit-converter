@@ -2,6 +2,3 @@ name = "bmi-calculator"
 compatibility_date = "2024-12-01"
 compatibility_flags = ["nodejs_compat"]
 pages_build_output_dir = "./dist"
-
-[vars]
-PUBLIC_ADSENSE_ID = "ca-pub-4967918867986181"
