@@ -14,7 +14,7 @@ const title = t(lang, 'age', 'title') + ' | Age Calculator';
 const description = t(lang, 'age', 'metaDesc');
 ---
 
-<BaseLayout title={title} description={description} lang={lang} path={`${lang}/age/`}>
+<BaseLayout title={title} description={description} lang={lang} path="age/">
   <article>
     <div style="background: var(--card); border: var(--border); box-shadow: var(--shadow); padding: 2rem; margin-bottom: 2rem;">
       <AgeCalc lang={lang} />
