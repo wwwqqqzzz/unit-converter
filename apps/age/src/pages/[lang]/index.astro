@@ -1,13 +1,24 @@
 ---
+// Redirect to Age calculator
+import { hreflangTags, canonicalUrl } from 'converter-core/lib/seo';
 export const prerender = true;
 export async function getStaticPaths() {
   const langs = ['en','zh','es','fr','de','ja','pt','it','ko','ru','hi','tr'];
   return langs.map(lang => ({ params: { lang } }));
 }
 const { lang } = Astro.params;
+const site = 'https://age-calculator-2rd.pages.dev';
+const dest = `/${lang}/age/`;
+const canonical = canonicalUrl(lang as any, 'age/', site);
 ---
+
 <!doctype html>
-<html>
-  <head><meta charset="utf-8" /><meta http-equiv="refresh" content={`0;url=/${lang}/age/`} /></head>
-  <body><script>window.location.href='/{lang}/age/';</script></body>
+<html lang={lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="refresh" content={`0;url=${dest}`} />
+    <link rel="canonical" href={canonical} />
+    <Fragment set:html={hreflangTags('age/', site)} />
+  </head>
+  <body><script is:inline>window.location.href=document.querySelector('meta[http-equiv="refresh"]').content.match(/url=(.+)/)[1];</script></body>
 </html>

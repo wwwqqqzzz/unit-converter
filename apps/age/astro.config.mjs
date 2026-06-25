@@ -9,7 +9,7 @@ export default defineConfig({
       type: 'pages',
     },
   }),
-  site: 'https://age.example.com',
+  site: 'https://age-calculator-2rd.pages.dev',
   trailingSlash: 'always',
   build: {
     format: 'directory',

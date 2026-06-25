@@ -10,26 +10,26 @@ export async function getStaticPaths() {
 }
 
 const { lang } = Astro.params as { lang: Lang };
-const title = t(lang, 'bmi', 'title') + ' | BMI Calculator';
-const description = t(lang, 'bmi', 'metaDesc');
+const title = t(lang, 'calc.bmi.title') + ' | BMI Calculator';
+const description = t(lang, 'calc.bmi.metaDesc');
 ---
 
   <BaseLayout title={title} description={description} lang={lang} path="bmi/">
   <article>
     <h1 style="font-size: 2.5rem; font-weight: 700; margin-bottom: 0.5rem; border-left: 6px solid var(--yellow); padding-left: 1rem;">
-      {t(lang, 'bmi', 'title')}
+      {t(lang, 'calc.bmi.title')}
     </h1>
-    <p style="color: var(--text-muted); margin-bottom: 2rem;">{t(lang, 'bmi', 'metaDesc')}</p>
+    <p style="color: var(--text-muted); margin-bottom: 2rem;">{t(lang, 'calc.bmi.metaDesc')}</p>
 
     <div style="background: var(--card); border: var(--border); box-shadow: var(--shadow); padding: 2rem; margin-bottom: 2rem;">
       <BMI lang={lang} />
     </div>
 
     <section style="background: var(--card); border: var(--border); box-shadow: var(--shadow); padding: 2rem;">
-      <h2 style="font-size: 1.5rem; margin-bottom: 1rem;">{t(lang, 'bmi', 'faqTitle')}</h2>
-      <details style="margin-bottom: 0.75rem;"><summary style="cursor: pointer; font-weight: 600;">{t(lang, 'bmi', 'faq1q')}</summary><p style="margin-top: 0.5rem; color: var(--text-muted);">{t(lang, 'bmi', 'faq1a')}</p></details>
-      <details style="margin-bottom: 0.75rem;"><summary style="cursor: pointer; font-weight: 600;">{t(lang, 'bmi', 'faq2q')}</summary><p style="margin-top: 0.5rem; color: var(--text-muted);">{t(lang, 'bmi', 'faq2a')}</p></details>
-      <details style="margin-bottom: 0.75rem;"><summary style="cursor: pointer; font-weight: 600;">{t(lang, 'bmi', 'faq3q')}</summary><p style="margin-top: 0.5rem; color: var(--text-muted);">{t(lang, 'bmi', 'faq3a')}</p></details>
+      <h2 style="font-size: 1.5rem; margin-bottom: 1rem;">{t(lang, 'calc.bmi.faqTitle')}</h2>
+      <details style="margin-bottom: 0.75rem;"><summary style="cursor: pointer; font-weight: 600;">{t(lang, 'calc.bmi.faq1q')}</summary><p style="margin-top: 0.5rem; color: var(--text-muted);">{t(lang, 'calc.bmi.faq1a')}</p></details>
+      <details style="margin-bottom: 0.75rem;"><summary style="cursor: pointer; font-weight: 600;">{t(lang, 'calc.bmi.faq2q')}</summary><p style="margin-top: 0.5rem; color: var(--text-muted);">{t(lang, 'calc.bmi.faq2a')}</p></details>
+      <details style="margin-bottom: 0.75rem;"><summary style="cursor: pointer; font-weight: 600;">{t(lang, 'calc.bmi.faq3q')}</summary><p style="margin-top: 0.5rem; color: var(--text-muted);">{t(lang, 'calc.bmi.faq3a')}</p></details>
     </section>
   </article>
 </BaseLayout>
@@ -37,8 +37,8 @@ const description = t(lang, 'bmi', 'metaDesc');
 <script type="application/ld+json" set:html={JSON.stringify({
   "@context": "https://schema.org",
   "@type": ["WebApplication", "MedicalWebPage"],
-  "name": t(lang, 'bmi', 'title'),
-  "description": t(lang, 'bmi', 'metaDesc'),
+  "name": t(lang, 'calc.bmi.title'),
+  "description": t(lang, 'calc.bmi.metaDesc'),
   "url": `https://bmi-calculator-27p.pages.dev/${lang}/bmi/`,
   "applicationCategory": "HealthApplication",
   "operatingSystem": "All",

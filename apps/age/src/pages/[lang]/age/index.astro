@@ -10,8 +10,8 @@ export async function getStaticPaths() {
 }
 
 const { lang } = Astro.params as { lang: Lang };
-const title = t(lang, 'age', 'title') + ' | Age Calculator';
-const description = t(lang, 'age', 'metaDesc');
+const title = t(lang, 'calc.age.title') + ' | Age Calculator';
+const description = t(lang, 'calc.age.metaDesc');
 ---
 
 <BaseLayout title={title} description={description} lang={lang} path="age/">
@@ -21,10 +21,10 @@ const description = t(lang, 'age', 'metaDesc');
     </div>
 
     <section style="background: var(--card); border: var(--border); box-shadow: var(--shadow); padding: 2rem;">
-      <h2 style="font-size: 1.5rem; margin-bottom: 1rem;">{t(lang, 'age', 'faqTitle')}</h2>
-      <details style="margin-bottom: 0.75rem;"><summary style="cursor: pointer; font-weight: 600;">{t(lang, 'age', 'faq1q')}</summary><p style="margin-top: 0.5rem; color: var(--text-muted);">{t(lang, 'age', 'faq1a')}</p></details>
-      <details style="margin-bottom: 0.75rem;"><summary style="cursor: pointer; font-weight: 600;">{t(lang, 'age', 'faq2q')}</summary><p style="margin-top: 0.5rem; color: var(--text-muted);">{t(lang, 'age', 'faq2a')}</p></details>
-      <details style="margin-bottom: 0.75rem;"><summary style="cursor: pointer; font-weight: 600;">{t(lang, 'age', 'faq3q')}</summary><p style="margin-top: 0.5rem; color: var(--text-muted);">{t(lang, 'age', 'faq3a')}</p></details>
+      <h2 style="font-size: 1.5rem; margin-bottom: 1rem;">{t(lang, 'calc.age.faqTitle')}</h2>
+      <details style="margin-bottom: 0.75rem;"><summary style="cursor: pointer; font-weight: 600;">{t(lang, 'calc.age.faq1q')}</summary><p style="margin-top: 0.5rem; color: var(--text-muted);">{t(lang, 'calc.age.faq1a')}</p></details>
+      <details style="margin-bottom: 0.75rem;"><summary style="cursor: pointer; font-weight: 600;">{t(lang, 'calc.age.faq2q')}</summary><p style="margin-top: 0.5rem; color: var(--text-muted);">{t(lang, 'calc.age.faq2a')}</p></details>
+      <details style="margin-bottom: 0.75rem;"><summary style="cursor: pointer; font-weight: 600;">{t(lang, 'calc.age.faq3q')}</summary><p style="margin-top: 0.5rem; color: var(--text-muted);">{t(lang, 'calc.age.faq3a')}</p></details>
     </section>
   </article>
 </BaseLayout>
@@ -32,8 +32,8 @@ const description = t(lang, 'age', 'metaDesc');
 <script type="application/ld+json" set:html={JSON.stringify({
   "@context": "https://schema.org",
   "@type": ["WebApplication"],
-  "name": t(lang, 'age', 'title'),
-  "description": t(lang, 'age', 'metaDesc'),
+  "name": t(lang, 'calc.age.title'),
+  "description": t(lang, 'calc.age.metaDesc'),
   "url": `https://age-calculator-2rd.pages.dev/${lang}/age/`,
   "applicationCategory": "UtilitiesApplication",
   "operatingSystem": "All"
