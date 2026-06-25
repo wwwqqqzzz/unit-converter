@@ -11,7 +11,7 @@ export interface Props {
 }
 
 const { title, description, lang, path } = Astro.props;
-const site = 'https://bmi.example.com';
+const site = 'https://bmi-calculator-27p.pages.dev';
 const canonical = canonicalUrl(lang, path, site);
 ---
 
@@ -23,8 +23,7 @@ const canonical = canonicalUrl(lang, path, site);
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
-    <Fragment set:html={hreflangTags(path)} />
-    <link rel="alternate" hreflang="x-default" href={`${site}/en/`} />
+    <Fragment set:html={hreflangTags(path, site)} />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />

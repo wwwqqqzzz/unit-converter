@@ -2,7 +2,7 @@ import { LANGUAGES } from 'converter-core/utils/i18n';
 
 export const prerender = true;
 
-const site = 'https://bmi.example.com';
+const site = 'https://bmi-calculator-27p.pages.dev';
 
 export async function GET() {
   const urls = LANGUAGES.flatMap(lang => [
