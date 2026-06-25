@@ -15,7 +15,7 @@ const categories = getCategories();
 const calcCount = categories.filter(c => c.type === 'calculator').length;
 ---
 
-<BaseLayout lang={lang} title={t(lang, 'home.title')} description={t(lang, 'home.description')} pagePath="" isHome={true}>
+<BaseLayout lang={lang} title={t(lang, 'home.title')} description={t(lang, 'home.subtitle')} pagePath="" isHome={true}>
   <div class="home-hero">
     <h1>{t(lang, 'home.title')}</h1>
     <p class="home-subtitle">{t(lang, 'home.subtitle')}</p>
