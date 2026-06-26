@@ -7,7 +7,7 @@ export async function getStaticPaths() {
   return langs.map(lang => ({ params: { lang } }));
 }
 const { lang } = Astro.params;
-const site = 'https://age-calculator-2rd.pages.dev';
+const site = 'https://age.convunit.net';
 const dest = `/${lang}/age/`;
 const canonical = canonicalUrl(lang as any, 'age/', site);
 ---

@@ -1,6 +1,6 @@
 import { LANGUAGES } from 'converter-core/utils/i18n';
 export const prerender = true;
-const site = 'https://age-calculator-2rd.pages.dev';
+const site = 'https://age.convunit.net';
 export async function GET() {
   const urls = LANGUAGES.flatMap(lang => [`${site}/${lang}/age/`]);
   const body = `<?xml version="1.0" encoding="UTF-8"?>

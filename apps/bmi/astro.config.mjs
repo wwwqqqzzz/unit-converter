@@ -9,7 +9,7 @@ export default defineConfig({
       type: 'pages',
     },
   }),
-  site: 'https://bmi-calculator-27p.pages.dev',
+  site: 'https://bmi.convunit.net',
   trailingSlash: 'always',
   build: {
     format: 'directory',

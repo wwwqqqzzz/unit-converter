@@ -9,7 +9,7 @@ export default defineConfig({
       type: 'pages',
     },
   }),
-  site: 'https://age-calculator-2rd.pages.dev',
+  site: 'https://age.convunit.net',
   trailingSlash: 'always',
   build: {
     format: 'directory',

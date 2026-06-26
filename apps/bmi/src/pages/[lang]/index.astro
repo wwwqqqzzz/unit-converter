@@ -7,7 +7,7 @@ export async function getStaticPaths() {
   return langs.map(lang => ({ params: { lang } }));
 }
 const { lang } = Astro.params;
-const site = 'https://bmi-calculator-27p.pages.dev';
+const site = 'https://bmi.convunit.net';
 const dest = `/${lang}/bmi/`;
 const canonical = canonicalUrl(lang as any, 'bmi/', site);
 ---
