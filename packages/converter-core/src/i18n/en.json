@@ -28,7 +28,8 @@
     "title": "Unit Converter",
     "subtitle": "Fast, accurate, free — convert any unit instantly",
     "chooseCategory": "Choose a category to get started:",
-    "trust": "Free · Instant · No signup"
+    "trust": "Free · Instant · No signup",
+    "about": "ConvUnit is a free online unit converter covering 123 units across 23 categories. Convert length, weight, temperature, data storage, area, volume, speed, time, pressure, energy, power, fuel efficiency, frequency, angle, force, torque, and shoe size. Also includes calculators for number base, timestamp, percentage, BMI, age, and currency. Available in 12 languages."
   },
   "category": {
     "title": "%name% Converter",
@@ -81,12 +82,67 @@
     "faqTitle": "Frequently Asked Questions"
   },
   "calc": {
-    "numberBase": { "title": "Number Base Converter", "desc": "Free online number base converter. Convert between binary, octal, decimal, and hexadecimal instantly." },
-    "timestamp": { "title": "Unix Timestamp Converter", "desc": "Free online Unix timestamp converter. Convert between Unix timestamps and human-readable dates instantly.", "faqTitle": "Frequently Asked Questions", "faq1q": "What is a Unix timestamp?", "faq1a": "A Unix timestamp is the number of seconds that have elapsed since January 1, 1970 (UTC), excluding leap seconds. It is widely used in programming and computing for tracking time.", "faq2q": "How do I convert a Unix timestamp to a human-readable date?", "faq2a": "Simply enter the timestamp into the converter above. The tool automatically converts it to the corresponding date and time in your local timezone. You can also enter a date to get the Unix timestamp.", "faq3q": "What is the Year 2038 problem?", "faq3a": "The Year 2038 problem is a computing issue where timestamps stored as 32-bit signed integers will overflow on January 19, 2038. Our converter supports timestamps beyond this date using 64-bit precision." },
-    "percentage": { "title": "Percentage Calculator", "desc": "Free online percentage calculator. Calculate discounts, percentage increases, and percentage differences instantly.", "faqTitle": "Frequently Asked Questions", "faq1q": "How do I calculate a percentage discount?", "faq1a": "To calculate the final price after a discount, multiply the original price by (1 - discount_percentage / 100). For example, a 20% discount on $100 means you pay $100 × 0.8 = $80.", "faq2q": "How do I calculate percentage increase?", "faq2a": "Percentage increase is calculated as: ((new_value - original_value) / original_value) × 100%. For example, an increase from 50 to 75 is a (75-50)/50 × 100% = 50% increase.", "faq3q": "What is the difference between percentage increase and percentage difference?", "faq3a": "Percentage increase measures growth relative to the original value, while percentage difference measures the absolute difference between two values regardless of direction. Use our calculator above for both calculations." },
-    "bmi": { "title": "BMI Calculator", "desc": "Free online BMI calculator. Calculate your Body Mass Index instantly and check your weight category.", "metaDesc": "Calculate your Body Mass Index (BMI) instantly. Free online BMI calculator with weight categories, healthy range, and metric/imperial units.", "faqTitle": "Frequently Asked Questions", "faq1q": "What is BMI?", "faq1a": "BMI (Body Mass Index) is a measure of body fat based on height and weight. It is calculated by dividing weight in kilograms by the square of height in meters.", "faq2q": "What is a healthy BMI range?", "faq2a": "A healthy BMI range is 18.5 to 24.9. Below 18.5 is underweight, 25 to 29.9 is overweight, and 30 or above is obese.", "faq3q": "Is BMI accurate for everyone?", "faq3a": "BMI is a general screening tool and may not be accurate for athletes, pregnant women, or the elderly. Consult a healthcare professional for a complete health assessment." },
-    "age": { "title": "Age Calculator", "desc": "Free online age calculator. Calculate your exact age in years, months, and days instantly.", "metaDesc": "Calculate your exact age in years, months, and days. Free online age calculator with birthday countdown, total days lived, and date of birth to age conversion.", "faqTitle": "Frequently Asked Questions", "faq1q": "How is my age calculated?", "faq1a": "Your age is calculated by subtracting your birth date from the current date. The result shows the exact number of years, months, and days you have lived.", "faq2q": "Can I calculate age for any date?", "faq2a": "Yes, you can select any date to calculate age as of that specific date. This is useful for determining age at a future event or past milestone.", "faq3q": "How many days has a newborn lived?", "faq3a": "A newborn has lived 0 days. The counter starts from day 1 after birth. Our calculator shows total days, weeks, and months lived for any age." },
-    "currency": { "title": "Currency Converter", "desc": "Free online currency converter. Convert between USD, EUR, GBP, JPY and 150+ currencies with live exchange rates.", "faqTitle": "Frequently Asked Questions", "faq1q": "How often are exchange rates updated?", "faq1a": "Our currency converter uses the Frankfurter API which provides live exchange rates updated daily on business days. Rates reflect interbank market rates without any markup.", "faq2q": "How many currencies does the converter support?", "faq2a": "The converter supports 30+ major world currencies including USD, EUR, GBP, JPY, CNY, AUD, CAD, CHF, and more. Select any two currencies to get the current exchange rate.", "faq3q": "Are there any fees for using the currency converter?", "faq3a": "No, it is completely free to use. Our currency converter uses the Frankfurter API which provides exchange rates without any markup or hidden fees. The rates shown are interbank rates." }
+    "numberBase": {
+      "title": "Number Base Converter",
+      "desc": "Free online number base converter. Convert between binary, octal, decimal, and hexadecimal instantly."
+    },
+    "timestamp": {
+      "title": "Unix Timestamp Converter",
+      "desc": "Free online Unix timestamp converter. Convert between Unix timestamps and human-readable dates instantly.",
+      "faqTitle": "Frequently Asked Questions",
+      "faq1q": "What is a Unix timestamp?",
+      "faq1a": "A Unix timestamp is the number of seconds that have elapsed since January 1, 1970 (UTC), excluding leap seconds. It is widely used in programming and computing for tracking time.",
+      "faq2q": "How do I convert a Unix timestamp to a human-readable date?",
+      "faq2a": "Simply enter the timestamp into the converter above. The tool automatically converts it to the corresponding date and time in your local timezone. You can also enter a date to get the Unix timestamp.",
+      "faq3q": "What is the Year 2038 problem?",
+      "faq3a": "The Year 2038 problem is a computing issue where timestamps stored as 32-bit signed integers will overflow on January 19, 2038. Our converter supports timestamps beyond this date using 64-bit precision."
+    },
+    "percentage": {
+      "title": "Percentage Calculator",
+      "desc": "Free online percentage calculator. Calculate discounts, percentage increases, and percentage differences instantly.",
+      "faqTitle": "Frequently Asked Questions",
+      "faq1q": "How do I calculate a percentage discount?",
+      "faq1a": "To calculate the final price after a discount, multiply the original price by (1 - discount_percentage / 100). For example, a 20% discount on $100 means you pay $100 × 0.8 = $80.",
+      "faq2q": "How do I calculate percentage increase?",
+      "faq2a": "Percentage increase is calculated as: ((new_value - original_value) / original_value) × 100%. For example, an increase from 50 to 75 is a (75-50)/50 × 100% = 50% increase.",
+      "faq3q": "What is the difference between percentage increase and percentage difference?",
+      "faq3a": "Percentage increase measures growth relative to the original value, while percentage difference measures the absolute difference between two values regardless of direction. Use our calculator above for both calculations."
+    },
+    "bmi": {
+      "title": "BMI Calculator",
+      "desc": "Free online BMI calculator. Calculate your Body Mass Index instantly and check your weight category.",
+      "metaDesc": "Calculate your Body Mass Index (BMI) instantly. Free online BMI calculator with weight categories, healthy range, and metric/imperial units.",
+      "faqTitle": "Frequently Asked Questions",
+      "faq1q": "What is BMI?",
+      "faq1a": "BMI (Body Mass Index) is a measure of body fat based on height and weight. It is calculated by dividing weight in kilograms by the square of height in meters.",
+      "faq2q": "What is a healthy BMI range?",
+      "faq2a": "A healthy BMI range is 18.5 to 24.9. Below 18.5 is underweight, 25 to 29.9 is overweight, and 30 or above is obese.",
+      "faq3q": "Is BMI accurate for everyone?",
+      "faq3a": "BMI is a general screening tool and may not be accurate for athletes, pregnant women, or the elderly. Consult a healthcare professional for a complete health assessment."
+    },
+    "age": {
+      "title": "Age Calculator",
+      "desc": "Free online age calculator. Calculate your exact age in years, months, and days instantly.",
+      "metaDesc": "Calculate your exact age in years, months, and days. Free online age calculator with birthday countdown, total days lived, and date of birth to age conversion.",
+      "faqTitle": "Frequently Asked Questions",
+      "faq1q": "How is my age calculated?",
+      "faq1a": "Your age is calculated by subtracting your birth date from the current date. The result shows the exact number of years, months, and days you have lived.",
+      "faq2q": "Can I calculate age for any date?",
+      "faq2a": "Yes, you can select any date to calculate age as of that specific date. This is useful for determining age at a future event or past milestone.",
+      "faq3q": "How many days has a newborn lived?",
+      "faq3a": "A newborn has lived 0 days. The counter starts from day 1 after birth. Our calculator shows total days, weeks, and months lived for any age."
+    },
+    "currency": {
+      "title": "Currency Converter",
+      "desc": "Free online currency converter. Convert between USD, EUR, GBP, JPY and 150+ currencies with live exchange rates.",
+      "faqTitle": "Frequently Asked Questions",
+      "faq1q": "How often are exchange rates updated?",
+      "faq1a": "Our currency converter uses the Frankfurter API which provides live exchange rates updated daily on business days. Rates reflect interbank market rates without any markup.",
+      "faq2q": "How many currencies does the converter support?",
+      "faq2a": "The converter supports 30+ major world currencies including USD, EUR, GBP, JPY, CNY, AUD, CAD, CHF, and more. Select any two currencies to get the current exchange rate.",
+      "faq3q": "Are there any fees for using the currency converter?",
+      "faq3a": "No, it is completely free to use. Our currency converter uses the Frankfurter API which provides exchange rates without any markup or hidden fees. The rates shown are interbank rates."
+    }
   },
   "shoeGuide": {
     "title": "Shoe Size Conversion Guide",

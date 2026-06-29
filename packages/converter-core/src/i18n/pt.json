@@ -28,7 +28,8 @@
     "title": "Conversor de Unidades",
     "subtitle": "Rápido, preciso, gratuito — converta qualquer unidade instantaneamente",
     "chooseCategory": "Escolha uma categoria para começar:",
-    "trust": "Grátis · Instantâneo · Sem cadastro"
+    "trust": "Grátis · Instantâneo · Sem cadastro",
+    "about": "ConvUnit é um conversor de unidades online gratuito que abrange 123 unidades em 23 categorias. Converta comprimento, peso, temperatura, armazenamento de dados, área, volume, velocidade, tempo, pressão, energia, potência, eficiência de combustível, frequência, ângulo, força, torque e tamanho de calçado. Também inclui calculadoras de base numérica, carimbo de data/hora, porcentagem, IMC, idade e moeda. Disponível em 12 idiomas."
   },
   "category": {
     "title": "Conversor de %name%",
@@ -64,12 +65,30 @@
     "otherCategories": "Outras categorias de conversão"
   },
   "calc": {
-    "numberBase": { "title": "Conversor de bases numéricas", "desc": "Conversor de bases numéricas online gratuito. Converta entre binário, octal, decimal e hexadecimal instantaneamente." },
-    "timestamp": { "title": "Conversor de timestamp Unix", "desc": "Conversor de timestamp Unix online gratuito. Converta entre timestamps Unix e datas legíveis instantaneamente." },
-    "percentage": { "title": "Calculadora de porcentagem", "desc": "Calculadora de porcentagem online gratuita. Calcule descontos, aumentos e diferenças percentuais instantaneamente." },
-    "bmi": { "title": "Calculadora de IMC", "desc": "Calculadora de IMC online gratuita. Calcule seu Índice de Massa Corporal instantaneamente." },
-    "age": { "title": "Calculadora de idade", "desc": "Calculadora de idade online gratuita. Calcule sua idade exata em anos, meses e dias instantaneamente." },
-    "currency": { "title": "Conversor de moedas", "desc": "Conversor de moedas online gratuito. Converta entre USD, EUR, GBP, JPY e mais de 150 moedas com taxas de câmbio ao vivo." }
+    "numberBase": {
+      "title": "Conversor de bases numéricas",
+      "desc": "Conversor de bases numéricas online gratuito. Converta entre binário, octal, decimal e hexadecimal instantaneamente."
+    },
+    "timestamp": {
+      "title": "Conversor de timestamp Unix",
+      "desc": "Conversor de timestamp Unix online gratuito. Converta entre timestamps Unix e datas legíveis instantaneamente."
+    },
+    "percentage": {
+      "title": "Calculadora de porcentagem",
+      "desc": "Calculadora de porcentagem online gratuita. Calcule descontos, aumentos e diferenças percentuais instantaneamente."
+    },
+    "bmi": {
+      "title": "Calculadora de IMC",
+      "desc": "Calculadora de IMC online gratuita. Calcule seu Índice de Massa Corporal instantaneamente."
+    },
+    "age": {
+      "title": "Calculadora de idade",
+      "desc": "Calculadora de idade online gratuita. Calcule sua idade exata em anos, meses e dias instantaneamente."
+    },
+    "currency": {
+      "title": "Conversor de moedas",
+      "desc": "Conversor de moedas online gratuito. Converta entre USD, EUR, GBP, JPY e mais de 150 moedas com taxas de câmbio ao vivo."
+    }
   },
   "common": {
     "loading": "Carregando...",

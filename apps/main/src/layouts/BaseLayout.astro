@@ -178,7 +178,7 @@ const canonicalHref = canonical ?? canonicalUrl(lang, pagePath, siteUrl.replace(
 
     <footer class="site-footer">
       <div class="container footer-inner">
-        <p>&copy; {new Date().getFullYear()} Unit Converter</p>
+        <p>&copy; {new Date().getFullYear()} <a href="/" class="footer-brand">ConvUnit</a></p>
         <nav>
           <a href={"/" + lang + "/"}>{t(lang, 'nav.home')}</a>
         </nav>
@@ -267,6 +267,8 @@ const canonicalHref = canonical ?? canonicalUrl(lang, pagePath, siteUrl.replace(
     margin-left: var(--sp-4);
   }
   .footer-inner nav a:hover { color: var(--c-text); text-decoration: underline; }
+  .footer-brand { color: var(--c-text); font-weight: 700; text-decoration: none; }
+  .footer-brand:hover { text-decoration: underline; }
   @media (max-width: 480px) {
     :root { --container-pad: var(--sp-3); }
     .header-inner { padding: var(--sp-2) var(--sp-3); }

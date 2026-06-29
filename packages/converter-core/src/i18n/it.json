@@ -28,7 +28,8 @@
     "title": "Convertitore di Unità",
     "subtitle": "Veloce, preciso, gratuito — converti qualsiasi unità all'istante",
     "chooseCategory": "Scegli una categoria per iniziare:",
-    "trust": "Gratis · Istantaneo · Senza registrazione"
+    "trust": "Gratis · Istantaneo · Senza registrazione",
+    "about": "ConvUnit è un convertitore di unità online gratuito che copre 123 unità in 23 categorie. Converti lunghezza, peso, temperatura, archiviazione dati, area, volume, velocità, tempo, pressione, energia, potenza, efficienza del carburante, frequenza, angolo, forza, coppia e numero di scarpe. Include anche calcolatori per base numerica, timestamp, percentuale, BMI, età e valuta. Disponibile in 12 lingue."
   },
   "category": {
     "title": "Convertitore di %name%",
@@ -64,12 +65,30 @@
     "otherCategories": "Altre categorie di conversione"
   },
   "calc": {
-    "numberBase": { "title": "Convertitore di basi numeriche", "desc": "Convertitore di basi numeriche online gratuito. Converti tra binario, ottale, decimale ed esadecimale all'istante." },
-    "timestamp": { "title": "Convertitore di timestamp Unix", "desc": "Convertitore di timestamp Unix online gratuito. Converti tra timestamp Unix e date leggibili all'istante." },
-    "percentage": { "title": "Calcolatore percentuale", "desc": "Calcolatore percentuale online gratuito. Calcola sconti, aumenti e differenze percentuali all'istante." },
-    "bmi": { "title": "Calcolatore BMI", "desc": "Calcolatore BMI online gratuito. Calcola il tuo Indice di Massa Corporea all'istante." },
-    "age": { "title": "Calcolatore età", "desc": "Calcolatore età online gratuito. Calcola la tua età esatta in anni, mesi e giorni all'istante." },
-    "currency": { "title": "Convertitore di valuta", "desc": "Convertitore di valuta online gratuito. Converti tra USD, EUR, GBP, JPY e oltre 150 valute con tassi di cambio in tempo reale." }
+    "numberBase": {
+      "title": "Convertitore di basi numeriche",
+      "desc": "Convertitore di basi numeriche online gratuito. Converti tra binario, ottale, decimale ed esadecimale all'istante."
+    },
+    "timestamp": {
+      "title": "Convertitore di timestamp Unix",
+      "desc": "Convertitore di timestamp Unix online gratuito. Converti tra timestamp Unix e date leggibili all'istante."
+    },
+    "percentage": {
+      "title": "Calcolatore percentuale",
+      "desc": "Calcolatore percentuale online gratuito. Calcola sconti, aumenti e differenze percentuali all'istante."
+    },
+    "bmi": {
+      "title": "Calcolatore BMI",
+      "desc": "Calcolatore BMI online gratuito. Calcola il tuo Indice di Massa Corporea all'istante."
+    },
+    "age": {
+      "title": "Calcolatore età",
+      "desc": "Calcolatore età online gratuito. Calcola la tua età esatta in anni, mesi e giorni all'istante."
+    },
+    "currency": {
+      "title": "Convertitore di valuta",
+      "desc": "Convertitore di valuta online gratuito. Converti tra USD, EUR, GBP, JPY e oltre 150 valute con tassi di cambio in tempo reale."
+    }
   },
   "common": {
     "loading": "Caricamento...",

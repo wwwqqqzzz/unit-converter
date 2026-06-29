@@ -28,7 +28,8 @@
     "title": "Birim Dönüştürücü",
     "subtitle": "Hızlı, doğru, ücretsiz — herhangi bir birimi anında dönüştürün",
     "chooseCategory": "Başlamak için bir kategori seçin:",
-    "trust": "Ücretsiz · Anında · Kayıtsız"
+    "trust": "Ücretsiz · Anında · Kayıtsız",
+    "about": "ConvUnit, 23 kategoride 123 birimi kapsayan ücretsiz bir çevrimiçi birim dönüştürücüdür. Uzunluk, ağırlık, sıcaklık, veri depolama, alan, hacim, hız, zaman, basınç, enerji, güç, yakıt verimliliği, frekans, açı, kuvvet, tork ve ayakkabı numarası dönüştürme. Ayrıca sayı tabanı, zaman damgası, yüzde, VKI, yaş ve para birimi hesap makineleri. 12 dilde kullanılabilir."
   },
   "category": {
     "title": "%name% Dönüştürücü",
@@ -64,12 +65,30 @@
     "otherCategories": "Diğer Dönüşüm Kategorileri"
   },
   "calc": {
-    "numberBase": { "title": "Sayı Tabanı Dönüştürücü", "desc": "Ücretsiz çevrimiçi sayı tabanı dönüştürücü. İkili, sekizli, ondalık ve onaltılı arasında anında dönüşüm." },
-    "timestamp": { "title": "Unix Zaman Damgası Dönüştürücü", "desc": "Ücretsiz çevrimiçi Unix zaman damgası dönüştürücü. Unix zaman damgaları ve okunabilir tarihler arasında anında dönüşüm." },
-    "percentage": { "title": "Yüzde Hesaplayıcı", "desc": "Ücretsiz çevrimiçi yüzde hesaplayıcı. İndirim, artış ve yüzde farkını anında hesaplayın." },
-    "bmi": { "title": "BMI Hesaplayıcı", "desc": "Ücretsiz çevrimiçi BMI hesaplayıcı. Vücut Kitle İndeksinizi anında hesaplayın." },
-    "age": { "title": "Yaş Hesaplayıcı", "desc": "Ücretsiz çevrimiçi yaş hesaplayıcı. Tam yaşınızı yıl, ay ve gün olarak anında hesaplayın." },
-    "currency": { "title": "Döviz Çevirici", "desc": "Ücretsiz çevrimiçi döviz çevirici. USD, EUR, GBP, JPY ve 150'den fazla para birimi arasında canlı döviz kurlarıyla dönüşüm yapın." }
+    "numberBase": {
+      "title": "Sayı Tabanı Dönüştürücü",
+      "desc": "Ücretsiz çevrimiçi sayı tabanı dönüştürücü. İkili, sekizli, ondalık ve onaltılı arasında anında dönüşüm."
+    },
+    "timestamp": {
+      "title": "Unix Zaman Damgası Dönüştürücü",
+      "desc": "Ücretsiz çevrimiçi Unix zaman damgası dönüştürücü. Unix zaman damgaları ve okunabilir tarihler arasında anında dönüşüm."
+    },
+    "percentage": {
+      "title": "Yüzde Hesaplayıcı",
+      "desc": "Ücretsiz çevrimiçi yüzde hesaplayıcı. İndirim, artış ve yüzde farkını anında hesaplayın."
+    },
+    "bmi": {
+      "title": "BMI Hesaplayıcı",
+      "desc": "Ücretsiz çevrimiçi BMI hesaplayıcı. Vücut Kitle İndeksinizi anında hesaplayın."
+    },
+    "age": {
+      "title": "Yaş Hesaplayıcı",
+      "desc": "Ücretsiz çevrimiçi yaş hesaplayıcı. Tam yaşınızı yıl, ay ve gün olarak anında hesaplayın."
+    },
+    "currency": {
+      "title": "Döviz Çevirici",
+      "desc": "Ücretsiz çevrimiçi döviz çevirici. USD, EUR, GBP, JPY ve 150'den fazla para birimi arasında canlı döviz kurlarıyla dönüşüm yapın."
+    }
   },
   "common": {
     "loading": "Yükleniyor...",

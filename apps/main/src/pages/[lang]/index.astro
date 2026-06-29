@@ -63,6 +63,11 @@ const homeJsonld = JSON.stringify([orgJsonld, siteJsonld]);
       ))}
     </div>
   </section>
+
+  <section class="about-convunit">
+    <h2>ConvUnit</h2>
+    <p>{t(lang, 'home.about')}</p>
+  </section>
 </BaseLayout>
 
 <style>
@@ -131,6 +136,19 @@ const homeJsonld = JSON.stringify([orgJsonld, siteJsonld]);
   .category-icon { font-size: 1.5rem; margin-bottom: var(--sp-1); }
   .category-name { font-weight: 600; font-size: var(--text-base); }
   .category-count { font-size: var(--text-xs); color: var(--c-text-tertiary); margin-top: 2px; }
+  .about-convunit { margin: var(--sp-10) 0 var(--sp-6); padding: var(--sp-6); background: var(--c-surface); border: var(--b); box-shadow: var(--shadow-hard-sm); }
+  .about-convunit h2 {
+    font-size: var(--text-xl);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: var(--sp-3);
+    color: var(--c-text);
+  }
+  .about-convunit p {
+    font-size: var(--text-base);
+    line-height: 1.7;
+    color: var(--c-text-secondary);
+  }
   @media (max-width: 480px) {
     .home-hero { padding: var(--sp-8) 0 var(--sp-6); }
     .home-hero h1 { font-size: var(--text-3xl); }

@@ -1,5 +1,66 @@
 # 实施日志
 
+## 2026-06-30 — Phase 14: 品牌锚定 + 内容可见性
+
+### 背景
+
+AEO 分析发现三个品牌锚定问题：
+1. UnitDescription 内容藏在 `<details>` 折叠中 — AI 爬虫把折叠内容当补充，不当核心内容
+2. Footer 写 "Unit Converter" 而非品牌名 "ConvUnit" — AI 无法建立品牌关联
+3. 首页没有品牌描述段落 — AI 不知道 "ConvUnit 是什么"
+
+### 变更
+
+#### 14.1 UnitDescription 从折叠改为直接可见 ✅
+
+**文件**: `apps/main/src/components/UnitDescription.astro`
+
+| 之前 | 之后 |
+|------|------|
+| `<details>` + `<summary>` 折叠 | `<section>` + `<h3>` 直接可见 |
+| 内容默认隐藏，需点击展开 | 内容默认展示，无需交互 |
+| AI 爬虫视为补充内容 | AI 爬虫视为核心内容 |
+
+视觉变化：
+- 从折叠框（带 +/- 按钮）改为带边框的可见区块
+- 标题从 `<summary>` 改为 `<h3>` 带大写字母间距样式
+- 内容直接显示，无需点击
+
+影响：1,230 个单位描述 × 12 语言 = 全部 48,925 页的描述内容对 AI 可见。
+
+#### 14.2 首页品牌锚定段落 ✅
+
+**文件**: `apps/main/src/pages/[lang]/index.astro`
+
+在分类网格下方新增 "ConvUnit" 品牌锚定段落：
+- H2 标题 "ConvUnit"
+- 包含品牌名、网站范围（123 单位、23 分类、12 语言）的描述文字
+- 12 语言 i18n 翻译全部完成
+
+新增 i18n key: `home.about` — 每种语言包含完整品牌描述，AI 爬虫可以直接引用。
+
+#### 14.3 Footer 品牌名统一 ✅
+
+**文件**: `apps/main/src/layouts/BaseLayout.astro`
+
+| 之前 | 之后 |
+|------|------|
+| `© 2026 Unit Converter` | `© 2026 [ConvUnit](/)` |
+
+品牌名从 "Unit Converter"（通用描述词）改为 "ConvUnit"（专有品牌名），并链接到首页。
+
+### 线上验证
+
+| 验证项 | 结果 |
+|--------|------|
+| 首页品牌段落 "ConvUnit is a free..." | ✅ 可见 |
+| Footer "ConvUnit" 品牌名 | ✅ 替换了 "Unit Converter" |
+| UnitDescription 不再有 `<details>` | ✅ 0 个 `<details>` 标签 |
+| UnitDescription `<h3>` 可见 | ✅ "About Kilograms", "About Pounds" |
+| Build + 74 tests | ✅ 通过 |
+
+---
+
 ## 2026-06-30 — Phase 13: AEO Schema 优化 + llms.txt + robots.txt 更新
 
 ### 背景
