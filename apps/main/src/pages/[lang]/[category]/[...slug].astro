@@ -210,7 +210,8 @@ if (!isNumberBasePage) {
     else { howToSteps = [{ '@type': 'HowToStep', position: 1, text: lang === 'zh' ? `先将${u1Name}转换为摄氏度` : `First convert ${u1Name} to Celsius` }, { '@type': 'HowToStep', position: 2, text: lang === 'zh' ? `再将摄氏度转换为${u2Name}` : `Then convert Celsius to ${u2Name}` }]; }
   } else { howToSteps = [{ '@type': 'HowToStep', position: 1, text: lang === 'zh' ? `取${u1Name}的数值` : `Take the value in ${u1Name}` }, { '@type': 'HowToStep', position: 2, text: lang === 'zh' ? `乘以换算系数 ${formatResult(rate)}` : `Multiply by the conversion factor ${formatResult(rate)}` }, { '@type': 'HowToStep', position: 3, text: lang === 'zh' ? `得到的结果就是${u2Name}` : `The result is your value in ${u2Name}` }]; }
   const howToJsonld = { '@context': 'https://schema.org', '@type': 'HowTo', name: howToNameHeading, step: howToSteps };
-  jsonld = JSON.stringify([breadcrumbJsonld, faqJsonld, howToJsonld]);
+  const webAppJsonld = { '@context': 'https://schema.org', '@type': 'WebApplication', name: `${u1Name} → ${u2Name} ${catName}`, description: pageDesc, url: `${Astro.site}${lang}/${pagePath}`, applicationCategory: 'UtilityApplication', operatingSystem: 'All', offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' }, publisher: { '@id': 'https://convunit.net/#organization' } };
+  jsonld = JSON.stringify([breadcrumbJsonld, faqJsonld, howToJsonld, webAppJsonld]);
   allUnits = category.units.map(u => ({ id: u.id, name: u.name[lang], symbol: u.symbol }));
   ratesMap = {}; for (const u of category.units) ratesMap[u.id] = u.toBase;
   commonValuesForTable = getCommonValues(catId);

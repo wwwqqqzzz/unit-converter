@@ -39,7 +39,6 @@ const breadcrumbJsonld = {
     { '@type': 'ListItem', position: 2, name: catName, item: `${Astro.site}${lang}/${catId}/` },
   ],
 };
-const jsonld = JSON.stringify([breadcrumbJsonld]);
 
 // Shoe guide i18n helper (falls back to English for untranslated languages)
 const sg = (key: string): string => {
@@ -85,6 +84,19 @@ const pageDesc = isShoe ? sg('metaDesc') : isCalculator ? calcMeta[catId]?.desc 
   const catDesc = t(lang, catDescKey as any);
   return catDesc !== catDescKey ? catDesc : t(lang, 'category.description', { name: catName });
 })();
+
+const catWebAppJsonld = {
+  '@context': 'https://schema.org',
+  '@type': 'WebApplication',
+  name: catName,
+  description: pageDesc,
+  url: `${Astro.site}${lang}/${catPath}`,
+  applicationCategory: 'UtilityApplication',
+  operatingSystem: 'All',
+  offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+  publisher: { '@id': 'https://convunit.net/#organization' },
+};
+const jsonld = JSON.stringify([breadcrumbJsonld, catWebAppJsonld]);
 
 // Calculator FAQ helper
 const calcFaq = (id: string) => {

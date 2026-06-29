@@ -1,0 +1,74 @@
+# ConvUnit — Unit Converter
+
+> Free online unit converter with 123 units across 23 categories and 12 languages. 48,925 pages of conversion tools, formulas, and reference data.
+
+## What is ConvUnit?
+
+ConvUnit is a multilingual unit conversion website covering 17 converter categories (length, weight, temperature, data storage, area, volume, speed, time, pressure, energy, power, fuel efficiency, frequency, angle, force, torque, shoe size) and 6 interactive calculators (number base, unix timestamp, percentage, BMI, age, currency).
+
+## Key Features
+
+- 123 units, 433 conversion pairs
+- 12 languages: English, 中文, Español, Français, Deutsch, 日本語, Português, Italiano, 한국어, Русский, हिन्दी, Türkçe
+- Value-in-URL pages: every conversion has its own SEO-optimized page
+- Real-time interactive converter with instant results
+- Common conversion tables on every pair page
+- Cross-links between related categories and units
+- Mobile-first responsive design
+- Free, no registration, no ads blocking content
+
+## Categories
+
+| Category | Type | Units |
+|----------|------|-------|
+| Length | converter | 8 |
+| Weight | converter | 8 |
+| Temperature | converter | 3 |
+| Data Storage | converter | 10 |
+| Area | converter | 10 |
+| Volume | converter | 13 |
+| Speed | converter | 6 |
+| Time | converter | 8 |
+| Pressure | converter | 8 |
+| Energy | converter | 7 |
+| Power | converter | 8 |
+| Fuel Efficiency | converter | 4 |
+| Frequency | converter | 6 |
+| Angle | converter | 6 |
+| Force | converter | 6 |
+| Torque | converter | 6 |
+| Shoe Size | converter | 6 |
+| Number Base | calculator | — |
+| Unix Timestamp | calculator | — |
+| Percentage | calculator | — |
+| BMI | calculator | — |
+| Age | calculator | — |
+| Currency | calculator | — |
+
+## URL Structure
+
+- Homepage: `/{lang}/`
+- Category: `/{lang}/{category}/`
+- Converter pair: `/{lang}/{category}/{unit1}-to-{unit2}/`
+- Value conversion: `/{lang}/{category}/{value}-{unit1}-to-{unit2}/`
+- Example: `/en/length/km-to-miles/` or `/en/length/5-km-to-miles/`
+
+## Conversion API (Informal)
+
+Every page includes:
+- The conversion formula (e.g., "1 km = 0.621371 miles")
+- Common values table
+- Unit descriptions with historical/contextual information
+- FAQ with direct answers
+
+## About
+
+- **Site**: https://convunit.net
+- **Sub-sites**: https://bmi.convunit.net (BMI Calculator), https://age.convunit.net (Age Calculator)
+- **Structured data**: BreadcrumbList, FAQPage, HowTo, WebApplication, Organization, WebSite schemas
+- **Sitemap**: https://convunit.net/sitemap.xml (48,925 URLs)
+- **Languages**: 12 (en, zh, es, fr, de, ja, pt, it, ko, ru, hi, tr)
+
+## Contact
+
+For questions about ConvUnit, visit the site or check the GitHub repository.

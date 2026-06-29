@@ -13,9 +13,36 @@ export function getStaticPaths() {
 const { lang } = Astro.params as Props;
 const categories = getCategories();
 const calcCount = categories.filter(c => c.type === 'calculator').length;
+
+const orgJsonld = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  '@id': 'https://convunit.net/#organization',
+  name: 'ConvUnit',
+  url: 'https://convunit.net',
+  logo: 'https://convunit.net/favicon.svg',
+  sameAs: [],
+};
+
+const siteJsonld = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  '@id': 'https://convunit.net/#website',
+  name: 'ConvUnit — Unit Converter',
+  url: 'https://convunit.net',
+  inLanguage: LANGUAGES,
+  potentialAction: {
+    '@type': 'SearchAction',
+    target: 'https://convunit.net/{lang}/?q={search_term_string}',
+    'query-input': 'required name=search_term_string',
+  },
+  publisher: { '@id': 'https://convunit.net/#organization' },
+};
+
+const homeJsonld = JSON.stringify([orgJsonld, siteJsonld]);
 ---
 
-<BaseLayout lang={lang} title={t(lang, 'home.title')} description={t(lang, 'home.subtitle')} pagePath="" isHome={true}>
+<BaseLayout lang={lang} title={t(lang, 'home.title')} description={t(lang, 'home.subtitle')} pagePath="" isHome={true} jsonld={homeJsonld}>
   <div class="home-hero">
     <h1>{t(lang, 'home.title')}</h1>
     <p class="home-subtitle">{t(lang, 'home.subtitle')}</p>

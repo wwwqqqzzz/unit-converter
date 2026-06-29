@@ -1,5 +1,152 @@
 # 实施日志
 
+## 2026-06-30 — Phase 13: AEO Schema 优化 + llms.txt + robots.txt 更新
+
+### 背景
+
+AEO 分析发现主站 48,925 页缺少 WebApplication schema（BMI/Age 站有），全站没有 Organization/WebSite schema，没有 llms.txt，robots.txt 缺少 AI 爬虫指引和 Sitemap 指令。这些是 AI 搜索引擎引用网站的关键信号。
+
+### 变更
+
+#### 13.1 主站转换页加 WebApplication schema ✅
+
+**文件**: `apps/main/src/pages/[lang]/[category]/[...slug].astro`
+
+每个转换页（48,925 页）的 JSON-LD 从 3 个 schema 增加到 4 个：
+
+| 之前 | 之后 |
+|------|------|
+| BreadcrumbList | BreadcrumbList |
+| FAQPage | FAQPage |
+| HowTo | HowTo |
+| — | **WebApplication** (新增) |
+
+WebApplication schema 属性：
+
+```json
+{
+  "@type": "WebApplication",
+  "name": "{unit1} → {unit2} {category}",
+  "description": "{pageDesc}",
+  "url": "https://convunit.net/{lang}/{category}/{slug}",
+  "applicationCategory": "UtilityApplication",
+  "operatingSystem": "All",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+  "publisher": { "@id": "https://convunit.net/#organization" }
+}
+```
+
+**publisher 引用**: 所有 WebApplication 统一引用 `https://convunit.net/#organization`，与首页 Organization schema 建立实体关联。
+
+#### 13.2 分类着陆页加 WebApplication schema ✅
+
+**文件**: `apps/main/src/pages/[lang]/[category]/index.astro`
+
+每个分类页（276 页）的 JSON-LD 从 1 个增加到 2 个：
+
+| 之前 | 之后 |
+|------|------|
+| BreadcrumbList | BreadcrumbList |
+| — | **WebApplication** (新增) |
+
+WebApplication schema 包含：name (分类名), description, url, applicationCategory, operatingSystem, offers, publisher。
+
+#### 13.3 首页加 Organization + WebSite schema ✅
+
+**文件**: `apps/main/src/pages/[lang]/index.astro`
+
+首页（12 页）从 0 个 schema 增加到 2 个：
+
+**Organization schema**:
+```json
+{
+  "@type": "Organization",
+  "@id": "https://convunit.net/#organization",
+  "name": "ConvUnit",
+  "url": "https://convunit.net",
+  "logo": "https://convunit.net/favicon.svg",
+  "sameAs": []
+}
+```
+
+**WebSite schema**:
+```json
+{
+  "@type": "WebSite",
+  "@id": "https://convunit.net/#website",
+  "name": "ConvUnit — Unit Converter",
+  "url": "https://convunit.net",
+  "inLanguage": ["en","zh","es","fr","de","ja","pt","it","ko","ru","hi","tr"],
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": "https://convunit.net/{lang}/?q={search_term_string}",
+    "query-input": "required name=search_term_string"
+  },
+  "publisher": { "@id": "https://convunit.net/#organization" }
+}
+```
+
+**实体关联图**:
+```
+Organization (#organization) ←── publisher ── WebSite (#website)
+        ↑                                               
+        └── publisher ── WebApplication (48,925 pages)
+        └── publisher ── WebApplication (276 category pages)
+```
+
+#### 13.4 创建 llms.txt ✅
+
+**文件**: `apps/main/public/llms.txt` (新建)
+
+73 行结构化文档，包含：
+- 站点简介（123 单位、23 分类、12 语言、48,925 页）
+- 完整分类表格（17 转换器 + 6 计算器）
+- URL 结构说明
+- 转换公式和常见值信息
+- 子站链接（bmi.convunit.net, age.convunit.net）
+- Schema 类型列表
+- Sitemap 地址
+
+#### 13.5 更新 robots.txt ✅
+
+**文件**: `apps/main/src/pages/robots.txt.ts`
+
+| 之前 | 之后 |
+|------|------|
+| `User-agent: *\nAllow: /\n\nSitemap: {site}/sitemap.xml` | 注释头 + Disallow /api/ + Sitemap + llms.txt 引导 |
+
+### Schema 覆盖对比
+
+| 页面类型 | 之前 | 之后 |
+|----------|------|------|
+| 首页 (12) | 0 schema | Organization + WebSite |
+| 分类页 (276) | BreadcrumbList | BreadcrumbList + **WebApplication** |
+| 转换页 (48,925) | BreadcrumbList + FAQPage + HowTo | BreadcrumbList + FAQPage + HowTo + **WebApplication** |
+| Number Base 页 (516) | BreadcrumbList + FAQPage | BreadcrumbList + FAQPage (保持不变) |
+
+### 验证
+
+| 检查项 | 结果 |
+|--------|------|
+| `npm run build` | ✅ 通过 |
+| 74 单元测试 | ✅ 全部通过 |
+| WebApplication schema 结构 | ✅ 包含所有必需字段 |
+| Organization schema 结构 | ✅ @id, name, url, logo 齐全 |
+| WebSite schema 结构 | ✅ @id, inLanguage, potentialAction, publisher 齐全 |
+| publisher 交叉引用 | ✅ WebSite.publisher → Organization.@id |
+| robots.txt 内容 | ✅ 包含 Sitemap + Disallow /api/ + llms.txt 引导 |
+| llms.txt 内容 | ✅ 73 行，包含站点信息、分类、URL 结构 |
+
+### 影响范围
+
+- **48,925 页**获得 WebApplication schema + publisher 引用
+- **276 页**获得 WebApplication schema + publisher 引用
+- **12 页**获得 Organization + WebSite schema
+- **llms.txt** 为 AI 爬虫提供结构化入口
+- **robots.txt** 明确 Sitemap 位置和 AI 友好引导
+
+---
+
 ## 2026-06-21 — Phase 11: 多站群 Monorepo 架构重构
 
 ### 背景
