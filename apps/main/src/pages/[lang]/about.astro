@@ -1,0 +1,175 @@
+---
+// About ConvUnit — Trust page for AEO and users (English only)
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+export const prerender = true;
+export async function getStaticPaths() {
+  return [{ params: { lang: 'en' } }];
+}
+
+const orgJsonld = JSON.stringify({
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  '@id': 'https://convunit.net/#organization',
+  name: 'ConvUnit',
+  url: 'https://convunit.net',
+  logo: 'https://convunit.net/favicon.svg',
+  description: 'ConvUnit is a free online unit converter covering 123 units across 23 categories and 12 languages.',
+  sameAs: [],
+  founder: {
+    '@type': 'Organization',
+    name: 'ConvUnit',
+  },
+});
+
+const aboutJsonld = JSON.stringify({
+  '@context': 'https://schema.org',
+  '@type': 'AboutPage',
+  mainEntity: {
+    '@type': 'Organization',
+    '@id': 'https://convunit.net/#organization',
+  },
+  description: 'ConvUnit is a free, accurate, and instant unit converter. It covers 123 units across 23 categories including length, weight, temperature, data storage, area, volume, speed, time, pressure, energy, power, fuel efficiency, frequency, angle, force, torque, and shoe size, plus calculators for number base, unix timestamp, percentage, BMI, age, and currency.',
+});
+---
+
+<BaseLayout lang="en" title="About ConvUnit" description="Learn about ConvUnit — a free, accurate, and instant unit converter covering 123 units across 23 categories and 12 languages." pagePath="about" jsonld={orgJsonld}>
+  <article class="trust-page">
+    <h1>About ConvUnit</h1>
+
+    <section>
+      <h2>What is ConvUnit?</h2>
+      <p><strong>ConvUnit</strong> is a free online unit converter built for speed, accuracy, and accessibility. It converts between <strong>123 units</strong> across <strong>23 categories</strong> — from everyday measurements like length and weight to specialized fields like pressure, energy, and data storage.</p>
+      <p>Every conversion is instant. No signup, no ads blocking content, no tracking. Just type and convert.</p>
+    </section>
+
+    <section>
+      <h2>What ConvUnit Covers</h2>
+      <div class="two-col">
+        <div>
+          <h3>Unit Converters (17 categories)</h3>
+          <ul>
+            <li>Length — km, miles, feet, meters, inches, cm, yards, mm</li>
+            <li>Weight — kg, pounds, ounces, grams, tonnes, stones</li>
+            <li>Temperature — Celsius, Fahrenheit, Kelvin</li>
+            <li>Data Storage — bytes, KB, MB, GB, TB, PB, bits</li>
+            <li>Area — sq meters, acres, hectares, sq feet, sq miles</li>
+            <li>Volume — liters, gallons, cups, milliliters, cubic meters</li>
+            <li>Speed — km/h, mph, m/s, knots, mach</li>
+            <li>Time — seconds, minutes, hours, days, weeks, months, years</li>
+            <li>Pressure — Pa, bar, atm, psi, mmHg, Torr</li>
+            <li>Energy — joules, calories, kWh, BTU, eV</li>
+            <li>Power — watts, horsepower, BTU/h</li>
+            <li>Fuel Efficiency — L/100km, mpg, km/L</li>
+            <li>Frequency — Hz, kHz, MHz, GHz, rpm</li>
+            <li>Angle — degrees, radians, gradians</li>
+            <li>Force — newtons, pounds-force, dynes</li>
+            <li>Torque — N·m, ft·lbf, kgf·m</li>
+            <li>Shoe Size — US, UK, EU, JP sizing</li>
+          </ul>
+        </div>
+        <div>
+          <h3>Calculators (6 tools)</h3>
+          <ul>
+            <li>Number Base — binary, octal, decimal, hexadecimal</li>
+            <li>Unix Timestamp — epoch ↔ human date</li>
+            <li>Percentage — discounts, increases, differences</li>
+            <li>BMI — body mass index with category scale</li>
+            <li>Age — years, months, days, next birthday</li>
+            <li>Currency — live exchange rates for 30 currencies</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Why ConvUnit?</h2>
+      <ul>
+        <li><strong>Instant results</strong> — conversions happen as you type, no page reload</li>
+        <li><strong>Accurate formulas</strong> — every conversion uses verified mathematical formulas, not approximations</li>
+        <li><strong>Answer-first design</strong> — value pages show the answer immediately (e.g., "5 km = 3.107 miles")</li>
+        <li><strong>12 languages</strong> — English, 中文, Español, Français, Deutsch, 日本語, Português, Italiano, 한국어, Русский, हिन्दी, Türkçe</li>
+        <li><strong>No tracking</strong> — we don't track what you convert or store personal data</li>
+        <li><strong>Free forever</strong> — no premium tier, no signup wall, no hidden paywalls</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>How ConvUnit Works</h2>
+      <p>ConvUnit uses pure mathematical conversion formulas. For linear conversions (most units), we multiply by a verified conversion factor. For non-linear conversions (temperature, shoe size), we use precise multi-step formulas.</p>
+      <p>For more details on our conversion methodology, see our <a href="/en/methodology/">Methodology page</a>.</p>
+    </section>
+
+    <section>
+      <h2>Technical Architecture</h2>
+      <p>ConvUnit runs on <strong>Cloudflare Workers</strong> at the edge, serving pages from 300+ locations worldwide. This means:</p>
+      <ul>
+        <li>Sub-400ms time-to-first-byte (cached)</li>
+        <li>HTTP/2 and HTTP/3 (QUIC) support</li>
+        <li>Brotli compression</li>
+        <li>No single point of failure</li>
+      </ul>
+      <p>The site is built with <strong>Astro</strong> for server-side rendering, <strong>TypeScript</strong> for type-safe unit definitions, and <strong>Vitest</strong> for 74 automated conversion tests.</p>
+    </section>
+
+    <section>
+      <h2>Contact & Links</h2>
+      <ul>
+        <li><strong>Website</strong>: <a href="https://convunit.net">convunit.net</a></li>
+        <li><strong>BMI Calculator</strong>: <a href="https://bmi.convunit.net">bmi.convunit.net</a></li>
+        <li><strong>Age Calculator</strong>: <a href="https://age.convunit.net">age.convunit.net</a></li>
+        <li><strong>Sitemap</strong>: <a href="/sitemap.xml">48,925 pages</a></li>
+      </ul>
+    </section>
+  </article>
+</BaseLayout>
+
+<style>
+  .trust-page { max-width: 720px; margin: 0 auto; }
+  .trust-page h1 {
+    font-size: var(--text-3xl);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    margin-bottom: var(--sp-6);
+  }
+  .trust-page h2 {
+    font-size: var(--text-xl);
+    font-weight: 700;
+    margin: var(--sp-8) 0 var(--sp-3);
+    padding-bottom: var(--sp-2);
+    border-bottom: 3px solid var(--c-accent);
+  }
+  .trust-page h3 {
+    font-size: var(--text-base);
+    font-weight: 700;
+    margin: var(--sp-4) 0 var(--sp-2);
+  }
+  .trust-page p {
+    line-height: 1.7;
+    color: var(--c-text-secondary);
+    margin-bottom: var(--sp-3);
+  }
+  .trust-page ul {
+    padding-left: var(--sp-6);
+    margin-bottom: var(--sp-4);
+  }
+  .trust-page li {
+    line-height: 1.7;
+    color: var(--c-text-secondary);
+    margin-bottom: var(--sp-1);
+  }
+  .trust-page a {
+    color: var(--c-link);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+  .trust-page a:hover { color: var(--c-link-hover); }
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--sp-6);
+  }
+  @media (max-width: 600px) {
+    .two-col { grid-template-columns: 1fr; }
+  }
+</style>

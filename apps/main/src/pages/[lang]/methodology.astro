@@ -1,0 +1,159 @@
+---
+// Methodology — Conversion accuracy and data sources (English only)
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+export const prerender = true;
+export async function getStaticPaths() {
+  return [{ params: { lang: 'en' } }];
+}
+---
+
+<BaseLayout lang="en" title="Conversion Methodology" description="How ConvUnit converts units — accuracy standards, data sources, and methodology for all 23 categories." pagePath="methodology">
+  <article class="trust-page">
+    <h1>Conversion Methodology</h1>
+
+    <section>
+      <h2>Our Approach</h2>
+      <p>ConvUnit uses <strong>exact mathematical formulas</strong> for all conversions. We do not use approximations, lookup tables, or rounded estimates. Every conversion factor is verified against authoritative sources.</p>
+      <p>There are two types of conversion in ConvUnit:</p>
+      <ul>
+        <li><strong>Linear conversions</strong> — most units (length, weight, area, etc.) use a single multiplication factor</li>
+        <li><strong>Non-linear conversions</strong> — temperature, shoe size, and fuel efficiency use multi-step formulas</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Linear Conversions</h2>
+      <p>For the majority of units, conversion is straightforward multiplication:</p>
+      <p class="formula"><code>target_value = source_value × (source_unit.toBase / target_unit.toBase)</code></p>
+      <p>Each unit stores a single <code>toBase</code> value — its ratio to the category's base unit. For example:</p>
+      <ul>
+        <li><strong>Length</strong>: base unit = meters. 1 km = 1000 m, 1 mile = 1609.344 m</li>
+        <li><strong>Weight</strong>: base unit = grams. 1 kg = 1000 g, 1 lb = 453.592 g</li>
+        <li><strong>Data Storage</strong>: base unit = bytes. 1 KB = 1024 B, 1 MB = 1048576 B</li>
+      </ul>
+      <p>This approach is exact and produces no intermediate rounding errors.</p>
+    </section>
+
+    <section>
+      <h2>Non-Linear Conversions</h2>
+      <h3>Temperature</h3>
+      <p>Temperature uses Celsius as the base unit with multi-step formulas:</p>
+      <ul>
+        <li><strong>°C → °F</strong>: °F = °C × 9/5 + 32</li>
+        <li><strong>°F → °C</strong>: °C = (°F − 32) × 5/9</li>
+        <li><strong>°C → K</strong>: K = °C + 273.15</li>
+      </ul>
+
+      <h3>Shoe Size</h3>
+      <p>Shoe sizes use foot length in centimeters as the intermediate unit:</p>
+      <ul>
+        <li><strong>US Men</strong>: foot_cm = US × 0.838 + 21.64</li>
+        <li><strong>US Women</strong>: foot_cm = US × 0.838 + 20.8</li>
+        <li><strong>UK</strong>: foot_cm = UK × 0.838 + 22.0</li>
+        <li><strong>EU</strong>: EU = (foot_cm + 1.5) × 1.5</li>
+        <li><strong>JP</strong>: JP = foot_cm × 10</li>
+      </ul>
+
+      <h3>Fuel Efficiency</h3>
+      <p>Fuel efficiency uses km/L as the base unit:</p>
+      <ul>
+        <li><strong>mpg (US)</strong> = 0.425144 × km/L</li>
+        <li><strong>L/100km</strong> = 100 / km/L (inverse relationship)</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Data Sources</h2>
+      <p>Conversion factors are sourced from:</p>
+      <ul>
+        <li><strong>NIST Special Publication 811</strong> — Guide for the Use of the International System of Units (SI)</li>
+        <li><strong>BIPM</strong> — International Bureau of Weights and Measures</li>
+        <li><strong>ISO 80000</strong> — Quantities and Units international standard</li>
+        <li><strong>IEEE/ASTM SI 10</strong> — Standard for Use of the International System of Units</li>
+      </ul>
+      <p>Currency exchange rates are provided by the <strong>European Central Bank</strong> via the <a href="https://www.frankfurter.app/" target="_blank" rel="noopener">Frankfurter API</a>, updated daily.</p>
+    </section>
+
+    <section>
+      <h2>Precision & Display</h2>
+      <p>ConvUnit displays results with up to <strong>6 significant figures</strong>. Internal calculations use JavaScript's <code>number</code> type (IEEE 754 double-precision), which provides approximately 15-17 significant digits of precision.</p>
+      <p>For most everyday conversions, this is more than sufficient. For scientific applications requiring arbitrary precision, we recommend using a dedicated arbitrary-precision library.</p>
+    </section>
+
+    <section>
+      <h2>Testing</h2>
+      <p>All conversion logic is validated by <strong>74 automated tests</strong> covering:</p>
+      <ul>
+        <li>Linear conversions (length, weight, area, volume, etc.)</li>
+        <li>Temperature conversions (C ↔ F ↔ K)</li>
+        <li>Shoe size conversions (US/UK/EU/JP)</li>
+        <li>Slug generation (URL path creation)</li>
+        <li>Formatting (significant figures)</li>
+      </ul>
+      <p>Tests run on every commit to prevent regressions.</p>
+    </section>
+
+    <section>
+      <h2>Update Policy</h2>
+      <ul>
+        <li><strong>Unit definitions</strong>: Updated when errors are found or new units are added</li>
+        <li><strong>Conversion factors</strong>: Never change for existing units (backward compatibility)</li>
+        <li><strong>Currency rates</strong>: Updated daily via Frankfurter API</li>
+        <li><strong>Site structure</strong>: Changes are deployed via Cloudflare Workers with zero downtime</li>
+      </ul>
+    </section>
+  </article>
+</BaseLayout>
+
+<style>
+  .trust-page { max-width: 720px; margin: 0 auto; }
+  .trust-page h1 {
+    font-size: var(--text-3xl);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    margin-bottom: var(--sp-6);
+  }
+  .trust-page h2 {
+    font-size: var(--text-xl);
+    font-weight: 700;
+    margin: var(--sp-8) 0 var(--sp-3);
+    padding-bottom: var(--sp-2);
+    border-bottom: 3px solid var(--c-accent);
+  }
+  .trust-page h3 {
+    font-size: var(--text-base);
+    font-weight: 700;
+    margin: var(--sp-4) 0 var(--sp-2);
+  }
+  .trust-page p {
+    line-height: 1.7;
+    color: var(--c-text-secondary);
+    margin-bottom: var(--sp-3);
+  }
+  .trust-page ul {
+    padding-left: var(--sp-6);
+    margin-bottom: var(--sp-4);
+  }
+  .trust-page li {
+    line-height: 1.7;
+    color: var(--c-text-secondary);
+    margin-bottom: var(--sp-1);
+  }
+  .trust-page a {
+    color: var(--c-link);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+  .trust-page a:hover { color: var(--c-link-hover); }
+  .formula {
+    background: var(--c-surface);
+    border: var(--b);
+    padding: var(--sp-3) var(--sp-4);
+    margin: var(--sp-3) 0;
+  }
+  .formula code {
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+  }
+</style>

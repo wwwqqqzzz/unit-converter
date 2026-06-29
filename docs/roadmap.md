@@ -1,6 +1,6 @@
 # Unit Converter pSEO — 完整实施路线图
 
-> 创建日期: 2026-06-19 | 更新: 2026-06-21 | 目标: 万页级 pSEO 转换工具矩阵，睡后收入
+> 创建日期: 2026-06-19 | 更新: 2026-06-30 | 目标: 万页级 pSEO 转换工具矩阵，睡后收入
 
 ## ✅ 完成状态
 
@@ -21,6 +21,7 @@
 | **10** | ✅ **已完成** | **Number Base SEO 价值页 + 鞋码 Landing Page** |
 | **11** | ✅ **已完成** | **Monorepo 多站群架构 (converter-core + apps/main + apps/bmi)** |
 | **12** | ⬜ 待定 | 更多独立站 (age, timestamp, percentage, currency) |
+| **13** | ⬜ 待定 | AEO 优化 Phase 13-16 (详见 aeo-and-project-direction.md) |
 
 ## 总览
 
@@ -40,6 +41,24 @@
 | **9** | 6个交互式计算器 (含汇率) | **29,473** | ✅ |
 | **10** | Number Base SEO 价值页 + 鞋码 Landing Page | **48,925** | ✅ |
 | **11** | Monorepo 多站群架构 | **48,925 + 12** | ✅ |
+
+---
+
+## Phase 13-16: AEO 优化 (2026-06-30 规划)
+
+详见 `docs/aeo-implementation-plan.md` 和 `docs/aeo-analysis-report.md`
+
+| Phase | 内容 | 影响范围 | 预计工时 | 状态 |
+|-------|------|---------|---------|------|
+| **13** | Schema 修复 + llms.txt + robots.txt | 全站 48,925 页 | 3-4h | ⬜ |
+| **14** | 品牌锚定 + 内容结构优化 | 全站页面模板 | 8-12h | ⬜ |
+| **15** | 信任建设 (About/方法/隐私页) | 新增 3-4 页 | 4-6h | ⬜ |
+| **16** | 差异化内容 (现实类比/行业指南) | 逐步扩展 | 8-16h | ⬜ |
+
+**预期效果时间线**:
+- Phase 13 完成后 2-7 天: Perplexity 开始识别结构变更
+- Phase 14 完成后 2-4 周: Google AIO 可能开始引用
+- Phase 15-16 完成后 1-3 月: AI 引用全面增长
 
 **当前架构**: Monorepo (npm workspaces) | **站点数**: 2 (convunit.net + bmi PoC) | **共享包**: converter-core (7 子路径导出) | **分类**: 23 | **单位**: 123 | **语言**: 12
 
@@ -181,10 +200,12 @@ Category 类型系统引入 `type` 字段: `'converter'` | `'calculator'`。计�
 
 ## 下一步
 
-| 优先级 | 品类 | 策略 | 预估 |
-|--------|------|------|------|
-| 🟡 P1 | 创建更多独立站 | Age, Timestamp, Percentage, Currency 各建独立站 | ~2h/站 |
-| 🟢 P2 | 重新提交 sitemap | Google Search Console 更新 48,925 URLs | ~0.5h |
-| 🔵 P3 | Age 独立站 SEO 增强 | 年龄站加上生肖/星座/纪念日等粘性内容 | ~3h |
+详见 **`docs/aeo-and-project-direction.md`** — 新人可读的完整指南，含：
+- 当前状况、为什么要做 AEO、Phase 13-16 具体改什么文件改哪行
+- SaaS 扩展结论（不做，等日活 > 10K）
+- 时间线预期
 
-Monorepo 架构已完成。下一阶段：利用 converter-core 快速创建各计算器独立站（Age→生肖星座、Timestamp→时区转换），每个站独立域名独立 SEO。
+详细研究数据见：
+- `docs/aeo-analysis-report.md` — 完整分析报告
+- `docs/aeo-implementation-plan.md` — 详细实施计划 + 验收标准
+- `docs/saas-expansion-analysis.md` — SaaS 方向评估

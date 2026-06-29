@@ -1,5 +1,87 @@
 # 实施日志
 
+## 2026-06-30 — Phase 15: 信任页 (About / Methodology / Privacy)
+
+### 背景
+
+AEO 分析发现网站缺乏信任信号：没有 About 页面、没有 Methodology 页面、没有 Privacy 政策。AI 爬虫在引用时优先选择有实体背书的来源。这三个页面为 ConvUnit 建立了品牌身份、数据权威性和透明度。
+
+### 变更
+
+#### 15.1 About 页面 ✅
+
+**文件**: `apps/main/src/pages/[lang]/about.astro` (新建)
+
+内容包含：
+- ConvUnit 是什么 — 品牌描述、覆盖范围、核心价值
+- 17 个转换器分类 + 6 个计算器的完整列表
+- 为什么选择 ConvUnit — 6 个理由（即时结果、精确公式、答案优先设计、12 语言、无追踪、永久免费）
+- 工作原理 — 线性 vs 非线性转换
+- 技术架构 — Cloudflare Workers、Astro、TypeScript、Vitest
+- 联系方式 — 主站 + BMI/Age 子站
+
+Schema: Organization + AboutPage (引用 `#organization`)
+
+#### 15.2 Methodology 页面 ✅
+
+**文件**: `apps/main/src/pages/[lang]/methodology.astro` (新建)
+
+内容包含：
+- 转换方法 — 线性 vs 非线性公式
+- 线性转换公式详解 — toBase 比值体系
+- 非线性转换详解 — 温度、鞋码、油耗公式
+- 数据来源 — NIST SP 811、BIPM、ISO 80000、IEEE/ASTM SI 10
+- 精度与显示 — 6 位有效数字、IEEE 754 双精度
+- 测试覆盖 — 74 自动化测试
+- 更新策略 — 转换因子永不改变、汇率每日更新
+
+#### 15.3 Privacy 页面 ✅
+
+**文件**: `apps/main/src/pages/[lang]/privacy.astro` (新建)
+
+内容包含：
+- 核心声明 — "ConvUnit does not track what you convert"
+- 数据收集范围 — Cloudflare 服务器日志、不收集转换值
+- Cookie 使用 — Cloudflare Analytics（匿名）、Google AdSense（可选）
+- Google Analytics — 匿名化数据、不追踪个人
+- 第三方服务表格 — Cloudflare、GA、AdSense、Frankfurter API
+- 数据安全 — HTTPS、CSP、X-Frame-Options、无账户
+- 用户权利 — 无数据可访问/删除/导出
+- 更新政策
+
+#### 15.4 Footer 链接更新 ✅
+
+**文件**: `apps/main/src/layouts/BaseLayout.astro`
+
+所有页面底部添加 About / Methodology / Privacy 链接。
+
+### 页面设计
+
+所有信任页采用 Neo-Brutalist 设计系统：
+- H2 带 `#ffe033` 黄色底部边框
+- 内容用 `--c-text-secondary` 灰色
+- Methodology 页有公式框（边框 + 等宽字体）
+- Privacy 页有服务对比表（黄色表头 + 边框）
+- About 页有双栏分类列表（移动端单栏）
+- 全部 `max-width: 720px` 居中
+
+### 限制
+
+- 目前仅英文版本（`/en/about/`, `/en/methodology/`, `/en/privacy/`）
+- 其他语言用户访问时看到英文内容，对 SEO 和 AEO 来说足够
+
+### 线上验证
+
+| 验证项 | 结果 |
+|--------|------|
+| `/en/about/` 返回 About 页面 | ✅ |
+| `/en/methodology/` 返回 Methodology 页面 | ✅ |
+| `/en/privacy/` 返回 Privacy 页面 | ✅ |
+| Footer 包含信任页链接 | ✅ |
+| Build + 74 tests | ✅ 通过 |
+
+---
+
 ## 2026-06-30 — Phase 14: 品牌锚定 + 内容可见性
 
 ### 背景

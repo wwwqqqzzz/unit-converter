@@ -170,16 +170,23 @@ Domain: `convunit.net` (Cloudflare Registrar)
 
 ## Documentation
 
-- `docs/roadmap.md` — Full implementation roadmap
-- `docs/changelog.md` — Implementation log
-- `docs/phase5-7-report.md` — Deployment + AdSense report
-- `docs/phase8-report.md` — Multilingual + SSR migration report
-- `docs/phase9-report.md` — 6 interactive calculators (Number Base, Timestamp, Percentage, BMI, Age, Currency)
-- `docs/phase10-report.md` — Number Base SEO value pages + Shoe Size landing page
-- `docs/architecture.md` — Multi-site monorepo architecture design
+| 文档 | 说明 |
+|------|------|
+| `docs/aeo-and-project-direction.md` | **新人入口** — AEO 优化 + 项目方向，改什么文件改哪行 |
+| `docs/roadmap.md` | 完整实施路线图 |
+| `docs/changelog.md` | 实施日志 |
+| `docs/aeo-analysis-report.md` | AEO 完整分析报告（研究数据、竞品对比） |
+| `docs/aeo-implementation-plan.md` | AEO 详细实施计划（验收标准、代码示例） |
+| `docs/saas-expansion-analysis.md` | SaaS 方向评估（结论：现在不做） |
+| `docs/phase5-7-report.md` | 部署 + AdSense 报告 |
+| `docs/phase8-report.md` | 多语言 + SSR 迁移报告 |
+| `docs/phase9-report.md` | 6 交互式计算器 |
+| `docs/phase10-report.md` | Number Base SEO 价值页 + 鞋码 Landing Page |
+| `docs/architecture.md` | 多站群架构设计 |
 
 ## What's Next
 
-- **Medium Priority**: Multi-site monorepo — extract converter-core, create BMI standalone site
-- **Done**: Sitemap (48,925 URLs) resubmitted to Google Search Console via Webmasters API (Jun 22, 2026)
-- **Low Priority**: Additional calculator SEO value pages (timestamp, percentage, BMI, age, currency)
+- 🔴 **P0**: AEO 优化 Phase 13-16 → 详见 `docs/aeo-and-project-direction.md`
+- 🟡 **P1**: 更多独立站 (Age, Timestamp, Percentage, Currency)
+- 🟢 **P2**: 等 Google 索引建立 (2-6 周)
+- ⚠️ **SaaS**: 不做，等日活 > 10K 再评估
