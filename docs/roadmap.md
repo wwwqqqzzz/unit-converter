@@ -21,7 +21,10 @@
 | **10** | ✅ **已完成** | **Number Base SEO 价值页 + 鞋码 Landing Page** |
 | **11** | ✅ **已完成** | **Monorepo 多站群架构 (converter-core + apps/main + apps/bmi)** |
 | **12** | ⬜ 待定 | 更多独立站 (age, timestamp, percentage, currency) |
-| **13** | ⬜ 待定 | AEO 优化 Phase 13-16 (详见 aeo-and-project-direction.md) |
+| **13** | ✅ 已完成 | AEO Phase 13: Schema + llms.txt + robots.txt |
+| **14** | ✅ 已完成 | AEO Phase 14: 品牌锚定 + UnitDescription 可见化 |
+| **15** | ✅ 已完成 | AEO Phase 15: 信任页 (About/Methodology/Privacy) |
+| **16** | ⬜ 待定 | AEO Phase 16: 差异化内容 (现实类比/行业指南) |
 
 ## 总览
 
@@ -50,9 +53,9 @@
 
 | Phase | 内容 | 影响范围 | 预计工时 | 状态 |
 |-------|------|---------|---------|------|
-| **13** | Schema 修复 + llms.txt + robots.txt | 全站 48,925 页 | 3-4h | ⬜ |
-| **14** | 品牌锚定 + 内容结构优化 | 全站页面模板 | 8-12h | ⬜ |
-| **15** | 信任建设 (About/方法/隐私页) | 新增 3-4 页 | 4-6h | ⬜ |
+| **13** | Schema 修复 + llms.txt + robots.txt | 全站 48,925 页 | 3-4h | ✅ |
+| **14** | 品牌锚定 + 内容结构优化 | 全站页面模板 | 8-12h | ✅ |
+| **15** | 信任建设 (About/方法/隐私页) | 新增 3 页 | 4-6h | ✅ |
 | **16** | 差异化内容 (现实类比/行业指南) | 逐步扩展 | 8-16h | ⬜ |
 
 **预期效果时间线**:
