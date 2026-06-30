@@ -11,6 +11,7 @@ import { t, type Lang, LANGUAGES, LANG_LABELS } from 'converter-core/utils/i18n'
 import { getCategory, getUnit, convert, formatResult, getUnitPairs, pairSlug, valueSlug, getCommonValues } from 'converter-core/lib/units';
 import { categories } from 'converter-core/data/units';
 import { unitDescriptions } from 'converter-core/data/descriptions';
+import { unitAnalogies } from 'converter-core/data/analogies';
 import { NUMBER_BASE_VALUES, numberBaseSlug, parseNumberBaseSlug, baseDisplayName, parseBaseValue } from 'converter-core/data/number-base-values';
 
 export interface Props { lang: Lang; category: string; slug: string[]; }
@@ -185,6 +186,10 @@ if (!isNumberBasePage) {
   rate = convert(category, 1, unit1Id, unit2Id);
   reverseRate = convert(category, 1, unit2Id, unit1Id);
   u1Name = u1.name[lang]; u2Name = u2.name[lang];
+  const analogy1 = unitAnalogies[catId]?.[unit1Id];
+  const analogy2 = unitAnalogies[catId]?.[unit2Id];
+  const analogyText1 = analogy1 ? (analogy1[lang] || analogy1.en) : undefined;
+  const analogyText2 = analogy2 ? (analogy2[lang] || analogy2.en) : undefined;
   pageSlug = isConverterPage ? pairSlug(u1, u2, lang) : rawSlug;
   pagePath = `${catId}/${pageSlug}`;
 
@@ -267,6 +272,13 @@ const finalJsonld = isNumberBasePage ? nbJsonld : jsonld;
           <span class="answer-result">{formattedResult} {u2.symbol}</span>
         </div>
       )}
+      {(!isConverterPage && (analogyText1 || analogyText2)) && (
+        <div class="analogy-hero">
+          {analogyText1 && <span class="analogy-tag">💡 {analogyText1}</span>}
+          {analogyText1 && analogyText2 && <span class="analogy-sep">·</span>}
+          {analogyText2 && <span class="analogy-tag">💡 {analogyText2}</span>}
+        </div>
+      )}
 
       <Converter lang={lang} categoryName={catName} unit1Id={unit1Id} unit1Name={u1Name} unit1Symbol={u1.symbol} unit2Id={unit2Id} unit2Name={u2Name} unit2Symbol={u2.symbol} initialValue={isConverterPage ? 1 : displayValue} rate={rate} reverseRate={reverseRate} initialResult={formattedResult} allUnits={allUnits} ratesMap={ratesMap} hasCustomConvert={!!category.convertFn} />
 
@@ -347,6 +359,22 @@ const finalJsonld = isNumberBasePage ? nbJsonld : jsonld;
   .answer-value { font-size: var(--text-xl); font-weight: 700; }
   .answer-equals { font-size: var(--text-lg); color: var(--c-text-secondary); }
   .answer-result { font-size: var(--text-xl); font-weight: 700; }
+  .analogy-hero {
+    margin: calc(var(--sp-2) * -1) 0 var(--sp-4) 0;
+    display: flex;
+    align-items: baseline;
+    gap: var(--sp-2);
+    flex-wrap: wrap;
+  }
+  .analogy-tag {
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: var(--c-text);
+    background: var(--c-surface);
+    border: 2px solid var(--c-border);
+    padding: var(--sp-1) var(--sp-2);
+  }
+  .analogy-sep { color: var(--c-text-tertiary); }
   .formula-section { margin: var(--sp-8) 0; }
   .formula-section h2 {
     font-size: var(--text-xs); font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em;

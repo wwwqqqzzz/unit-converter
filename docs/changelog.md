@@ -1,5 +1,73 @@
 # 实施日志
 
+## 2026-06-30 — Phase 16A: 现实现比 (Real-World Analogies)
+
+### 背景
+
+AEO 分析发现 ConvUnit 缺乏"只有你有、别人没有"的内容。48,925 个页面的结构都一样（输入框 + 结果 + 表格），AI 爬虫没有理由引用 ConvUnit 而非其他转换器。现实现比（如 "1 千米 ≈ 步行 10 分钟"）是 AEO 的关键差异化内容。
+
+### 变更
+
+#### 16A.1 现实现比数据 ✅
+
+**新建文件**: `packages/converter-core/src/data/analogies.ts`
+
+- 新增 `UnitAnalogy` 类型和 `unitAnalogies` 数据
+- 覆盖 17 个转换器分类中的 87 个单位
+- 每个类比都是一句简短、具体的现实比较
+- 英文 + 中文双语，其他 10 种语言 fallback 到英文
+
+**示例**:
+- km: "A kilometer is about a 10-minute walk" / "1千米大约步行10分钟的距离"
+- kg: "A kilogram is about the weight of a liter of water" / "1千克大约是一升水的重量"
+- m: "A meter is about the height of a kitchen counter" / "1米大约是一个厨房台面的高度"
+- byte: "A byte holds one character of text" / "1字节可以存储一个文字字符"
+- n: "A newton is about the force to hold a small apple" / "1牛顿大约是托住一个小苹果的力"
+
+#### 16A.2 UnitDescription 组件更新 ✅
+
+**文件**: `apps/main/src/components/UnitDescription.astro`
+
+- 新增 `unitAnalogies` 导入
+- 类比显示在描述段落下方，用黄色底色 `#ffe033` 突出
+- 亮灯泡 💡 图标前缀
+- 无描述但有类比时仍然显示类比
+
+#### 16A.3 值页面 Hero 区域类比 ✅
+
+**文件**: `apps/main/src/pages/[lang]/[category]/[...slug].astro`
+
+- 在 `direct-answer` 下方新增 `analogy-hero` 区域
+- 同时显示两个单位的类比（如 "💡 A kilometer is about a 10-minute walk · 💡 A mile is about a 15-minute walk"）
+- 仅在值页面显示（converter 页面不显示）
+- Neo-Brutalist 风格：边框 + 表面背景
+
+#### 16A.4 导出和包注册 ✅
+
+- `packages/converter-core/src/index.ts` 新增 `unitAnalogies` 和 `UnitAnalogy` 导出
+- `packages/converter-core/package.json` 新增 `./data/analogies` 子路径导出
+- `[...slug].astro` 新增 `unitAnalogies` 导入和 `analogyText1/2` 计算
+
+### 未覆盖的单位
+
+以下分类类比暂未添加（非转换器或需要更专业的内容）:
+- `data`: kibibyte, mebibyte, gibibyte（3个，已添加到data分类但作为补充）
+- `shoe`: 鞋码类比已在数据中
+- 计算器分类 (number-base, timestamp, percentage, bmi, age, currency): 不需要类比
+
+### 线上验证
+
+| 验证项 | 结果 |
+|--------|------|
+| Build 成功 | ✅ |
+| 74 tests 全部通过 | ✅ |
+| 部署成功 | ✅ |
+| Bundle 包含 analogies 数据 | ✅ (4个类比确认) |
+| Hero 区域类比渲染代码 | ✅ |
+| UnitDescription 类比渲染代码 | ✅ |
+
+---
+
 ## 2026-06-30 — Phase 15: 信任页 (About / Methodology / Privacy)
 
 ### 背景

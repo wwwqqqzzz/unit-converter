@@ -1,22 +1,25 @@
 ---
-// Unit description — Neo-Brutalist (always visible for AEO)
+// Unit description + real-world analogy — Neo-Brutalist (always visible for AEO)
 import type { Unit } from 'converter-core/data/units';
 import type { Lang } from 'converter-core/utils/i18n';
 import { t } from 'converter-core/utils/i18n';
 import { unitDescriptions } from 'converter-core/data/descriptions';
+import { unitAnalogies } from 'converter-core/data/analogies';
 
 export interface Props { lang: Lang; unit: Unit; categoryId: string; }
 const { lang, unit, categoryId } = Astro.props;
 const desc = unitDescriptions[categoryId]?.[unit.id];
-if (!desc) return;
-const text = desc[lang] || desc.en;
-if (!text) return;
+const analogy = unitAnalogies[categoryId]?.[unit.id];
+if (!desc && !analogy) return;
+const text = desc ? (desc[lang] || desc.en) : undefined;
+const analogyText = analogy ? (analogy[lang] || analogy.en) : undefined;
+if (!text && !analogyText) return;
 const label = t(lang, 'converter.aboutUnit', { unit: unit.name[lang] });
 ---
 
 <section class="unit-desc">
-  <h3 class="unit-desc-title">{label}</h3>
-  <p>{text}</p>
+  {text && <><h3 class="unit-desc-title">{label}</h3><p>{text}</p></>}
+  {analogyText && <p class="unit-analogy">💡 {analogyText}</p>}
 </section>
 
 <style>
@@ -39,5 +42,13 @@ const label = t(lang, 'converter.aboutUnit', { unit: unit.name[lang] });
     font-size: var(--text-sm);
     line-height: 1.7;
     color: var(--c-text-secondary);
+  }
+  .unit-analogy {
+    margin-top: var(--sp-2) !important;
+    padding: var(--sp-2) var(--sp-3);
+    background: var(--c-accent);
+    border: 2px solid var(--c-border);
+    font-weight: 600;
+    color: var(--c-text);
   }
 </style>

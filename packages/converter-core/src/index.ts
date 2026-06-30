@@ -5,4 +5,6 @@ export { t, type Lang, LANGUAGES, LANG_LABELS } from './utils/i18n.js';
 export { categories, CATEGORY_ICONS, COMMON_VALUES, CATEGORY_VALUES } from './data/units.js';
 export type { Unit } from './data/units.js';
 export { unitDescriptions } from './data/descriptions.js';
+export { unitAnalogies } from './data/analogies.js';
+export type { UnitAnalogy } from './data/analogies.js';
 export { NUMBER_BASE_VALUES, numberBaseSlug, parseNumberBaseSlug, baseDisplayName, parseBaseValue } from './data/number-base-values.js';
