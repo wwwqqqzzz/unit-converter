@@ -4,18 +4,15 @@
 // Also loads auto-ads script once per page (in top position)
 export interface Props { position?: 'top' | 'middle' | 'bottom'; class?: string; }
 const { position = 'middle' } = Astro.props;
-const PUBLISHER_ID = import.meta.env.PUBLIC_ADSENSE_ID;
-const AD_SLOT_TOP = import.meta.env.PUBLIC_ADSENSE_SLOT_TOP || '1234567890';
-const AD_SLOT_MIDDLE = import.meta.env.PUBLIC_ADSENSE_SLOT_MIDDLE || '1234567890';
-const AD_SLOT_BOTTOM = import.meta.env.PUBLIC_ADSENSE_SLOT_BOTTOM || '1234567890';
+const PUBLISHER_ID = 'ca-pub-4967918867986181';
+const AD_SLOT_TOP = import.meta.env.PUBLIC_ADSENSE_SLOT_TOP || '9477105493';
+const AD_SLOT_MIDDLE = import.meta.env.PUBLIC_ADSENSE_SLOT_MIDDLE || '9477105493';
+const AD_SLOT_BOTTOM = import.meta.env.PUBLIC_ADSENSE_SLOT_BOTTOM || '9477105493';
 const slot = position === 'top' ? AD_SLOT_TOP : position === 'bottom' ? AD_SLOT_BOTTOM : AD_SLOT_MIDDLE;
 ---
 
-{PUBLISHER_ID && (
+{import.meta.env.PROD && (
   <div class={`ad-container ad-${position}`}>
-    {position === 'top' && (
-      <script is:inline src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${PUBLISHER_ID}`} crossorigin="anonymous" async></script>
-    )}
     <ins
       class="adsbygoogle"
       style="display:block"
