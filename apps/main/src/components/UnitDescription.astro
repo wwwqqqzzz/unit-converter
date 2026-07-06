@@ -1,17 +1,15 @@
 ---
-// Unit description + real-world analogy — Neo-Brutalist (always visible for AEO)
 import type { Unit } from 'converter-core/data/units';
 import type { Lang } from 'converter-core/utils/i18n';
 import { t } from 'converter-core/utils/i18n';
-import { unitDescriptions } from 'converter-core/data/descriptions';
+import { getDescriptionText } from 'converter-core/data/descriptions/index';
 import { unitAnalogies } from 'converter-core/data/analogies';
 
 export interface Props { lang: Lang; unit: Unit; categoryId: string; }
 const { lang, unit, categoryId } = Astro.props;
-const desc = unitDescriptions[categoryId]?.[unit.id];
+const text = getDescriptionText(categoryId, unit.id, lang);
 const analogy = unitAnalogies[categoryId]?.[unit.id];
-if (!desc && !analogy) return;
-const text = desc ? (desc[lang] || desc.en) : undefined;
+if (!text && !analogy) return;
 const analogyText = analogy ? (analogy[lang] || analogy.en) : undefined;
 if (!text && !analogyText) return;
 const label = t(lang, 'converter.aboutUnit', { unit: unit.name[lang] });

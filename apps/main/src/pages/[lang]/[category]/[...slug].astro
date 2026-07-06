@@ -10,7 +10,7 @@ import NumberBase from '../../../components/calculators/NumberBase.astro';
 import { t, type Lang, LANGUAGES, LANG_LABELS } from 'converter-core/utils/i18n';
 import { getCategory, getUnit, convert, formatResult, getUnitPairs, pairSlug, valueSlug, getCommonValues } from 'converter-core/lib/units';
 import { categories } from 'converter-core/data/units';
-import { unitDescriptions } from 'converter-core/data/descriptions';
+import { getDescriptionText } from 'converter-core/data/descriptions/index';
 import { unitAnalogies } from 'converter-core/data/analogies';
 import { NUMBER_BASE_VALUES, numberBaseSlug, parseNumberBaseSlug, baseDisplayName, parseBaseValue } from 'converter-core/data/number-base-values';
 
@@ -168,6 +168,10 @@ let rate = 0;
 let reverseRate = 0;
 let u1Name = '';
 let u2Name = '';
+let analogyText1: string | undefined = undefined;
+let analogyText2: string | undefined = undefined;
+let desc1: string | undefined = undefined;
+let desc2: string | undefined = undefined;
 let pageSlug = '';
 let pageTitle = '';
 let pageDesc = '';
@@ -188,8 +192,8 @@ if (!isNumberBasePage) {
   u1Name = u1.name[lang]; u2Name = u2.name[lang];
   const analogy1 = unitAnalogies[catId]?.[unit1Id];
   const analogy2 = unitAnalogies[catId]?.[unit2Id];
-  const analogyText1 = analogy1 ? (analogy1[lang] || analogy1.en) : undefined;
-  const analogyText2 = analogy2 ? (analogy2[lang] || analogy2.en) : undefined;
+  analogyText1 = analogy1 ? (analogy1[lang] || analogy1.en) : undefined;
+  analogyText2 = analogy2 ? (analogy2[lang] || analogy2.en) : undefined;
   pageSlug = isConverterPage ? pairSlug(u1, u2, lang) : rawSlug;
   pagePath = `${catId}/${pageSlug}`;
 
@@ -202,9 +206,10 @@ if (!isNumberBasePage) {
     { '@type': 'Question', name: `${t(lang, 'converter.whatIsUnit', { unit: `${displayValue} ${u1Name}` })} ${lang === 'zh' || lang === 'ja' || lang === 'ko' ? '' : ''}${u2Name}${lang === 'zh' ? '换算结果是' : ' = '}${formattedResult} ${u2Name}`, acceptedAnswer: { '@type': 'Answer', text: `${displayValue} ${u1Name} = ${formattedResult} ${u2Name}. ${t(lang, 'converter.formula')}: 1 ${u1Name} = ${formatResult(rate)} ${u2Name}.` } },
     { '@type': 'Question', name: `1 ${u1Name} = ? ${u2Name}`, acceptedAnswer: { '@type': 'Answer', text: `1 ${u1Name} = ${formatResult(rate)} ${u2Name}.` } },
   ];
-  const desc1 = unitDescriptions[catId]?.[unit1Id]; const desc2 = unitDescriptions[catId]?.[unit2Id];
-  if (desc1) faqQuestions.push({ '@type': 'Question', name: t(lang, 'converter.whatIsUnit', { unit: u1Name }), acceptedAnswer: { '@type': 'Answer', text: desc1[lang] } });
-  if (desc2) faqQuestions.push({ '@type': 'Question', name: t(lang, 'converter.whatIsUnit', { unit: u2Name }), acceptedAnswer: { '@type': 'Answer', text: desc2[lang] } });
+  desc1 = getDescriptionText(catId, unit1Id, lang);
+  desc2 = getDescriptionText(catId, unit2Id, lang);
+  if (desc1) faqQuestions.push({ '@type': 'Question', name: t(lang, 'converter.whatIsUnit', { unit: u1Name }), acceptedAnswer: { '@type': 'Answer', text: desc1 } });
+  if (desc2) faqQuestions.push({ '@type': 'Question', name: t(lang, 'converter.whatIsUnit', { unit: u2Name }), acceptedAnswer: { '@type': 'Answer', text: desc2 } });
 
   const faqJsonld = { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faqQuestions };
   const howToNameHeading = t(lang, 'converter.headingConverter', { unit1: u1Name, unit2: u2Name, name: catName });
@@ -313,16 +318,16 @@ const finalJsonld = isNumberBasePage ? nbJsonld : jsonld;
           <summary class="faq-q">{lang === 'zh' ? `1 ${u1Name}等于多少${u2Name}？` : `How many ${u2Name} in 1 ${u1Name}?`}</summary>
           <p class="faq-a">{lang === 'zh' ? `1 ${u1Name} = ${formatResult(rate)} ${u2Name}` : `1 ${u1Name} = ${formatResult(rate)} ${u2Name}. Use the converter above to calculate other values.`}</p>
         </details>
-        {unitDescriptions[catId]?.[unit1Id] && (
+        {desc1 && (
           <details class="faq-item">
             <summary class="faq-q">{t(lang, 'converter.whatIsUnit', { unit: u1Name })}</summary>
-            <p class="faq-a">{unitDescriptions[catId][unit1Id][lang]}</p>
+            <p class="faq-a">{desc1}</p>
           </details>
         )}
-        {unitDescriptions[catId]?.[unit2Id] && (
+        {desc2 && (
           <details class="faq-item">
             <summary class="faq-q">{t(lang, 'converter.whatIsUnit', { unit: u2Name })}</summary>
-            <p class="faq-a">{unitDescriptions[catId][unit2Id][lang]}</p>
+            <p class="faq-a">{desc2}</p>
           </details>
         )}
       </section>
