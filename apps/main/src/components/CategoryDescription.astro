@@ -1,0 +1,94 @@
+---
+import { categoryContent } from 'converter-core/data/category-content';
+
+interface Props {
+  categoryId: string;
+  categoryName: string;
+}
+
+const { categoryId, categoryName } = Astro.props;
+const content = categoryContent[categoryId];
+---
+
+{content && (
+  <section class="category-about">
+    <h2>About {categoryName}</h2>
+    <div class="about-text" set:html={content.description.split('\n\n').map(p => `<p>${p}</p>`).join('')} />
+
+    <h3 class="faq-heading">Frequently Asked Questions</h3>
+    <div class="faq-list">
+      {content.faq.map((item, i) => (
+        <details class="faq-item" open={i === 0}>
+          <summary class="faq-q">{item.q}</summary>
+          <p class="faq-a">{item.a}</p>
+        </details>
+      ))}
+    </div>
+  </section>
+)}
+
+<style>
+  .category-about {
+    margin: var(--sp-8) 0;
+  }
+  .category-about h2 {
+    font-size: var(--text-lg);
+    font-weight: 700;
+    margin-bottom: var(--sp-4);
+    letter-spacing: -0.01em;
+    color: var(--c-text);
+  }
+  .about-text p {
+    color: var(--c-text-secondary);
+    line-height: 1.7;
+    margin-bottom: var(--sp-3);
+    font-size: var(--text-sm);
+  }
+  .faq-heading {
+    font-size: var(--text-xs);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--c-text-tertiary);
+    margin: var(--sp-8) 0 var(--sp-4);
+  }
+  .faq-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-2);
+  }
+  .faq-item {
+    border: 2px solid var(--c-border);
+    background: var(--c-surface);
+  }
+  .faq-q {
+    padding: var(--sp-3) var(--sp-4);
+    cursor: pointer;
+    font-weight: 600;
+    font-size: var(--text-sm);
+    user-select: none;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: var(--sp-2);
+  }
+  .faq-q::-webkit-details-marker { display: none; }
+  .faq-q::before {
+    content: '▸';
+    font-size: var(--text-xs);
+    transition: transform 0.2s;
+    flex-shrink: 0;
+  }
+  .faq-item[open] .faq-q::before {
+    transform: rotate(90deg);
+  }
+  .faq-q:hover {
+    background: rgba(0,0,0,0.02);
+  }
+  .faq-a {
+    padding: 0 var(--sp-4) var(--sp-3);
+    font-size: var(--text-sm);
+    line-height: 1.6;
+    color: var(--c-text-secondary);
+  }
+</style>

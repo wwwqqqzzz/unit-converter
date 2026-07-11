@@ -14,6 +14,8 @@ import ShoeSizeChart from '../../../components/ShoeSizeChart.astro';
 import { t, type Lang, LANGUAGES } from 'converter-core/utils/i18n';
 import { getCategory, getUnitPairs, pairSlug, valueSlug, getCommonValues } from 'converter-core/lib/units';
 import { categories, CATEGORY_ICONS } from 'converter-core/data/units';
+import { categoryContent } from 'converter-core/data/category-content';
+import CategoryDescription from '../../../components/CategoryDescription.astro';
 
 export interface Props { lang: Lang; category: string; }
 export function getStaticPaths() {
@@ -96,7 +98,22 @@ const catWebAppJsonld = {
   offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
   publisher: { '@id': 'https://convunit.net/#organization' },
 };
-const jsonld = JSON.stringify([breadcrumbJsonld, catWebAppJsonld]);
+
+// FAQ JSON-LD for converter categories with rich content
+const catContent = categoryContent[catId];
+let faqJsonld: object | null = null;
+if (!isCalculator && !isShoe && catContent) {
+  faqJsonld = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: catContent.faq.map(item => ({
+      '@type': 'Question',
+      name: item.q,
+      acceptedAnswer: { '@type': 'Answer', text: item.a },
+    })),
+  };
+}
+const jsonld = JSON.stringify(faqJsonld ? [breadcrumbJsonld, catWebAppJsonld, faqJsonld] : [breadcrumbJsonld, catWebAppJsonld]);
 
 // Calculator FAQ helper
 const calcFaq = (id: string) => {
@@ -238,6 +255,8 @@ if (isShoe) {
           );
         })}
       </div>
+
+      <CategoryDescription categoryId={catId} categoryName={catName} />
 
     </>
   )}

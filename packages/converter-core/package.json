@@ -11,6 +11,7 @@
     "./data/descriptions/index": "./src/data/descriptions/index.ts",
     "./data/analogies": "./src/data/analogies.ts",
     "./data/number-base-values": "./src/data/number-base-values.ts",
+    "./data/category-content": "./src/data/category-content.ts",
     "./lib/units": "./src/lib/units.ts",
     "./lib/seo": "./src/lib/seo.ts",
     "./utils/i18n": "./src/utils/i18n.ts"
