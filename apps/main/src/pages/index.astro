@@ -1,17 +1,8 @@
 ---
-// ============================================================
-// Root index — redirect to English homepage
-// ============================================================
+// Root index — permanent redirect to English homepage (301 for SEO)
+// Astro.redirect() defaults to 302, so we use a Response directly for 301
+return new Response(null, {
+  status: 301,
+  headers: { Location: '/en/' },
+});
 ---
-
-<!doctype html>
-<html>
-  <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="refresh" content="0;url=/en/" />
-    <link rel="canonical" href="https://convunit.net/en/" />
-  </head>
-  <body>
-    <script>window.location.href = '/en/';</script>
-  </body>
-</html>
