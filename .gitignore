@@ -6,4 +6,5 @@ dist/
 .agents/
 # Google OAuth — do not commit
 credentials.json
-token.jsonapps/main/.wrangler/
+token.json
+apps/main/.wrangler/
