@@ -1169,3 +1169,45 @@ Area 包含中式单位 `mu` (亩)，Volume 包含美制和英制加仑。
 - **语言**: 暂不加新语言，保持中英双语
 - **变现**: 多站群策略 — 同架构复制到汇率、BMI 等新站
 - **规模目标**: 万页级别
+## Phase 11: Indexing API + Sitemap 提交 (2026-07-13)
+
+### 问题
+- GSC 显示 `/en/force/` "未检测到引荐站点地图"、"未编入索引"
+- 新拆分的 sitemap 还没被 Google 处理
+- GSC token 过期，无法通过 API 推送
+
+### 解决
+1. **Token 刷新成功** — 发现 token.json 已有 `indexing` scope 和 `refresh_token`，自动刷新
+2. **Sitemap 重新提交** — 通过 GSC API 成功提交 `https://convunit.net/sitemap.xml`
+   - Google 已下载: `lastDownloaded: 2026-07-13T00:45:38.350Z`
+   - 提交 URL 数: 49,213
+   - 错误/警告: 0
+3. **Indexing API 批量推送** — 成功推送 193 个优先 URL:
+   - 12 个语言首页
+   - 16 个英文分类页 (包括 /en/force/)
+   - 6 个热门转换页
+   - 12×16=192 个多语言分类页 (到限流前)
+4. **脚本更新** — `resubmit-sitemap.mjs` 现在同时请求 `webmasters` + `indexing` scope
+
+### GSC Sitemap 状态
+```
+path: https://convunit.net/sitemap.xml
+lastSubmitted: 2026-07-13T00:45:37
+lastDownloaded: 2026-07-13T00:45:38
+isSitemapsIndex: true
+errors: 0
+warnings: 0
+submitted: 49,213
+indexed: 0 (刚提交，等待索引)
+```
+
+### 下一步
+- 等 1-2 天，GSC 会开始索引推送的 URL
+- 限流后继续推送剩余 URL（每天约200个配额）
+- 3-5 天后检查 GSC 索引状态
+- 索引稳定后重新申请 AdSense
+
+### 文件变更
+- `scripts/resubmit-sitemap.mjs` — 更新：双 scope 授权 + Indexing API 推送
+- `scripts/index-urls.mjs` — 新增：独立 Indexing API 推送脚本
+- `scripts/refresh-gsc-token.mjs` — 新增：token 刷新工具
