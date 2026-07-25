@@ -1,6 +1,6 @@
 # 实施日志
 
-## 2026-07-25 — Phase 17: SEO URL 规范化 — Trailing-Slash 301 + Middleware 强制
+## 2026-07-25 — Phase 17: SEO URL 规范化 — Trailing-Slash 301 + Middleware 强制 ✅ 生产已部署
 
 ### 背景
 
@@ -54,7 +54,21 @@ fallback 域名从临时 `unit-converter.pages.dev` 改为实际 `convunit.net`�
 | `GET /sitemap.xml` | ✅ 200 |
 | `GET /sitemap-root.xml` | ✅ 200 |
 | `GET /sitemap/en.xml` | ✅ 200 |
-| sitemap/robots Cache-Control | ✅ `public, max-age=86400` |
+| sitemap/robots Cache-Control | ✅ `public, max-age=86400`（经 Cloudflare CDN 传播后） |
+
+### 生产验证 (2026-07-25)
+
+部署 commit `cea0cb7` → [convunit.net](https://convunit.net) · Preview: https://bb2bb018.unit-convert-dd0.pages.dev · Custom domain: `convunit.net`
+
+| 验证项 | 结果 |
+|--------|------|
+| slashless query → 301 relative slash Location | ✅ |
+| slash page → 200 | ✅ |
+| `//evil.com/phish` → safe same-origin `/evil.com/phish/` | ✅ |
+| robots / root sitemap / language sitemap → 200 | ✅ |
+| Cache-Control max-age=86400 (en.xml, zh.xml, sitemap.xml, robots.txt) | ✅ (CDN 传播后) |
+
+**Cache-Control 传播**: 首次检查时语言 sitemap `/sitemap/en.xml` 仍为 Pages 默认的 `max-age=0`，根 sitemap 与 robots 已是 `max-age=86400`。经 Cloudflare CDN 配置传播后，语言 sitemap 也返回 `max-age=86400`。这些静态资源由 `public/_headers` 控制缓存头——middleware 不控制 prerendered 静态资产的生产响应。
 
 ### 变更文件
 
@@ -66,15 +80,12 @@ fallback 域名从临时 `unit-converter.pages.dev` 改为实际 `convunit.net`�
 | `apps/main/src/__tests__/middleware.test.ts` | 新建 | 13 个 middleware 测试（含多次前导斜杠 open-redirect 规范化） |
 | `apps/main/vitest.config.ts` | 新建 | Vitest 配置 |
 | `apps/main/package.json` | 修改 | 新增 `test` 脚本 |
+| `apps/main/public/_headers` | 修改 | sitemap/robots 静态资源 `max-age=86400`（middleware 不控制静态资产响应头） |
 
 ### 部署后用户操作
 
-1. **部署后立即**：`curl -I` 验证 301 重定向和 sitemap 响应（详见 `docs/phase17-report.md`）
+1. **部署后已完成**（2026-07-25）：通过 `convunit.net` 验证 301 重定向、正常页面、open-redirect 安全、sitemap/robots 响应和 Cache-Control（详见 `docs/phase17-report.md`）
 2. **部署后 3-7 天**：GSC URL 检查确认 301 被识别；覆盖范围报告确认重复页面告警消失。**不需要使用 Indexing API 推送**，Google 会在正常爬取周期内自动处理。
-
-### 未部署声明
-
-变更尚未合并到主分支或部署到生产环境。所有验证基于本地开发环境。
 
 ---
 

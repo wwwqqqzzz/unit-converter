@@ -1,6 +1,8 @@
 # Phase 17: SEO URL 规范化 — Trailing-Slash 301 + Middleware 强制
 
-> 日期: 2026-07-25 | 状态: 开发完成，未部署 | 测试: 87/87 通过 | 涉及文件: 6
+> 日期: 2026-07-25 | 状态: ✅ 已部署到生产环境 | 测试: 87/87 通过 | 涉及文件: 7
+>
+> **生产部署**: commit `cea0cb7` → [convunit.net](https://convunit.net) · Preview: https://bb2bb018.unit-convert-dd0.pages.dev · Custom domain: `convunit.net`
 
 ## 背景
 
@@ -164,6 +166,25 @@ middleware: needsTrailingSlashRedirect() = true → 301 → Location: /en/force/
 | `/sitemap/en.xml` | `public, max-age=86400` ✅ |
 | `/robots.txt` | `public, max-age=86400` ✅ |
 
+## 生产环境验证 (2026-07-25)
+
+部署 commit `cea0cb7` 后，通过自定义域名 `convunit.net` 进行了完整的生产验证。
+
+| 验证项 | 请求 | 预期 | 结果 |
+|--------|------|------|------|
+| slashless query → 301 | `GET /en/force?from=n&to=lbf` | 301, Location: `/en/force/?from=n&to=lbf` (相对路径斜杠) | ✅ |
+| slash page → 200 | `GET /en/force/` | 200 | ✅ |
+| open-redirect 安全 | `GET //evil.com/phish` | safe same-origin `/evil.com/phish/` | ✅ |
+| robots.txt | `GET /robots.txt` | 200 | ✅ |
+| root sitemap | `GET /sitemap.xml` | 200 | ✅ |
+| language sitemap | `GET /sitemap/en.xml` | 200 | ✅ |
+
+### Cache-Control 生产传播
+
+首次自定义域名检查时，语言 sitemap `/sitemap/en.xml` 仍返回 Pages 默认的 `max-age=0`；根 sitemap 与 robots 已是 `max-age=86400`。经过 Cloudflare CDN 配置传播后，`/sitemap/en.xml` 和 `/sitemap/zh.xml` 也返回预期的 `public, max-age=86400`。
+
+> **说明**: sitemap 变体（`/sitemap.xml`、`/sitemap-root.xml`、`/sitemap/{lang}.xml`）和 `/robots.txt` 是 prerendered 的静态资源，不经过 SSR middleware。这些文件的 `Cache-Control` 头由 `apps/main/public/_headers` 提供——middleware 仅控制 SSR 请求的响应头，无法覆盖 Pages 对静态资产的默认缓存行为。
+
 ## 变更文件汇总
 
 | 文件 | 变更类型 | 说明 |
@@ -174,6 +195,7 @@ middleware: needsTrailingSlashRedirect() = true → 301 → Location: /en/force/
 | `apps/main/src/__tests__/middleware.test.ts` | 新建 | 13 个 middleware 单元测试（含多次前导斜杠 open-redirect 规范化） |
 | `apps/main/vitest.config.ts` | 新建 | apps/main 独立 Vitest 配置 |
 | `apps/main/package.json` | 修改 | 新增 `test` 脚本 |
+| `apps/main/public/_headers` | 修改 | 新增 sitemap/robots 静态资源 `max-age=86400` 规则（middleware 不控制静态资产响应头） |
 
 ## 已知风险
 
@@ -185,32 +207,40 @@ middleware: needsTrailingSlashRedirect() = true → 301 → Location: /en/force/
 
 ## 部署后用户操作步骤
 
-### 1. 部署验证（部署后立即执行）
+### 1. 生产验证（部署后已完成）
+
+以下验证已在 2026-07-25 通过自定义域名 `convunit.net` 完成（见上方「生产环境验证」）。原始验证命令保留供参考：
 
 ```bash
-# 1. 验证 301 重定向
+# 1. 验证 301 重定向（slashless → slash with query）
 curl -I "https://convunit.net/en/force?from=n&to=lbf"
-# 预期: HTTP/1.1 301, Location: /en/force/?from=n&to=lbf
+# 已验证: HTTP/1.1 301, Location: /en/force/?from=n&to=lbf
 
 # 2. 验证正常页面
 curl -I "https://convunit.net/en/force/"
-# 预期: HTTP/1.1 200
+# 已验证: HTTP/1.1 200
 
-# 3. 验证 sitemap 缓存
+# 3. 验证 open-redirect 安全（多次前导斜杠规范化）
+curl -I "https://convunit.net//evil.com/phish"
+# 已验证: 301 → /evil.com/phish/ (safe same-origin)
+
+# 4. 验证 sitemap 缓存
 curl -I "https://convunit.net/sitemap.xml"
-# 预期: Cache-Control: public, max-age=86400
+# 已验证: Cache-Control: public, max-age=86400 (经传播后)
 
-# 4. 验证 robots.txt
+# 5. 验证 robots.txt
 curl -I "https://convunit.net/robots.txt"
-# 预期: HTTP/1.1 200
+# 已验证: HTTP/1.1 200
 
-# 5. 运行完整测试
+# 6. 运行完整测试
 npm test                     # converter-core 74 tests
 cd apps/main && npm test     # middleware 13 tests
 # 预期: 87/87 通过
 ```
 
 ### 2. Google Search Console 验证（部署后 3-7 天）
+
+GSC 变化需要 3-7 天才能反映，以下步骤仍需用户手动执行：
 
 1. 登录 [Google Search Console](https://search.google.com/search-console)
 2. 选择 `convunit.net` 资源
@@ -220,7 +250,3 @@ cd apps/main && npm test     # middleware 13 tests
 5. **Sitemap** → 确认 sitemap 状态仍为 "成功"
 
 **注意**: 不需要使用 Indexing API 手动推送。Google 会在正常爬取周期内自动发现 301 重定向并合并 canonical。通常 1-2 周内 GSC 会反映变化。
-
-## 未部署声明
-
-本文档记录的是 **开发完成** 的状态，变更尚未合并到主分支或部署到生产环境。所有验证结果基于本地开发环境。
