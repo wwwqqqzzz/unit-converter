@@ -11,7 +11,7 @@ export default defineConfig({
     },
   }),
   site: 'https://convunit.net',
-  trailingSlash: 'always',
+  trailingSlash: 'ignore',
   build: {
     format: 'directory',
   },
