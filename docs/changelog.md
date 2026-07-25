@@ -1,5 +1,83 @@
 # 实施日志
 
+## 2026-07-25 — Phase 17: SEO URL 规范化 — Trailing-Slash 301 + Middleware 强制
+
+### 背景
+
+审计 GSC 数据发现，ConvUnit 存在 slashless URL 变体与带尾部斜杠变体同时出现在搜索数据中，造成重复信号风险：搜索引擎可能将两者视为独立页面。根本原因是 `trailingSlash: 'always'` 在 Astro 路由层拦截了不含尾部斜杠的请求（返回 404），绕过了 middleware 的 301 重定向逻辑。修复：改为 `'ignore'` + middleware 统一 301。
+
+### 变更
+
+#### 17.1 Astro 配置 ✅
+
+**文件**: `apps/main/astro.config.mjs`
+
+`trailingSlash: 'always'` → `'ignore'`。让 Astro 不在路由层拦截，将控制权交给 middleware。
+
+#### 17.2 Middleware 301 重定向 ✅
+
+**文件**: `apps/main/src/middleware.ts`
+
+新增 `needsTrailingSlashRedirect()` 和 `trailingSlashRedirectLocation()` 两个导出函数。排除规则：已有斜杠、根路径 `/`、`/api`、扩展名路径（`.xml`/`.txt`/`.svg`）、`/_astro`、sitemap 变体（`/sitemap.xml`、`/sitemap-root.xml`、`/sitemap/{lang}.xml`）。其余路径 301 重定向，在 SSR 之前执行。
+
+同时扩展 `Cache-Control` 覆盖范围：sitemap 和 robots.txt 变体统一 `max-age=86400`。
+
+#### 17.3 Robots.txt fallback 域名修复 ✅
+
+**文件**: `apps/main/src/pages/robots.txt.ts`
+
+fallback 域名从临时 `unit-converter.pages.dev` 改为实际 `convunit.net`。
+
+#### 17.4 Middleware 单元测试 ✅
+
+**文件**: `apps/main/src/__tests__/middleware.test.ts` (新建)
+
+13 个测试用例：7 个覆盖 `needsTrailingSlashRedirect`（内容路径、已有斜杠、根路径、API、扩展名、_astro、sitemap 变体），6 个覆盖 `trailingSlashRedirectLocation`（query 参数保留、无 query、嵌套路径、多次前导斜杠 open-redirect 规范化）。
+
+#### 17.5 Vitest 配置 + Package.json ✅
+
+**文件**: `apps/main/vitest.config.ts` (新建)、`apps/main/package.json` (修改)
+
+`apps/main` 独立 Vitest 配置 + `test` 脚本。
+
+### 验证
+
+| 检查项 | 结果 |
+|--------|------|
+| `npm run build` (apps/main) | ✅ 成功（已知 SSR 警告 `getStaticPaths is ignored`，非本次引入） |
+| converter-core 测试 | ✅ 74/74 通过 |
+| middleware 测试 | ✅ 13/13 通过 |
+| **测试合计** | **87/87 通过** |
+| `GET /en/force?from=n&to=lbf` | ✅ 301 → `/en/force/?from=n&to=lbf` |
+| `GET /en/force/` | ✅ 200 |
+| `GET /robots.txt` | ✅ 200 |
+| `GET /sitemap.xml` | ✅ 200 |
+| `GET /sitemap-root.xml` | ✅ 200 |
+| `GET /sitemap/en.xml` | ✅ 200 |
+| sitemap/robots Cache-Control | ✅ `public, max-age=86400` |
+
+### 变更文件
+
+| 文件 | 类型 | 说明 |
+|------|------|------|
+| `apps/main/astro.config.mjs` | 修改 | `trailingSlash: 'always'` → `'ignore'` |
+| `apps/main/src/middleware.ts` | 修改 | 301 重定向 + sitemap cache 扩展 |
+| `apps/main/src/pages/robots.txt.ts` | 修改 | fallback 域名修复 |
+| `apps/main/src/__tests__/middleware.test.ts` | 新建 | 13 个 middleware 测试（含多次前导斜杠 open-redirect 规范化） |
+| `apps/main/vitest.config.ts` | 新建 | Vitest 配置 |
+| `apps/main/package.json` | 修改 | 新增 `test` 脚本 |
+
+### 部署后用户操作
+
+1. **部署后立即**：`curl -I` 验证 301 重定向和 sitemap 响应（详见 `docs/phase17-report.md`）
+2. **部署后 3-7 天**：GSC URL 检查确认 301 被识别；覆盖范围报告确认重复页面告警消失。**不需要使用 Indexing API 推送**，Google 会在正常爬取周期内自动处理。
+
+### 未部署声明
+
+变更尚未合并到主分支或部署到生产环境。所有验证基于本地开发环境。
+
+---
+
 ## 2026-06-30 — Phase 16A: 现实现比 (Real-World Analogies)
 
 ### 背景

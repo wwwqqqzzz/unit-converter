@@ -18,7 +18,7 @@ A programmatic SEO (pSEO) unit conversion website built with **Astro + TypeScrip
 
 - **Astro 5** — Cloudflare Workers SSR (`@astrojs/cloudflare` adapter)
 - **TypeScript** — type-safe unit configuration
-- **Vitest** — 74 unit tests
+- **Vitest** — 87 unit tests
 - **Cloudflare Workers** — server-side rendering, unlimited pages
 - **Bing Translation API** — free multilingual content generation
 - **AdSense** — conditional rendering, 3 positions
@@ -35,7 +35,7 @@ A programmatic SEO (pSEO) unit conversion website built with **Astro + TypeScrip
 | Unit descriptions | 1,230 (123 units × 10 non-English languages) |
 | Internal links/page | ~22 |
 | Structured data | BreadcrumbList + FAQPage + HowTo |
-| Tests | 74 passing |
+| Tests | 87 passing |
 | Design | Neo-Brutalist (Space Grotesk, 3px borders, hard shadows, #ffe033 accent) |
 
 ## Quick Start
@@ -151,7 +151,7 @@ src/
 | HTML cache (middleware) | max-age=3600, stale-while-revalidate=86400 |
 | Static asset cache | immutable, max-age=31536000 |
 | Security headers | X-Frame-Options: DENY, X-Content-Type-Options: nosniff, X-XSS-Protection, Permissions-Policy, Referrer-Policy |
-| Root redirect | / → /en/ (302) |
+| Root redirect | / → /en/ (301) |
 | Font preload | preconnect + preload Google Fonts |
 | CDN | Cloudflare (HTTP/2, Brotli, H3/QUIC) |
 | TTFB (cached) | ~0.38s |
