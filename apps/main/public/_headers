@@ -32,6 +32,10 @@
 # Sitemap and robots: medium cache
 /sitemap.xml
   Cache-Control: public, max-age=86400
+/sitemap-root.xml
+  Cache-Control: public, max-age=86400
+/sitemap/*.xml
+  Cache-Control: public, max-age=86400
 /robots.txt
   Cache-Control: public, max-age=86400
 
