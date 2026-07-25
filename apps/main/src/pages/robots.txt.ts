@@ -1,7 +1,7 @@
 export const prerender = true;
 
 export async function GET() {
-  const site = import.meta.env.SITE || 'https://unit-converter.pages.dev';
+  const site = import.meta.env.SITE || 'https://convunit.net';
   const body = `# ConvUnit — https://convunit.net
 # Allow all crawlers including AI agents
 
