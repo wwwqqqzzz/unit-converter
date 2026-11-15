@@ -29,7 +29,11 @@ export function getStaticPaths() {
 }
 const { lang, category: catId } = Astro.params as Props;
 const category = getCategory(catId);
-if (!category) return Astro.redirect('/404');
+// Unknown language: the [lang] segment is a free path parameter, so any typo
+// (`/xx/length/`, `/en2/`) would otherwise render a full page with an
+// untranslated title. That is an unbounded soft-404 surface.
+if (!LANGUAGES.includes(lang)) return Astro.rewrite('/404/');
+if (!category) return Astro.rewrite('/404/');
 const catName = category.name[lang];
 const catPath = `${catId}/`;
 const otherCategories = categories.filter(c => c.id !== catId);
@@ -81,6 +85,9 @@ const calcMeta: Record<string, { title: string; desc: string }> = {
 const isCalculator = category.type === 'calculator';
 const isShoe = catId === 'shoe';
 const pageTitle = isShoe ? sg('metaTitle') : isCalculator ? calcMeta[catId]?.title ?? catName : t(lang, 'category.title', { name: catName });
+// Visible H1 for calculator pages. `pageTitle` is the SEO <title> and may contain
+// branding suffixes, so keep the heading a clean, standalone phrase.
+const calcHeading = isCalculator ? (calcMeta[catId]?.title ?? catName) : '';
 const pageDesc = isShoe ? sg('metaDesc') : isCalculator ? calcMeta[catId]?.desc : (() => {
   const catDescKey = `category.description_${catId}`;
   const catDesc = t(lang, catDescKey as any);
@@ -150,25 +157,27 @@ if (isShoe) {
     <span>{catName}</span>
   </nav>
 
-  {isCalculator && catId === 'number-base' && <NumberBase lang={lang} />}
+  {isCalculator && catId === 'number-base' && (
+    <NumberBase lang={lang}><Fragment slot="title">{calcHeading}</Fragment></NumberBase>
+  )}
   {isCalculator && catId === 'timestamp' && <>
-    <Timestamp lang={lang} />
+    <Timestamp lang={lang}><Fragment slot="title">{calcHeading}</Fragment></Timestamp>
     <Fragment set:html={calcFaq('timestamp')} />
   </>}
   {isCalculator && catId === 'percentage' && <>
-    <Percentage lang={lang} />
+    <Percentage lang={lang}><Fragment slot="title">{calcHeading}</Fragment></Percentage>
     <Fragment set:html={calcFaq('percentage')} />
   </>}
   {isCalculator && catId === 'bmi' && <>
-    <BMI lang={lang} />
+    <BMI lang={lang}><Fragment slot="title">{calcHeading}</Fragment></BMI>
     <Fragment set:html={calcFaq('bmi')} />
   </>}
   {isCalculator && catId === 'age' && <>
-    <Age lang={lang} />
+    <Age lang={lang}><Fragment slot="title">{calcHeading}</Fragment></Age>
     <Fragment set:html={calcFaq('age')} />
   </>}
   {isCalculator && catId === 'currency' && <>
-    <Currency lang={lang} />
+    <Currency lang={lang}><Fragment slot="title">{calcHeading}</Fragment></Currency>
     <Fragment set:html={calcFaq('currency')} />
   </>}
 

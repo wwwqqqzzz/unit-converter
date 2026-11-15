@@ -11,6 +11,8 @@ export function getStaticPaths() {
   return LANGUAGES.map(lang => ({ params: { lang } }));
 }
 const { lang } = Astro.params as Props;
+// Unknown language segment would otherwise render an untranslated page (200).
+if (!LANGUAGES.includes(lang)) return Astro.rewrite('/404/');
 const categories = getCategories();
 const calcCount = categories.filter(c => c.type === 'calculator').length;
 

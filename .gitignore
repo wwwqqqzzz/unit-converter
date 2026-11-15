@@ -4,6 +4,8 @@ dist/
 *.db
 .DS_Store
 .agents/
+# Local Playwright MCP debug output
+.playwright-mcp/
 # Google OAuth — do not commit
 credentials.json
 token.json

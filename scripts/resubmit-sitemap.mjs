@@ -30,11 +30,14 @@ const TOKEN_PATH = join(__dirname, '..', 'token.json');
 const REDIRECT_PORT = 3000;
 const REDIRECT_URI = `http://localhost:${REDIRECT_PORT}/callback`;
 
-// Priority URLs to push via Indexing API (Google limits ~200/day)
+// Top converter pages (highest impressions in GSC).
+// IMPORTANT: these must match real unit IDs — see packages/converter-core/src/data/units.ts.
+// `length` uses id `foot` (not `ft`) and `speed` uses id `kmh` (not `km`),
+// so the URL slugs are `m-to-foot` and `kmh-to-mph`. Pushing non-existent URLs
+// to the Indexing API reports soft 404s to Google, which harms the whole site.
 const PRIORITY_URLS = [
-  // Homepage
-  'https://convunit.net/',
-  // Language homepages
+  // Language homepages (`/` is omitted: it 301-redirects to `/en/`, and the
+  // verification step only accepts a final 200.)
   'https://convunit.net/en/',
   'https://convunit.net/zh/',
   'https://convunit.net/es/',
@@ -68,7 +71,7 @@ const PRIORITY_URLS = [
   'https://convunit.net/en/weight/kg-to-lb/',
   'https://convunit.net/en/length/cm-to-inch/',
   'https://convunit.net/en/temperature/c-to-f/',
-  'https://convunit.net/en/speed/km-to-mph/',
+  'https://convunit.net/en/speed/kmh-to-mph/',
   'https://convunit.net/en/data/mb-to-gb/',
   'https://convunit.net/en/area/sqm-to-sqft/',
   // Top performing pages (from GSC analytics)
@@ -184,14 +187,37 @@ if (sitemapResp.status === 204 || sitemapResp.ok) {
   if (sitemapResp.status === 404) console.log('   → Check: site URL format (sc_domain: vs sc-domain:)');
 }
 
-// Step 2: Push priority URLs via Indexing API
-console.log(`\n🚀 Step 2: Pushing ${PRIORITY_URLS.length} priority URLs via Indexing API...`);
+// Step 2: Verify every priority URL resolves before pushing to Google.
+// Submitting URLs that 301/404 reports soft-404 signals that hurt the whole site.
+console.log(`\n🔎 Step 2a: Verifying ${PRIORITY_URLS.length} URLs resolve with 200...`);
+const verifiedUrls = [];
+for (const url of PRIORITY_URLS) {
+  try {
+    const head = await fetch(url, { method: 'GET', redirect: 'manual' });
+    if (head.status === 200) {
+      verifiedUrls.push(url);
+      console.log(`  ✅ ${url}`);
+    } else {
+      console.log(`  ⏭  ${url} — HTTP ${head.status} (skipped)`);
+    }
+  } catch (err) {
+    console.log(`  ⏭  ${url} — ${err.message} (skipped)`);
+  }
+  await new Promise(r => setTimeout(r, 150));
+}
+if (verifiedUrls.length === 0) {
+  console.error('❌ No URL passed verification. Refusing to submit to the Indexing API.');
+  process.exit(1);
+}
+
+// Step 2: Push verified URLs via Indexing API
+console.log(`\n🚀 Step 2b: Pushing ${verifiedUrls.length} verified URLs via Indexing API...`);
 
 const INDEXING_API = 'https://indexing.googleapis.com/v3/urlNotifications:publish';
 let successCount = 0;
 let failCount = 0;
 
-for (const url of PRIORITY_URLS) {
+for (const url of verifiedUrls) {
   try {
     const resp = await fetch(INDEXING_API, {
       method: 'POST',
@@ -241,7 +267,8 @@ for (const url of PRIORITY_URLS) {
 
 console.log(`\n📊 Summary:`);
 console.log(`   Sitemap: ${sitemapResp.ok ? '✅ submitted' : '❌ failed'}`);
-console.log(`   Indexing API: ${successCount}/${PRIORITY_URLS.length} URLs pushed, ${failCount} failed`);
+console.log(`   URL verification: ${verifiedUrls.length}/${PRIORITY_URLS.length} returned 200`);
+console.log(`   Indexing API: ${successCount}/${verifiedUrls.length} URLs pushed, ${failCount} failed`);
 
 if (failCount > 0) {
   console.log('\n⚠️  Some URLs failed. Common reasons:');

@@ -18,6 +18,8 @@ const securityHeaders: Record<string, string> = {
  * - '/_astro' and '/_astro/*' static assets
  * - Sitemap XML paths (/sitemap.xml, /sitemap-root.xml, /sitemap/{lang}.xml)
  * - '/robots.txt'
+ * - '/404' and '/500' — reached via internal `Astro.rewrite()` from invalid
+ *   URLs. Redirecting them would add a hop and turn a real 404 into a 301.
  */
 export function needsTrailingSlashRedirect(pathname: string): boolean {
   if (pathname.endsWith('/')) return false;
@@ -27,6 +29,7 @@ export function needsTrailingSlashRedirect(pathname: string): boolean {
   if (pathname === '/_astro' || pathname.startsWith('/_astro/')) return false;
   if (pathname === '/sitemap.xml' || pathname === '/robots.txt') return false;
   if (pathname === '/sitemap-root.xml' || /^\/sitemap\/[^/]+\.xml$/.test(pathname)) return false;
+  if (pathname === '/404' || pathname === '/500') return false;
   return true;
 }
 
@@ -55,6 +58,8 @@ export const onRequest: MiddlewareHandler = async (context, next) => {
     pathname.endsWith('/') ||
     pathname.endsWith('.html') ||
     !pathname.includes('.') ||
+    pathname === '/404' ||
+    pathname === '/500' ||
     pathname.includes('/en/') ||
     pathname.includes('/zh/') ||
     pathname.includes('/es/') ||

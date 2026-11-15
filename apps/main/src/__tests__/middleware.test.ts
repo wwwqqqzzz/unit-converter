@@ -45,6 +45,14 @@ describe('needsTrailingSlashRedirect', () => {
     expect(needsTrailingSlashRedirect('/sitemap/zh.xml')).toBe(false);
     expect(needsTrailingSlashRedirect('/sitemap/pt.xml')).toBe(false);
   });
+
+  // Invalid URLs use `Astro.rewrite('/404/')`. Astro normalizes the internal
+  // path to `/404`, so redirecting it to `/404/` would add a 301 hop in front
+  // of every 404 — and a 301 before a 404 reads as a soft 404 to crawlers.
+  it('does not redirect /404 and /500 error routes', () => {
+    expect(needsTrailingSlashRedirect('/404')).toBe(false);
+    expect(needsTrailingSlashRedirect('/500')).toBe(false);
+  });
 });
 
 describe('trailingSlashRedirectLocation', () => {

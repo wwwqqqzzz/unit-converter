@@ -8,9 +8,16 @@ export interface Props {
   unit2Name: string;
   rate: number;
   values: number[];
+  /**
+   * Optional real conversion function. Temperature is affine (F = C×9/5 + 32),
+   * so `value * rate` is wrong for it — 100 °C would render as 3380 °F instead
+   * of 212 °F. Any category with `convertFn` must pass this.
+   */
+  convertFn?: (value: number) => number;
 }
-const { lang, unit1Name, unit2Name, rate, values } = Astro.props;
-  const caption = `${unit1Name} → ${unit2Name}`;
+const { lang, unit1Name, unit2Name, rate, values, convertFn } = Astro.props;
+const caption = `${unit1Name} → ${unit2Name}`;
+const toUnit2 = (v: number) => (convertFn ? convertFn(v) : v * rate);
 ---
 
 <section class="conv-table-section">
@@ -22,7 +29,7 @@ const { lang, unit1Name, unit2Name, rate, values } = Astro.props;
       </thead>
       <tbody>
         {values.map(v => (
-          <tr><td>{v} {unit1Name}</td><td>{formatResult(v * rate)} {unit2Name}</td></tr>
+          <tr><td>{v} {unit1Name}</td><td>{formatResult(toUnit2(v))} {unit2Name}</td></tr>
         ))}
       </tbody>
     </table>

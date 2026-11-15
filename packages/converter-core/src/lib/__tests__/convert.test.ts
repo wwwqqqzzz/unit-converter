@@ -61,6 +61,16 @@ describe('convert (non-linear / temperature)', () => {
   it('same unit returns same value (°C to °C)', () => {
     expect(convert(tempCat, 25, 'c', 'c')).toBe(25);
   });
+
+  // Temperature is affine (F = C×9/5 + 32), so `value * rate` must never be
+  // used as a shortcut. The static ConversionTable did exactly that and
+  // rendered 100°C as 3380°F. These assertions pin the correct values so a
+  // future refactor cannot silently reintroduce multiplication.
+  it('affine conversion is not reproducible by multiplying a single rate', () => {
+    const rate = convert(tempCat, 1, 'c', 'f'); // 33.8
+    expect(rate * 100).not.toBeCloseTo(212, 1); // proves rate-only math is wrong
+    expect(convert(tempCat, 100, 'c', 'f')).toBeCloseTo(212, 1);
+  });
 });
 
 describe('getUnit', () => {
@@ -133,6 +143,47 @@ describe('valueSlug', () => {
 
   it('generates Chinese value slug', () => {
     expect(valueSlug(5, u1, u2, 'zh')).toBe('5-厘米-米');
+  });
+
+  // CATEGORY_VALUES contains decimals (0.5, 0.1) and temperature has negatives
+  // (-40). The detail-page slug parser originally used /^(\d+)-/, so every
+  // decimal sitemap URL (2,484 of them) rendered a 404. Keep these covered.
+  it('generates decimal value slug', () => {
+    expect(valueSlug(0.5, u1, u2, 'en')).toBe('0.5-cm-to-m');
+  });
+
+  it('generates negative value slug', () => {
+    expect(valueSlug(-40, u1, u2, 'en')).toBe('-40-cm-to-m');
+  });
+});
+
+describe('value slug round-trip', () => {
+  // Mirrors VALUE_PREFIX in apps/main/src/pages/[lang]/[category]/[...slug].astro
+  const VALUE_PREFIX = /^(-?\d+(?:\.\d+)?)-(.*)$/;
+
+  it('parses every generated value slug back to its number', () => {
+    const u1 = lengthCat.units.find(u => u.id === 'cm')!;
+    const u2 = lengthCat.units.find(u => u.id === 'm')!;
+    for (const value of [0.1, 0.5, 1, 5, 100, 1000, -40]) {
+      const slug = valueSlug(value, u1, u2, 'en');
+      const match = slug.match(VALUE_PREFIX);
+      expect(match, `slug "${slug}" should parse`).not.toBeNull();
+      expect(parseFloat(match![1])).toBe(value);
+    }
+  });
+
+  it('parses every CATEGORY_VALUES entry for every converter category', () => {
+    for (const cat of categories) {
+      if (cat.type === 'calculator' || !cat.units.length) continue;
+      const values = CATEGORY_VALUES[cat.id] ?? COMMON_VALUES;
+      const u1 = cat.units[0];
+      for (const value of values) {
+        const slug = valueSlug(value, u1, cat.units[1] ?? u1, 'en');
+        const match = slug.match(VALUE_PREFIX);
+        expect(match, `${cat.id}: slug "${slug}" should parse`).not.toBeNull();
+        expect(parseFloat(match![1])).toBe(value);
+      }
+    }
   });
 });
 

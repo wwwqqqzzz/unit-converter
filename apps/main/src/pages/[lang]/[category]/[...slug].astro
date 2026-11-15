@@ -45,11 +45,16 @@ export function getStaticPaths() {
 const { lang, slug } = Astro.params as { lang: Lang; slug: string | string[] };
 const catId = Astro.params.category as string;
 const category = getCategory(catId);
-if (!category || !slug) return Astro.redirect(`/${lang}/`);
+// Invalid URL → real 404. These are unreachable combinations (bad language,
+// bad category, missing/unknown slug, unknown unit pair) rather than moved
+// pages, so a redirect would create soft-404 signals and burn crawl budget.
+const notFound = () => Astro.rewrite('/404/');
+if (!LANGUAGES.includes(lang)) return notFound();
+if (!category || !slug) return notFound();
 const rawSlug = Array.isArray(slug) ? slug.join('/') : slug;
 if (!rawSlug) return Astro.redirect(`/${lang}/${catId}/`);
-// Calculator categories: redirect any detail page to their index page,
-// except number-base which has SEO value pages
+// Calculator categories have no detail pages (except number-base, which has
+// SEO value pages) — send visitors to the working tool at the category URL.
 if (category.type === 'calculator' && catId !== 'number-base') return Astro.redirect(`/${lang}/${catId}/`);
 
 // Check if this is a number-base value page
@@ -72,21 +77,32 @@ if (catId === 'number-base') {
     nbFromBase = nbParsed.conv.from;
     nbToBase = nbParsed.conv.to;
   } else {
-    // Invalid number-base slug → redirect to index
-    return Astro.redirect(`/${lang}/${catId}/`);
+    // Invalid number-base slug → real 404
+    return notFound();
   }
 }
 
 interface PageData { unit1Id: string; unit2Id: string; value: number | null; }
+
+/**
+ * Numeric prefix of a value slug.
+ * Accepts integers and decimals (incl. negatives, used by temperature):
+ *   `100-mm-to-cm`    → 100
+ *   `0.5-mm-to-cm`    → 0.5
+ *   `-40-c-to-f`      → -40
+ * Must stay in sync with `valueSlug()` in converter-core and with
+ * `CATEGORY_VALUES`, which contains decimals like 0.5 and 0.1.
+ */
+const VALUE_PREFIX = /^(-?\d+(?:\.\d+)?)-(.*)$/;
+
 function parseSlug(slugStr: string, cat: typeof category, l: Lang): PageData | null {
   if (!cat) return null;
+  const match = slugStr.match(VALUE_PREFIX);
   if (l === 'zh') {
-    const match = slugStr.match(/^(\d+)-(.*)$/);
-    if (match) { const val = parseInt(match[1], 10); const rest = match[2]; const parts = rest.split('-'); if (parts.length !== 2) return null; const u1 = cat.units.find(u => u.name.zh === parts[0]); const u2 = cat.units.find(u => u.name.zh === parts[1]); if (u1 && u2) return { unit1Id: u1.id, unit2Id: u2.id, value: val }; }
+    if (match) { const val = parseFloat(match[1]); const parts = match[2].split('-'); if (parts.length !== 2) return null; const u1 = cat.units.find(u => u.name.zh === parts[0]); const u2 = cat.units.find(u => u.name.zh === parts[1]); if (u1 && u2) return { unit1Id: u1.id, unit2Id: u2.id, value: val }; }
     else { const parts = slugStr.split('-'); if (parts.length !== 2) return null; const u1 = cat.units.find(u => u.name.zh === parts[0]); const u2 = cat.units.find(u => u.name.zh === parts[1]); if (u1 && u2) return { unit1Id: u1.id, unit2Id: u2.id, value: null }; }
   } else {
-    const match = slugStr.match(/^(\d+)-(.*)$/);
-    if (match) { const val = parseInt(match[1], 10); const rest = match[2]; const parts = rest.split('-to-'); if (parts.length !== 2) return null; const u1 = cat.units.find(u => u.id === parts[0]); const u2 = cat.units.find(u => u.id === parts[1]); if (u1 && u2) return { unit1Id: u1.id, unit2Id: u2.id, value: val }; }
+    if (match) { const val = parseFloat(match[1]); const parts = match[2].split('-to-'); if (parts.length !== 2) return null; const u1 = cat.units.find(u => u.id === parts[0]); const u2 = cat.units.find(u => u.id === parts[1]); if (u1 && u2) return { unit1Id: u1.id, unit2Id: u2.id, value: val }; }
     else { const parts = slugStr.split('-to-'); if (parts.length !== 2) return null; const u1 = cat.units.find(u => u.id === parts[0]); const u2 = cat.units.find(u => u.id === parts[1]); if (u1 && u2) return { unit1Id: u1.id, unit2Id: u2.id, value: null }; }
   }
   return null;
@@ -102,13 +118,13 @@ let u2: any = null;
 
 if (!isNumberBasePage) {
   parsed = parseSlug(rawSlug, category, lang);
-  if (!parsed) return Astro.redirect(`/${lang}/${catId}/`);
+  if (!parsed) return notFound();
   unit1Id = parsed.unit1Id;
   unit2Id = parsed.unit2Id;
   value = parsed.value;
   u1 = getUnit(category, unit1Id);
   u2 = getUnit(category, unit2Id);
-  if (!u1 || !u2) return Astro.redirect(`/${lang}/${catId}/`);
+  if (!u1 || !u2) return notFound();
 }
 
 const catName = category.name[lang];
@@ -299,7 +315,14 @@ const finalJsonld = isNumberBasePage ? nbJsonld : jsonld;
 
       <AdSense position="middle" />
 
-      <ConversionTable lang={lang} unit1Name={u1Name} unit2Name={u2Name} rate={rate} values={commonValuesForTable} />
+      <ConversionTable
+        lang={lang}
+        unit1Name={u1Name}
+        unit2Name={u2Name}
+        rate={rate}
+        values={commonValuesForTable}
+        convertFn={category.convertFn ? (v: number) => convert(category, v, unit1Id, unit2Id) : undefined}
+      />
 
       <UnitDescription lang={lang} unit={u1} categoryId={catId} />
       <UnitDescription lang={lang} unit={u2} categoryId={catId} />
